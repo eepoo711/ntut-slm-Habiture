@@ -13,35 +13,20 @@ import utils.exception.UnhandledException;
 public class HabitureModule {
 
     private final boolean DEBUG = true;
+    private NetworkInterface networkInterface = null;
+
+    public HabitureModule(NetworkInterface networkInterface) {
+        this.networkInterface = networkInterface;
+    }
 
     public boolean login(String account, String password) {
         trace("login");
 
         String url = "http://140.124.144.121/DeWeiChen/login.cgi?account=" + account + "&password=" + password;
-
-        HttpURLConnection httpUrlConnection = null;
-        try {
-            httpUrlConnection = (HttpURLConnection) new URL(url).openConnection();
-
-            InputStream in = httpUrlConnection.getInputStream();
-
-            byte[] dataByte = new byte[500];
-            int readLen = in.read(dataByte);
-
-            String data = new String(dataByte, 0, readLen);
-
-            if(data.contains("login-successful")) {
-                return true;
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new UnhandledException(e);
-        } finally {
-            if(httpUrlConnection != null)
-                httpUrlConnection.disconnect();
+        String data = networkInterface.httpGet(url);
+        if(data != null && data.contains("login-successful")) {
+            return true;
         }
-
         return false;
     }
 
