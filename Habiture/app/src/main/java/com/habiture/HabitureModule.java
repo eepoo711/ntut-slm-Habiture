@@ -24,10 +24,12 @@ public class HabitureModule {
 
         String url = "http://140.124.144.121/DeWeiChen/login.cgi?account=" + account + "&password=" + password;
         String data = networkInterface.httpGet(url);
-        if(data != null && data.contains("login-successful")) {
-            return true;
-        }
-        return false;
+
+        if(data == null) return false;
+
+        int code = Integer.valueOf(data.split("\n")[0]);
+
+        return code == 1 ? true : false;
     }
 
 

@@ -34,9 +34,13 @@ public class MainActivity extends ActionBarActivity implements LoginFragment.Lis
 
         mHabitureModule = new HabitureModule(new NetworkChannel());
 
-        getFragmentManager().beginTransaction()
-                .add(R.id.container, new LoginFragment())
-                .commit();
+        if(savedInstanceState == null) {
+            getFragmentManager().beginTransaction()
+                    .add(R.id.container, new LoginFragment())
+                    .commit();
+        }
+
+
     }
 
 

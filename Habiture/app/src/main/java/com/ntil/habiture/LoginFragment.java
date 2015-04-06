@@ -47,6 +47,8 @@ public class LoginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         trace("onCreate");
         super.onCreate(savedInstanceState);
+
+        setRetainInstance(true);
     }
 
     @Override
