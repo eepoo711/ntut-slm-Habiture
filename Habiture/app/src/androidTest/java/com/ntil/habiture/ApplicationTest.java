@@ -1,4 +1,4 @@
-package com.brian.habiture;
+package com.ntil.habiture;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
