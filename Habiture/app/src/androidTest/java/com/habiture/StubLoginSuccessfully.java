@@ -6,6 +6,6 @@ package com.habiture;
 public class StubLoginSuccessfully implements NetworkInterface {
     @Override
     public String httpGet(String url) {
-        return "login-successful";
+        return "1\n";
     }
 }

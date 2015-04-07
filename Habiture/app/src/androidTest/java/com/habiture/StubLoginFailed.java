@@ -7,7 +7,7 @@ public class StubLoginFailed implements NetworkInterface {
 
     @Override
     public String httpGet(String url) {
-        return "any conent";
+        return "0\n";
     }
 
 }
