@@ -1,3 +1,6 @@
+2015/04/10 Ed 18:17 (0.4.20150410)
+1. Finish Login Page Layout design
+
 2015/04/07 Brian 17:49 (0.3.20150407)
 1. Fix test case
 
