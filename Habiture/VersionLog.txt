@@ -1,3 +1,6 @@
+2015/04/10 Brian 18:44 (0.5.20150410)
+1. Add Habiture API for getting Account and Password.
+
 2015/04/10 Ed 18:17 (0.4.20150410)
 1. Finish Login Page Layout design
 

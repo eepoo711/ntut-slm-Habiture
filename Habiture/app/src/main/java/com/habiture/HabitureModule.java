@@ -15,6 +15,9 @@ public class HabitureModule {
     private final boolean DEBUG = true;
     private NetworkInterface networkInterface = null;
 
+    private String account = null;
+    private String password = null;
+
     public HabitureModule(NetworkInterface networkInterface) {
         this.networkInterface = networkInterface;
     }
@@ -29,7 +32,31 @@ public class HabitureModule {
 
         int code = Integer.valueOf(data.split("\n")[0]);
 
-        return code == 1 ? true : false;
+        boolean isLogined = false;
+        isLogined = code == 1 ? true : false;
+
+        if(isLogined) {
+            this.account = account;
+            this.password = password;
+        }
+
+        return isLogined;
+    }
+
+    /**
+     * Get the User Account.
+     * @return account or null when not login the system.
+     */
+    public String getAccount() {
+        return account;
+    }
+
+    /**
+     * Get the User Password.
+     * @return password or null when not login the system.
+     */
+    public String getPassword() {
+        return password;
     }
 
 
