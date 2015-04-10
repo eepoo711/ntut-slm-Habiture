@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+    android:gravity="center"
+    android:background="@drawable/default_wallpaper">
 
     <LinearLayout
         android:orientation="vertical"
@@ -11,32 +12,44 @@
         android:layout_gravity="center_horizontal"
         android:id="@+id/loginSession"
         android:layout_weight="1"
-        android:gravity="center">
+        android:gravity="center"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:src="@drawable/emo_im_embarrassed"
+            android:layout_marginBottom="60dp"
+            android:layout_gravity="center_horizontal" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
+            android:background="@drawable/retangle2_drawable"
             android:hint="@string/enter_account"
             android:id="@+id/etAccount"
             android:singleLine="true"
             android:ems="15"
-            android:layout_gravity="center_horizontal" />
+            android:layout_marginBottom="3dp" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:textAppearance="?android:attr/textAppearanceLarge"
+            android:background="@drawable/retangle2_drawable"
             android:hint="@string/enter_password"
             android:id="@+id/etPassword"
             android:singleLine="true"
             android:ems="15"
-            android:layout_gravity="center_horizontal" />
+            android:layout_marginTop="3dp" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/retangle_drawable"
             android:text="@string/login"
             android:id="@+id/btnLogin"
             android:layout_gravity="center_horizontal"
