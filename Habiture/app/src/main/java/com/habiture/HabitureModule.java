@@ -19,6 +19,7 @@ public class HabitureModule {
     private String password = null;
 
     public HabitureModule(NetworkInterface networkInterface) {
+        trace("HabitureModule");
         this.networkInterface = networkInterface;
     }
 
@@ -48,6 +49,7 @@ public class HabitureModule {
      * @return account or null when not login the system.
      */
     public String getAccount() {
+        trace("getAccount");
         return account;
     }
 
@@ -56,6 +58,7 @@ public class HabitureModule {
      * @return password or null when not login the system.
      */
     public String getPassword() {
+        trace("getPassword");
         return password;
     }
 
