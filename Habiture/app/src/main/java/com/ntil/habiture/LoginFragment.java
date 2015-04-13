@@ -17,7 +17,7 @@ import utils.exception.UnhandledException;
 
 public class LoginFragment extends Fragment {
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private Listener mListener;
 

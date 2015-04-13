@@ -12,10 +12,12 @@ import android.widget.Toast;
 import com.habiture.HabitureModule;
 import com.habiture.NetworkChannel;
 
+import utils.exception.ExceptionAlertDialog;
+
 
 public class MainActivity extends ActionBarActivity implements LoginFragment.Listener {
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private HabitureModule mHabitureModule;
 
@@ -29,17 +31,21 @@ public class MainActivity extends ActionBarActivity implements LoginFragment.Lis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         trace("onCreate");
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        mHabitureModule = new HabitureModule(new NetworkChannel());
+        try {
+            setContentView(R.layout.activity_main);
+            mHabitureModule = new HabitureModule(new NetworkChannel());
 
-        if(savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new LoginFragment())
-                    .commit();
+            if(savedInstanceState == null) {
+                getFragmentManager().beginTransaction()
+                        .add(R.id.container, new LoginFragment())
+                        .commit();
+            }
+        } catch(Throwable e) {
+            ExceptionAlertDialog.showException(getFragmentManager(), e);
         }
-
 
     }
 
@@ -47,23 +53,35 @@ public class MainActivity extends ActionBarActivity implements LoginFragment.Lis
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         trace("onCreateOptionsMenu");
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        try {
+            // Inflate the menu; this adds items to the action bar if it is present.
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+        } catch(Throwable e) {
+            ExceptionAlertDialog.showException(getFragmentManager(), e);
+        }
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         trace("onOptionsItemSelected");
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        try {
+            // Handle action bar item clicks here. The action bar will
+            // automatically handle clicks on the Home/Up button, so long
+            // as you specify a parent activity in AndroidManifest.xml.
+            int id = item.getItemId();
+
+            //noinspection SimplifiableIfStatement
+            if (id == R.id.action_settings) {
+                return true;
+            }
+        } catch(Throwable e) {
+            ExceptionAlertDialog.showException(getFragmentManager(), e);
         }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -81,32 +99,51 @@ public class MainActivity extends ActionBarActivity implements LoginFragment.Lis
         @Override
         protected void onPreExecute() {
             trace("onPreExecute");
-            progress = ProgressDialog.show(MainActivity.this,
-                    MainActivity.this.getString(R.string.progress_title),
-                    MainActivity.this.getString(R.string.logining));
+
+            try {
+                progress = ProgressDialog.show(MainActivity.this,
+                        MainActivity.this.getString(R.string.progress_title),
+                        MainActivity.this.getString(R.string.logining));
+            } catch(Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+
         }
 
         @Override
         protected Boolean doInBackground(String... params) {
             trace("doInBackground");
-            String account = params[0];
-            String password = params[1];
 
-            return mHabitureModule.login(account, password);
+            boolean logined = false;
+            try {
+                String account = params[0];
+                String password = params[1];
+                logined = mHabitureModule.login(account, password);
+            } catch (Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+
+            return logined;
         }
 
         @Override
         protected void onPostExecute(Boolean success) {
             trace("onPostExecute");
-            progress.dismiss();
+
+            try {
+                progress.dismiss();
 
 
-            String textLoginSuccessful = MainActivity.this.getString(R.string.login_successfully);
-            String textLoginFailed = MainActivity.this.getString(R.string.login_failed);
-            Toast.makeText(
-                    MainActivity.this,
-                    success ? textLoginSuccessful : textLoginFailed,
-                    Toast.LENGTH_SHORT).show();
+                String textLoginSuccessful = MainActivity.this.getString(R.string.login_successfully);
+                String textLoginFailed = MainActivity.this.getString(R.string.login_failed);
+                Toast.makeText(
+                        MainActivity.this,
+                        success ? textLoginSuccessful : textLoginFailed,
+                        Toast.LENGTH_SHORT).show();
+            } catch(Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+
         }
     }
 }
