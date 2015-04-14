@@ -8,10 +8,10 @@ import java.net.URL;
 public class NetworkChannel implements NetworkInterface {
 
     @Override
-    public String httpGet(String url) {
+    public boolean httpGetLoginResult(String account, String password) {
         HttpURLConnection httpUrlConnection = null;
         try {
-            httpUrlConnection = (HttpURLConnection) new URL(url).openConnection();
+            httpUrlConnection = createHttpURLConnection(URL_LOGIN.concat("account=" + account + "&password=" + password));
 
             InputStream in = httpUrlConnection.getInputStream();
 
@@ -19,14 +19,26 @@ public class NetworkChannel implements NetworkInterface {
             int readLen = in.read(dataByte);
 
             String data = new String(dataByte, 0, readLen);
-            return data;
+
+            int code = Integer.valueOf(data.split("\n")[0]);
+
+            boolean isLogined = false;
+            isLogined = code == 1 ? true : false;
+
+            return isLogined;
 
         } catch (IOException e) {
-            return null;
+            e.printStackTrace();
         } finally {
             if(httpUrlConnection != null)
                 httpUrlConnection.disconnect();
         }
+        return false;
+    }
+
+    private HttpURLConnection createHttpURLConnection(String url) throws IOException{
+
+        return (HttpURLConnection) new URL(url).openConnection();
     }
 
 }

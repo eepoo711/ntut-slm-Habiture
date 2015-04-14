@@ -6,8 +6,8 @@ package com.habiture;
 public class StubLoginFailed implements NetworkInterface {
 
     @Override
-    public String httpGet(String url) {
-        return "0\n";
+    public boolean httpGetLoginResult(String account, String password) {
+        return false;
     }
 
 }

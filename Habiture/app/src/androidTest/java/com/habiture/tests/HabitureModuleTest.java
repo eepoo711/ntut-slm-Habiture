@@ -20,8 +20,6 @@ public class HabitureModuleTest extends AndroidTestCase {
         assertFalse(stubLoginFailed());
     }
 
-
-
     public void testGetProfileAfterLoginSuccessfully() {
         stubLoginSuccessfully();
 

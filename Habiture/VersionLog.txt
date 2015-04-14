@@ -1,3 +1,7 @@
+2015/04/13 Brian 20:04 (0.8.20150414)
+1. refactor NetworkChannel and HabitureModel
+2. remoeve testServerAvail TestCase
+
 2015/04/13 Brian 13:42 (0.7.20150413)
 1. Implement Excpetion Gaol Level 1.
 

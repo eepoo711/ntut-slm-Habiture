@@ -2,6 +2,8 @@ package com.habiture;
 
 public interface NetworkInterface {
 
-    public String httpGet(String url);
+    public static final String URL_LOGIN =  "http://140.124.144.121/DeWeiChen/login.cgi?";
+
+    public boolean httpGetLoginResult(String account, String password);
 
 }
