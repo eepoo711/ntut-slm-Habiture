@@ -36,6 +36,15 @@ public class NetworkChannel implements NetworkInterface {
         return false;
     }
 
+    @Override
+    public Friend[] httpGetFriends() {
+
+        // TODO
+        throw new RuntimeException("unimplements method");
+
+//        return new Friend[0];
+    }
+
     private HttpURLConnection createHttpURLConnection(String url) throws IOException{
 
         return (HttpURLConnection) new URL(url).openConnection();

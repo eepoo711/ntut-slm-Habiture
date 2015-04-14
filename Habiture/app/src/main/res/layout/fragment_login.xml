@@ -32,7 +32,8 @@
             android:id="@+id/etAccount"
             android:singleLine="true"
             android:ems="15"
-            android:layout_marginBottom="3dp" />
+            android:layout_marginBottom="3dp"
+            android:maxLength="30" />
 
         <EditText
             android:layout_width="match_parent"
@@ -44,7 +45,8 @@
             android:id="@+id/etPassword"
             android:singleLine="true"
             android:ems="15"
-            android:layout_marginTop="3dp" />
+            android:layout_marginTop="3dp"
+            android:maxLength="30"/>
 
         <Button
             android:layout_width="wrap_content"

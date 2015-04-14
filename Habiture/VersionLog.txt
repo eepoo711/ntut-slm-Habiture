@@ -1,3 +1,7 @@
+2015/04/13 Brian 20:47 (0.9.20150414)
+1. Habiture Add API "queryFriends"
+2. UI limit length about account and password.
+
 2015/04/13 Brian 20:04 (0.8.20150414)
 1. refactor NetworkChannel and HabitureModel
 2. remoeve testServerAvail TestCase

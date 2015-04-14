@@ -2,51 +2,52 @@ package com.habiture.tests;
 
 import android.test.AndroidTestCase;
 
+import com.habiture.Friend;
 import com.habiture.HabitureModule;
-import com.habiture.NetworkChannel;
 import com.habiture.NetworkInterface;
 import com.habiture.StubLoginFailed;
 import com.habiture.StubLoginSuccessfully;
+import com.habiture.StubQueryFriends;
 
 public class HabitureModuleTest extends AndroidTestCase {
 
     private HabitureModule hm = null;
 
     public void testLoginSuccessfully() {
-        assertTrue(stubLoginSuccessfully());
+        assertTrue(stubLogin(new StubLoginSuccessfully()));
     }
 
     public void testLoginFailed() {
-        assertFalse(stubLoginFailed());
+        assertFalse(stubLogin(new StubLoginFailed()));
     }
 
     public void testGetProfileAfterLoginSuccessfully() {
-        stubLoginSuccessfully();
+        stubLogin(new StubLoginSuccessfully());
 
         assertEquals("testAccount", hm.getAccount());
         assertEquals("testPassword", hm.getPassword());
     }
 
     public void testGetProfileAfterLoginFailed() {
-        stubLoginFailed();
+        stubLogin(new StubLoginFailed());
 
         assertEquals(null, hm.getAccount());
         assertEquals(null, hm.getPassword());
 
     }
 
+    public void testQueryFriends() {
+        stubLogin(new StubQueryFriends());
+        Friend[] friends = hm.queryFriends();
 
-    private boolean stubLoginSuccessfully() {
-        NetworkInterface networkInterface = new StubLoginSuccessfully();
-        hm = new HabitureModule(networkInterface);
-        boolean result = hm.login("testAccount", "testPassword");
-        return result;
+        assertEquals(1, friends[0].getId());
+        assertEquals("Amanda", friends[0].getName());
     }
 
-    private boolean stubLoginFailed() {
-        boolean result;NetworkInterface networkInterface = new StubLoginFailed();
+
+    private boolean stubLogin(NetworkInterface networkInterface) {
         hm = new HabitureModule(networkInterface);
-        result = hm.login("accountExample", "passwordExample");
+        boolean result = hm.login("testAccount", "testPassword");
         return result;
     }
 

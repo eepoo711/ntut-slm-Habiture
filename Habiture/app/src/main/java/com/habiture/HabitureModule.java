@@ -47,6 +47,14 @@ public class HabitureModule {
         return password;
     }
 
+    public Friend[] queryFriends() {
+        Friend[] friends = null;
+
+        friends = networkInterface.httpGetFriends();
+
+        return friends;
+    }
+
 
     private void trace(String log) {
         if(DEBUG)

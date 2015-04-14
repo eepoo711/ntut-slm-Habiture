@@ -10,4 +10,9 @@ public class StubLoginFailed implements NetworkInterface {
         return false;
     }
 
+    @Override
+    public Friend[] httpGetFriends() {
+        throw new RuntimeException("unimplements method");
+    }
+
 }
