@@ -1,3 +1,7 @@
+2015/04/13 Brian 20:04 (0.10.20150415)
+1. add testCase for JSON
+2. add some HabitureModel API.
+
 2015/04/13 Brian 20:47 (0.9.20150414)
 1. Habiture Add API "queryFriends"
 2. UI limit length about account and password.

@@ -7,18 +7,19 @@ import java.net.URL;
 
 public class NetworkChannel implements NetworkInterface {
 
+    public static final String URL_LOGIN =  "http://140.124.144.121/DeWeiChen/login.cgi?";
+
     @Override
     public boolean httpGetLoginResult(String account, String password) {
         HttpURLConnection httpUrlConnection = null;
         try {
             httpUrlConnection = createHttpURLConnection(URL_LOGIN.concat("account=" + account + "&password=" + password));
 
+
+
             InputStream in = httpUrlConnection.getInputStream();
 
-            byte[] dataByte = new byte[500];
-            int readLen = in.read(dataByte);
-
-            String data = new String(dataByte, 0, readLen);
+            String data = readText(in);
 
             int code = Integer.valueOf(data.split("\n")[0]);
 
@@ -34,6 +35,13 @@ public class NetworkChannel implements NetworkInterface {
                 httpUrlConnection.disconnect();
         }
         return false;
+    }
+
+    private String readText(InputStream in) throws IOException {
+        byte[] dataByte = new byte[500];
+        int readLen = in.read(dataByte);
+
+        return new String(dataByte, 0, readLen);
     }
 
     @Override

@@ -3,15 +3,30 @@ package com.habiture.tests;
 
 import android.test.AndroidTestCase;
 
+import com.habiture.Friend;
 import com.habiture.NetworkChannel;
+import com.habiture.NetworkInterface;
 
 public class NetworkChannelTest extends AndroidTestCase {
 
+    private NetworkChannel networkChannel;
 
-//    public void testServerAvailable() {
-//        NetworkChannel networkChannel = new NetworkChannel();
-//        String result = networkChannel.httpGet("http://140.124.144.121/BrianYeh/cgi-bin/test.cgi");
-//        assertNotNull(result);
-//    }
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+
+        networkChannel = new NetworkChannel();
+    }
+
+    public void testLogin() {
+        boolean isLogined = networkChannel.httpGetLoginResult("guest", "guest");
+        assertTrue(isLogined);
+    }
+
+    public void testQueryFriends() {
+        Friend[] friends = networkChannel.httpGetFriends();
+
+        assertNotNull(friends);
+    }
 
 }
