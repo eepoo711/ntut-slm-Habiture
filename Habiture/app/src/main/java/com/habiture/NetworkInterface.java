@@ -6,5 +6,5 @@ public interface NetworkInterface {
 
     public boolean httpGetLoginResult(String account, String password);
 
-    Friend[] httpGetFriends();
+    public java.util.List<Friend> httpGetFriends(String account, String password);
 }

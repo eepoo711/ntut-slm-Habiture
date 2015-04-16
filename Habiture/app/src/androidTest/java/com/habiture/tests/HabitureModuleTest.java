@@ -9,6 +9,8 @@ import com.habiture.StubLoginFailed;
 import com.habiture.StubLoginSuccessfully;
 import com.habiture.StubQueryFriends;
 
+import java.util.List;
+
 public class HabitureModuleTest extends AndroidTestCase {
 
     private HabitureModule hm = null;
@@ -38,10 +40,12 @@ public class HabitureModuleTest extends AndroidTestCase {
 
     public void testQueryFriends() {
         stubLogin(new StubQueryFriends());
-        Friend[] friends = hm.queryFriends();
+        List<Friend> friends = hm.queryFriends();
 
-        assertEquals(1, friends[0].getId());
-        assertEquals("Amanda", friends[0].getName());
+        Friend amanda = friends.get(0);
+
+        assertEquals(1, amanda.getId());
+        assertEquals("Amanda", amanda.getName());
     }
 
 

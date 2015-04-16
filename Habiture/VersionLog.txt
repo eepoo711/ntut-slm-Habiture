@@ -1,3 +1,6 @@
+2015/04/16 Brian 16:30 (0.11.20150416)
+1. finish function queryFriends in HabitureModel.
+
 2015/04/15 Brian 20:04 (0.10.20150415)
 1. add testCase for JSON
 2. add some HabitureModel API.

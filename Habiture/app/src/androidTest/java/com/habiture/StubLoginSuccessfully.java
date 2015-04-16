@@ -1,5 +1,7 @@
 package com.habiture;
 
+import java.util.List;
+
 /**
  * Created by Yeh on 2015/4/2.
  */
@@ -12,7 +14,7 @@ public class StubLoginSuccessfully implements NetworkInterface {
     }
 
     @Override
-    public Friend[] httpGetFriends() {
-        throw new RuntimeException("unimplements method");
+    public List<Friend> httpGetFriends(String account, String password) {
+        throw new RuntimeException("wrong call");
     }
 }

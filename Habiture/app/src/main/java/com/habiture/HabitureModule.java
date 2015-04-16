@@ -2,6 +2,8 @@ package com.habiture;
 
 import android.util.Log;
 
+import java.util.List;
+
 
 public class HabitureModule {
 
@@ -47,10 +49,8 @@ public class HabitureModule {
         return password;
     }
 
-    public Friend[] queryFriends() {
-        Friend[] friends = null;
-
-        friends = networkInterface.httpGetFriends();
+    public List<Friend> queryFriends() {
+        List<Friend> friends = networkInterface.httpGetFriends(account, password);
 
         return friends;
     }
