@@ -36,7 +36,7 @@ public class MainActivity extends ActionBarActivity implements LoginFragment.Lis
 
         try {
             setContentView(R.layout.activity_main);
-            mHabitureModule = new HabitureModule(new NetworkChannel());
+            mHabitureModule = MainApplication.getInstance().getHabitureModel();
 
             if(savedInstanceState == null) {
                 getFragmentManager().beginTransaction()
@@ -140,6 +140,14 @@ public class MainActivity extends ActionBarActivity implements LoginFragment.Lis
                         MainActivity.this,
                         success ? textLoginSuccessful : textLoginFailed,
                         Toast.LENGTH_SHORT).show();
+
+                if(success){
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.container, HomeFragment.newInstance(mHabitureModule.getAccount()))
+                            .commit();
+                }
+
+
             } catch(Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
             }
