@@ -31,6 +31,14 @@ public class HabitureModule {
         return isLogined;
     }
 
+    public boolean declare(String peroid ,String frequency, String account, String password) {
+        trace("declare");
+		// TODO
+        boolean isDeclared = networkInterface.httpGetDeclareResult(peroid, frequency, account, password);
+
+        return isDeclared;
+    }
+
     /**
      * Get the User Account.
      * @return account or null when not login the system.

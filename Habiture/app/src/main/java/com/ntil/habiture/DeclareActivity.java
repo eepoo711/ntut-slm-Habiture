@@ -1,23 +1,20 @@
 package com.ntil.habiture;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.habiture.HabitureModule;
-import com.habiture.NetworkChannel;
 
 import utils.exception.ExceptionAlertDialog;
 
 
-public class MainActivity extends ActionBarActivity implements LoginFragment.Listener,
-        HomeFragment.Listener {
+public class DeclareActivity extends ActionBarActivity implements DeclareFragment.Listener {
 
     private static final boolean DEBUG = false;
 
@@ -27,12 +24,12 @@ public class MainActivity extends ActionBarActivity implements LoginFragment.Lis
 
     private void trace(String message) {
         if(DEBUG)
-            Log.d("MainActivity", message);
+            Log.d("DeclareActivity", message);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        trace("onCreate");
+        trace("onDeclareCreate");
 
         super.onCreate(savedInstanceState);
 
@@ -42,7 +39,7 @@ public class MainActivity extends ActionBarActivity implements LoginFragment.Lis
 
             if(savedInstanceState == null) {
                 getFragmentManager().beginTransaction()
-                        .add(R.id.container, new LoginFragment())
+                        .add(R.id.container, new DeclareFragment())
                         .commit();
             }
         } catch(Throwable e) {
@@ -54,7 +51,7 @@ public class MainActivity extends ActionBarActivity implements LoginFragment.Lis
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        trace("onCreateOptionsMenu");
+        trace("onDeclareCreateOptionsMenu");
 
         try {
             // Inflate the menu; this adds items to the action bar if it is present.
@@ -68,7 +65,7 @@ public class MainActivity extends ActionBarActivity implements LoginFragment.Lis
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        trace("onOptionsItemSelected");
+        trace("onDeclareOptionsItemSelected");
 
         try {
             // Handle action bar item clicks here. The action bar will
@@ -89,30 +86,29 @@ public class MainActivity extends ActionBarActivity implements LoginFragment.Lis
     }
 
     @Override
-    public void onLoginClicked(String account, String password) {
-        trace("onLoginClicked");
-        new LoginTask().execute(account, password);
+    public void onDeclareClicked(String peroid, String frequency, String account, String password) {
+        trace("onDeclareClicked");
+        new DeclareTask().execute(peroid, frequency, account, password);
     }
 
     @Override
-    public void onShowDeclarationClicked() {
-        trace("onShowDeclarationClicked");
-
-        startActivity(new Intent(MainActivity.this, DeclareActivity.class));
+    public void onCancelClicked() {
+        trace("onCancelClicked");
+        finish();
     }
 
 
-    private class LoginTask extends AsyncTask<String, Void, Boolean> {
+    private class DeclareTask extends AsyncTask<String, Void, Boolean> {
         private ProgressDialog progress;
 
         @Override
         protected void onPreExecute() {
-            trace("onPreExecute");
+            trace("onDeclarePreExecute");
 
             try {
-                progress = ProgressDialog.show(MainActivity.this,
-                        MainActivity.this.getString(R.string.progress_title),
-                        MainActivity.this.getString(R.string.logining));
+                progress = ProgressDialog.show(DeclareActivity.this,
+                        DeclareActivity.this.getString(R.string.progress_title),
+                        DeclareActivity.this.getString(R.string.declaring));
             } catch(Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
             }
@@ -121,41 +117,36 @@ public class MainActivity extends ActionBarActivity implements LoginFragment.Lis
 
         @Override
         protected Boolean doInBackground(String... params) {
-            trace("doInBackground");
-
-            boolean logined = false;
+            trace("doDeclareInBackground");
+            boolean declared = false;
             try {
-                String account = params[0];
-                String password = params[1];
-                logined = mHabitureModule.login(account, password);
+                String peroid = params[0];
+                String frequency = params[1];
+                String account = params[2];
+                String password = params[3];
+                declared = mHabitureModule.declare(peroid, frequency, account, password);
             } catch (Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
             }
 
-            return logined;
+            return declared;
         }
 
         @Override
         protected void onPostExecute(Boolean success) {
-            trace("onPostExecute");
-
+            trace("onDeclarePostExecute");
             try {
                 progress.dismiss();
 
 
-                String textLoginSuccessful = MainActivity.this.getString(R.string.login_successfully);
-                String textLoginFailed = MainActivity.this.getString(R.string.login_failed);
+                String textDeclareSuccessful = DeclareActivity.this.getString(R.string.declare_successfully);
+                String textDeclareFailed = DeclareActivity.this.getString(R.string.declare_failed);
                 Toast.makeText(
-                        MainActivity.this,
-                        success ? textLoginSuccessful : textLoginFailed,
+                        DeclareActivity.this,
+                        success ? textDeclareSuccessful : textDeclareFailed,
                         Toast.LENGTH_SHORT).show();
 
-                if(success){
-                    getFragmentManager().beginTransaction()
-                            .replace(R.id.container, HomeFragment.newInstance(mHabitureModule.getAccount()))
-                            .commit();
-                }
-
+                finish();
 
             } catch(Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);

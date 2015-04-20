@@ -54,6 +54,11 @@ public class NetworkChannel implements NetworkInterface {
         return false;
     }
 
+    public boolean httpGetDeclareResult(String peroid, String frequency, String account, String password) {
+        // TODO
+        return true;
+    }
+
     private String readText(InputStream in) throws IOException {
         trace("readText");
         byte[] dataByte = new byte[500];

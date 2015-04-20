@@ -11,6 +11,26 @@
     <string name="logining">登入中...</string>
     <string name="login_successfully">登入成功</string>
     <string name="login_failed">登入失敗</string>
-
+    <string name="declare">發佈</string>
+    <string name="declaring">發佈中...</string>
+    <string name="declare_successfully">發佈成功</string>
+    <string name="declare_failed">發佈失敗</string>
+    <string name="enter_declaration">我想要...</string>
+    <string name="enter_cost">如果...</string>
+    <string-array name="declare_period" >
+        <item >天</item>
+        <item >週</item>
+    </string-array>
+    <string-array name="declare_daily_frequency" >
+        <item>1</item>
+    </string-array>
+    <string-array name="declare_weekly_frequency" >
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
 
 </resources>

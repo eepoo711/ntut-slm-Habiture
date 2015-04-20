@@ -1,5 +1,6 @@
 package com.ntil.habiture;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,8 @@ public class HomeFragment extends Fragment {
     private static final String ARGS_NAME = "name";
 
     private TextView textView;
+
+    private Listener mListener;
 
     private void trace(String message) {
         if(DEBUG)
@@ -36,7 +39,12 @@ public class HomeFragment extends Fragment {
         return fragment;
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
 
+        mListener = (Listener) activity;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,5 +63,16 @@ public class HomeFragment extends Fragment {
 
         textView = (TextView) getActivity().findViewById(R.id.name);
         textView.setText(name);
+
+        getActivity().findViewById(R.id.btnDeclare).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                mListener.onShowDeclarationClicked();
+            }
+        });
+    }
+
+    public interface Listener {
+        public void onShowDeclarationClicked();
     }
 }
