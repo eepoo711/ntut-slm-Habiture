@@ -4,6 +4,7 @@ package com.habiture.tests;
 import android.test.AndroidTestCase;
 
 import com.habiture.Friend;
+import com.habiture.Group;
 import com.habiture.NetworkChannel;
 import com.habiture.NetworkInterface;
 
@@ -36,6 +37,16 @@ public class NetworkChannelTest extends AndroidTestCase {
         Friend codus = friends.get(1);
         assertEquals("Codus", codus.getName());
         assertEquals(6, codus.getId());
+    }
+
+    public void testQueryGroups() {
+        List<Group> groups = networkChannel.httpGetGroups("guest", "guest");
+        assertNotNull(groups);
+
+        Group guest = groups.get(0);
+        assertEquals("123", guest.getSwear());
+        assertEquals(64, guest.getId());
+
     }
 
 }

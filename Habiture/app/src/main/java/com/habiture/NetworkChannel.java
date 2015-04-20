@@ -20,6 +20,7 @@ public class NetworkChannel implements NetworkInterface {
 
     public static final String URL_LOGIN =  "http://140.124.144.121/DeWeiChen/login.cgi?";
     public static final String URL_QUERY_FRIENDS = "http://140.124.144.121/GawinHsu/friends.cgi?";
+    public static final String URL_QUERY_GROUPS = "http://140.124.144.121/GawinHsu/groups.cgi?";
 
     private void trace(String message) {
         if(DEBUG)
@@ -83,6 +84,30 @@ public class NetworkChannel implements NetworkInterface {
         try {
             connection = createHttpURLConnection(url);
             return readFriends(connection.getInputStream());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection(connection);
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<Group> httpGetGroups(String account, String password) {
+        String parameters =
+                "account=".concat(account)
+                        .concat("&")
+                        .concat("password=").concat(password);
+        String url = URL_QUERY_GROUPS.concat(parameters);
+
+        HttpURLConnection connection = null;
+
+
+        try {
+            connection = createHttpURLConnection(url);
+            return readGroups(connection.getInputStream());
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -161,6 +186,70 @@ public class NetworkChannel implements NetworkInterface {
         friend.setId(id);
 
         return friend;
+    }
+
+    private List<Group> readGroups(InputStream is) {
+        trace("readGroups");
+        JsonReader reader = null;
+        try {
+            reader = new JsonReader(new InputStreamReader(is));
+            reader.beginObject();
+
+            if(!"groups".equals(reader.nextName()))
+                throw new UnhandledException("wrong json format");
+            List<Group> groups = readGroupArray(reader);
+
+            reader.endObject();
+            return groups;
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new UnhandledException("readGroups unhandled", e);
+        } finally {
+            Utils.closeIO(reader);
+        }
+    }
+
+    private List<Group> readGroupArray(JsonReader reader) throws IOException {
+        trace("readGroupArray");
+        reader.beginArray();
+        List<Group> groups = new ArrayList<>();
+        while (reader.hasNext()) {
+            groups.add(readGroup(reader));
+        }
+        reader.endArray();
+        return groups;
+    }
+
+    private Group readGroup(JsonReader reader) throws IOException {
+        trace("readGroup");
+        long id = -1;
+        String swear = null;
+        String date = null;
+
+        reader.beginObject();
+        while(reader.hasNext()) {
+            String key = reader.nextName();
+            if("swear".equals(key)) {
+                swear = reader.nextString();
+            } else if("date".equals(key)) {
+                date = reader.nextString();
+            } else if("id".equals(key)) {
+                id = reader.nextLong();
+            } else {
+                reader.skipValue();
+            }
+        }
+        reader.endObject();
+
+        if(id == -1 || swear == null || date == null) {
+            throw new UnhandledException("wrong json format.");
+        }
+
+        Group group = new Group();
+        group.setSwear(swear);
+        group.setId(id);
+
+        return group;
     }
 
     private HttpURLConnection createHttpURLConnection(String url) throws IOException{

@@ -38,7 +38,6 @@ public class HabitureModule {
 
         return isDeclared;
     }
-
     /**
      * Get the User Account.
      * @return account or null when not login the system.
@@ -61,6 +60,12 @@ public class HabitureModule {
         List<Friend> friends = networkInterface.httpGetFriends(account, password);
 
         return friends;
+    }
+
+    public List<Group> queryGroups() {
+        List<Group> groups = networkInterface.httpGetGroups(account, password);
+
+        return groups;
     }
 
 

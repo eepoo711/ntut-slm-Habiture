@@ -1,3 +1,6 @@
+2015/04/20 Gawin 20:39 (0.14.20150420)
+1. add Group API in HabitureModel.
+
 2015/04/20 Codus 20:08 (0.13.20150420)
 1. finish declare page.
 

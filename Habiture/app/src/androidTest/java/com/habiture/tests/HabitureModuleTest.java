@@ -3,11 +3,13 @@ package com.habiture.tests;
 import android.test.AndroidTestCase;
 
 import com.habiture.Friend;
+import com.habiture.Group;
 import com.habiture.HabitureModule;
 import com.habiture.NetworkInterface;
 import com.habiture.StubLoginFailed;
 import com.habiture.StubLoginSuccessfully;
 import com.habiture.StubQueryFriends;
+import com.habiture.StubQueryGroups;
 
 import java.util.List;
 
@@ -48,6 +50,15 @@ public class HabitureModuleTest extends AndroidTestCase {
         assertEquals("Amanda", amanda.getName());
     }
 
+    public void testQueryGroups() {
+        stubLogin(new StubQueryGroups());
+        List<Group> groups = hm.queryGroups();
+
+        Group running = groups.get(0);
+
+        assertEquals(1, running.getId());
+        assertEquals("Running", running.getSwear());
+    }
 
     private boolean stubLogin(NetworkInterface networkInterface) {
         hm = new HabitureModule(networkInterface);

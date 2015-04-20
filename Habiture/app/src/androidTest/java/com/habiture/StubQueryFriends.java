@@ -25,4 +25,14 @@ public class StubQueryFriends implements NetworkInterface {
         return friends;
     }
 
+    @Override
+    public List<Group> httpGetGroups(String account, String password) {
+        throw new RuntimeException("wrong call");
+    }
+
+    @Override
+    public boolean httpGetDeclareResult(String peroid, String frequency, String account, String password) {
+        throw new RuntimeException("wrong call");
+    }
+
 }

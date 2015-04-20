@@ -1,15 +1,15 @@
 package com.habiture;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Yeh on 2015/4/2.
+ * Created by GawinHsu on 4/20/15.
  */
-public class StubLoginSuccessfully implements NetworkInterface {
+public class StubQueryGroups implements NetworkInterface{
 
     @Override
     public boolean httpGetLoginResult(String account, String password) {
-
         return true;
     }
 
@@ -20,7 +20,14 @@ public class StubLoginSuccessfully implements NetworkInterface {
 
     @Override
     public List<Group> httpGetGroups(String account, String password) {
-        throw new RuntimeException("wrong call");
+        List<Group> groups = new ArrayList<>();
+
+        Group running = new Group();
+        running.setId(1);
+        running.setSwear("Running");
+
+        groups.add(running);
+        return groups;
     }
 
     @Override
