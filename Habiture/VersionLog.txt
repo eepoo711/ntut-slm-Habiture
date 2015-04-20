@@ -1,3 +1,6 @@
+2015/04/20 Ed 22:16 (0.15.20150420)
+1. finish invite friend page.
+
 2015/04/20 Gawin 20:39 (0.14.20150420)
 1. add Group API in HabitureModel.
 

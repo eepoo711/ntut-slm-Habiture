@@ -9,14 +9,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.habiture.Friend;
 import com.habiture.HabitureModule;
+
+import java.util.List;
 
 import utils.exception.ExceptionAlertDialog;
 
 
-public class DeclareActivity extends ActionBarActivity implements DeclareFragment.Listener {
+public class DeclareActivity extends ActionBarActivity implements DeclareFragment.Listener, InviteFriendFragment.Listener {
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     private HabitureModule mHabitureModule;
 
@@ -97,6 +100,12 @@ public class DeclareActivity extends ActionBarActivity implements DeclareFragmen
         finish();
     }
 
+    @Override
+    public void onInviteFriendsClicked(List<Long> friendsId) {
+        trace("onInviteFriendsClicked friendsId = " + friendsId);
+        //TODO
+        finish();
+    }
 
     private class DeclareTask extends AsyncTask<String, Void, Boolean> {
         private ProgressDialog progress;
@@ -146,12 +155,60 @@ public class DeclareActivity extends ActionBarActivity implements DeclareFragmen
                         success ? textDeclareSuccessful : textDeclareFailed,
                         Toast.LENGTH_SHORT).show();
 
-                finish();
+                if(success) {
+
+                    new QueryFriendsTask().execute();
+                }
 
             } catch(Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
             }
 
+        }
+    }
+
+    private class QueryFriendsTask extends AsyncTask<Void, Void, List<Friend>> {
+        private ProgressDialog progress;
+        @Override
+        protected void onPreExecute() {
+            trace("onDeclarePreExecute");
+
+            try {
+                progress = ProgressDialog.show(DeclareActivity.this,
+                        DeclareActivity.this.getString(R.string.progress_title),
+                        DeclareActivity.this.getString(R.string.searching_friends));
+            } catch(Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+        }
+
+        @Override
+        protected void onPostExecute(List<Friend> friends) {
+            trace("onDeclarePostExecute");
+            try {
+                progress.dismiss();
+
+                if(friends == null || friends.size() == 0) {
+                    Toast.makeText(
+                            DeclareActivity.this,
+                            R.string.no_friend,
+                            Toast.LENGTH_SHORT).show();
+                    return ;
+                }
+
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.container, InviteFriendFragment.newInstance(friends))
+                        .addToBackStack(null)
+                        .commit();
+
+            } catch(Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+        }
+
+        @Override
+        protected List<Friend> doInBackground(Void... params) {
+            return mHabitureModule.queryFriends();
         }
     }
 }

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/default_wallpaper"
+    android:padding="15dp">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/retangle_invitefriend_grey_drawable">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            android:id="@+id/btnCancel"
+            android:singleLine="true"
+            android:background="#00AAAAAA"
+            android:textSize="32sp"
+            android:textColor="#122ead" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/invite_friend"
+            android:id="@+id/textView"
+            android:gravity="center"
+            android:textSize="32sp"
+            android:layout_weight="1"
+            android:textColor="#000000" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/confirm"
+            android:id="@+id/btnConfirm"
+            android:background="#00AAAAAA"
+            android:clickable="false"
+            android:nestedScrollingEnabled="false"
+            android:singleLine="true"
+            android:textSize="32sp"
+            android:textColor="#122ead" />
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lvFriendList"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/retangle_invitefriend_white_drawable"
+        android:drawSelectorOnTop="false"
+        android:fastScrollAlwaysVisible="false" />
+
+</LinearLayout>

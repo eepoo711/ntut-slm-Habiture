@@ -33,7 +33,9 @@
             android:singleLine="true"
             android:ems="15"
             android:layout_marginBottom="3dp"
-            android:maxLength="30" />
+            android:maxLength="30"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
 
         <EditText
             android:layout_width="match_parent"
@@ -46,7 +48,9 @@
             android:singleLine="true"
             android:ems="15"
             android:layout_marginTop="3dp"
-            android:maxLength="30"/>
+            android:maxLength="30"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
 
         <Button
             android:layout_width="wrap_content"
@@ -55,7 +59,11 @@
             android:text="@string/login"
             android:id="@+id/btnLogin"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="#ffffffff"
+            android:singleLine="true" />
     </LinearLayout>
 
     <LinearLayout
