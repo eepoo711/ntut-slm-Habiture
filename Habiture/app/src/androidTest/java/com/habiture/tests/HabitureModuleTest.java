@@ -8,9 +8,12 @@ import com.habiture.HabitureModule;
 import com.habiture.NetworkInterface;
 import com.habiture.StubLoginFailed;
 import com.habiture.StubLoginSuccessfully;
+import com.habiture.StubPostSwearFailed;
+import com.habiture.StubPostSwearSuccessfully;
 import com.habiture.StubQueryFriends;
 import com.habiture.StubQueryGroups;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HabitureModuleTest extends AndroidTestCase {
@@ -58,6 +61,18 @@ public class HabitureModuleTest extends AndroidTestCase {
 
         assertEquals(1, running.getId());
         assertEquals("Running", running.getSwear());
+    }
+
+    public void testPostSwearSuccessfully() {
+        stubLogin(new StubPostSwearSuccessfully());
+        List<Friend> friends = new ArrayList<>();
+        assertTrue(hm.postDeclaration(hm.getAccount(), hm.getPassword(), 1, 1, "Running", friends));
+    }
+
+    public void testPostSwearFailed() {
+        stubLogin(new StubPostSwearFailed());
+        List<Friend> friends = new ArrayList<>();
+        assertFalse(hm.postDeclaration(hm.getAccount(), hm.getPassword(), 1, 1, "Running", friends));
     }
 
     private boolean stubLogin(NetworkInterface networkInterface) {

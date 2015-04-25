@@ -31,10 +31,10 @@ public class HabitureModule {
         return isLogined;
     }
 
-    public boolean declare(String peroid ,String frequency, String account, String password) {
+    public boolean postDeclaration(String account, String password, int period, int frequency, String declaration, List<Friend> friends) {
         trace("declare");
 		// TODO
-        boolean isDeclared = networkInterface.httpGetDeclareResult(peroid, frequency, account, password);
+        boolean isDeclared = networkInterface.httpPostDeclaration(account, password, period, frequency, declaration, friends);
 
         return isDeclared;
     }

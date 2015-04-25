@@ -23,7 +23,7 @@ public class StubLoginFailed implements NetworkInterface {
     }
 
     @Override
-    public boolean httpGetDeclareResult(String peroid, String frequency, String account, String password) {
+    public boolean httpPostDeclaration(String account, String password, int period, int frequency, String declaration, List<Friend> friends) {
         throw new RuntimeException("wrong call");
     }
 

@@ -5,66 +5,91 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.habiture.Friend;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.Inflater;
 
-public class InviteFriendAdapter extends ArrayAdapter<InviteFriendSingleItem> {
+public class InviteFriendAdapter extends BaseAdapter {
+    private List<Item> items;
+    private LayoutInflater inflater;
 
-    private int resource;
+    public InviteFriendAdapter(Context context, List<Friend> friends) {
+        inflater = LayoutInflater.from(context);
+        items = new ArrayList<>(friends.size());
+        for (Friend friend : friends) {
+            Item item = new Item();
+            item.friend = friend;
+            items.add(item);
+        }
+    }
 
-    private List<InviteFriendSingleItem> items;
+    public class Item {
+        Friend friend;
+        boolean isSelected = false;
 
-    public InviteFriendAdapter (Context context, int resource, List<InviteFriendSingleItem> items)
-    {
-        super(context, resource, items);
-        this.resource = resource;
-        this.items = items;
+        public Friend getFriend() {
+            return friend;
+        }
+
+        public boolean isSelected() {
+            return isSelected;
+        }
+
+    }
+    @Override
+    public int getCount() {
+        return items.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return items.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LinearLayout itemView;
-        // 讀取目前位置的物件
-        final InviteFriendSingleItem item = getItem(position);
+        ViewHolder holder;
 
         if (convertView == null) {
-            // 建立項目畫面元件
-            itemView = new LinearLayout(getContext());
-            String inflater = Context.LAYOUT_INFLATER_SERVICE;
-            LayoutInflater li = (LayoutInflater)
-                    getContext().getSystemService(inflater);
-            li.inflate(resource, itemView, true);
+            convertView = inflater.inflate(R.layout.singleitem_invite_friend, parent, false);
+            holder = new ViewHolder();
+            holder.tvName = (TextView) convertView.findViewById(R.id.tvFriendsName);
+            holder.ivSelected = (ImageView) convertView.findViewById(R.id.ivSelected);
+            convertView.setTag(holder);
         }
         else {
-            itemView = (LinearLayout) convertView;
+            holder = (ViewHolder)convertView.getTag();
         }
-
-        // 讀取姓名、已選擇元件
-        TextView tvFriendsName = (TextView) itemView.findViewById(R.id.tvFriendsName);
-        ImageView ivSelected = (ImageView) itemView.findViewById(R.id.ivSelected);
-
+        Item item = (Item) getItem(position);
         // 設定姓名
-        tvFriendsName.setText(item.getFriendsName());
+        holder.tvName.setText(item.friend.getName());
 
         // 設定是否已選擇
-        ivSelected.setVisibility(item.isSelected() ? View.VISIBLE : View.INVISIBLE);
+        holder.ivSelected.setVisibility(item.isSelected() ? View.VISIBLE : View.INVISIBLE);
 
-        return itemView;
+        return convertView;
     }
 
-    // 設定指定編號的資料
-    public void set(int index, InviteFriendSingleItem item) {
-        if (index >= 0 && index < items.size()) {
-            items.set(index, item);
-            notifyDataSetChanged();
-        }
+    public void setSelected(int position, boolean selected) {
+        Item item = (Item) getItem(position);
+        item.isSelected = selected;
+        notifyDataSetChanged();
     }
 
-    // 讀取指定編號的資料
-    public InviteFriendSingleItem get(int index) {
-        return items.get(index);
+    private class ViewHolder {
+        TextView tvName;
+        ImageView ivSelected;
     }
 }

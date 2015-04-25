@@ -24,8 +24,6 @@ public class InviteFriendFragment extends Fragment {
 
     private InviteFriendAdapter invitefriendAdapter;
 
-    private List<InviteFriendSingleItem> items;
-
     private Button btnCancel, btnConfirm;
 
     private static List<Friend> friends;
@@ -64,15 +62,8 @@ public class InviteFriendFragment extends Fragment {
 
         initializeView();
 
-        // 取得所有姓名資料
-        items = new ArrayList<InviteFriendSingleItem>();
-        for(Friend friend : friends) {
-            items.add(new InviteFriendSingleItem(friend.getId(), friend.getName()));
-        }
 
-        invitefriendAdapter = new InviteFriendAdapter(getActivity().getBaseContext(),
-                R.layout.singleitem_invite_friend,
-                items);
+        invitefriendAdapter = new InviteFriendAdapter(getActivity(), friends);
         item_list.setAdapter(invitefriendAdapter);
 
         // 註冊選單項目點擊監聽物件
@@ -81,11 +72,11 @@ public class InviteFriendFragment extends Fragment {
              public void onItemClick(AdapterView<?> parent, View view,
                                      int position, long id) {
                  // 讀取選擇的物件
-                 InviteFriendSingleItem item = invitefriendAdapter.getItem(position);
+                 InviteFriendAdapter.Item item = (InviteFriendAdapter.Item) invitefriendAdapter.getItem(position);
                  // 處理是否顯示已選擇項目
-                 toggleItem(item);
                  // 重新設定記事項目
-                 invitefriendAdapter.set(position, item);
+                 invitefriendAdapter.setSelected(position, !item.isSelected);
+
              }
         });
 
@@ -108,29 +99,24 @@ public class InviteFriendFragment extends Fragment {
             public void onClick(View v) {
                 trace("btnConfirm onClick");
                 int index = invitefriendAdapter.getCount() - 1;
-                List<Long> friendsId = new ArrayList<>();
+                List<Friend> selectedFriends = new ArrayList<>();
 
                 while (index > -1) {
-                    InviteFriendSingleItem item = invitefriendAdapter.get(index);
+                    InviteFriendAdapter.Item item = (InviteFriendAdapter.Item) invitefriendAdapter.getItem(index);
 
                     if (item.isSelected()) {
-                        friendsId.add(item.getId());
+                        selectedFriends.add(item.getFriend());
+                        trace(item.getFriend().getName());
                     }
                     index--;
                 }
-                mListener.onInviteFriendsClicked(friendsId);
+                mListener.onInviteFriendsClicked(selectedFriends);
             }
         });
 
     }
 
-    private void toggleItem(InviteFriendSingleItem item) {
-        // 如果需要設定項目
-        if (item != null) {
-            // 設定已勾選的狀態
-            item.setSelected(!item.isSelected());
-        }
-    }
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -139,6 +125,6 @@ public class InviteFriendFragment extends Fragment {
     }
 
     public interface Listener {
-        public void onInviteFriendsClicked(List<Long> friendsId);
+        public void onInviteFriendsClicked(List<Friend> friends);
     }
 }

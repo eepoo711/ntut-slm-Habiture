@@ -1,3 +1,9 @@
+2015/04/24 Ed & Gawin 21:46 (0.16.20150424)
+1. merge declaration UI & model
+2. modify InviteFriendAdaptor
+3. remove InviteFriendSingleItem
+4. modify all url
+
 2015/04/20 Ed 22:16 (0.15.20150420)
 1. finish invite friend page.
 
@@ -8,7 +14,7 @@
 1. finish declare page.
 
 2015/04/16 Ed 18:13 (0.12.20150416)
-1. display name after user login.
+1. display name after user login.n
 
 2015/04/16 Brian 16:30 (0.11.20150416)
 1. finish function queryFriends in HabitureModel.

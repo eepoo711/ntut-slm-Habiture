@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import utils.exception.UnhandledException;
 
@@ -136,7 +135,7 @@ public class DeclareFragment extends Fragment {
     }
 
     public interface Listener {
-        public void onDeclareClicked(String peroid, String frequency, String account, String password);
+        public void onDeclareClicked(String period, String frequency, String declaration, String cost);
         public void onCancelClicked();
     }
 

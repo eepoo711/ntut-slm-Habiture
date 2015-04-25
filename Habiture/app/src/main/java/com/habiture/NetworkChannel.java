@@ -1,11 +1,14 @@
 package com.habiture;
 
 import android.util.JsonReader;
+import android.util.JsonWriter;
 import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -16,11 +19,12 @@ import utils.exception.UnhandledException;
 
 public class NetworkChannel implements NetworkInterface {
 
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
 
-    public static final String URL_LOGIN =  "http://140.124.144.121/DeWeiChen/login.cgi?";
-    public static final String URL_QUERY_FRIENDS = "http://140.124.144.121/GawinHsu/friends.cgi?";
-    public static final String URL_QUERY_GROUPS = "http://140.124.144.121/GawinHsu/groups.cgi?";
+    public static final String URL_LOGIN =  "http://140.124.144.121/Habiture/login.cgi?";
+    public static final String URL_QUERY_FRIENDS = "http://140.124.144.121/Habiture/friends.cgi?";
+    public static final String URL_QUERY_GROUPS = "http://140.124.144.121/Habiture/groups.cgi?";
+    public static final String URL_POST_SWEAR = "http://140.124.144.121/Habiture/posts.cgi";
 
     private void trace(String message) {
         if(DEBUG)
@@ -55,9 +59,57 @@ public class NetworkChannel implements NetworkInterface {
         return false;
     }
 
-    public boolean httpGetDeclareResult(String peroid, String frequency, String account, String password) {
-        // TODO
-        return true;
+    public boolean httpPostDeclaration(String account, String password, int period, int frequency, String declaration, List<Friend> friends) {
+        trace("httpPostSwear");
+        HttpURLConnection httpUrlConnection = null;
+        JsonWriter writer = null;
+
+        try {
+            URL url = new URL(URL_POST_SWEAR);
+            httpUrlConnection = (HttpURLConnection)url.openConnection();
+
+            //httpUrlConnection = createHttpURLConnection(URL_POST_SWEAR);
+           // httpUrlConnection.setRequestMethod("POST");
+          //  httpUrlConnection.setDoInput(true);
+            httpUrlConnection.setDoOutput(true);
+            httpUrlConnection.setChunkedStreamingMode(0);
+            httpUrlConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+
+            OutputStream out = httpUrlConnection.getOutputStream();
+            OutputStreamWriter ow = new OutputStreamWriter(out, "UTF-8");
+            writer = new JsonWriter(ow);
+            // make json
+            writer.setIndent("  ");
+            writer.beginObject();
+            writer.name("account").value(account);
+            writer.name("password").value(password);
+            writer.name("period").value(period);
+            writer.name("frequency").value(frequency);
+            writer.name("swear").value(declaration);
+            writer.name("friends_id");
+            writer.beginArray();
+            for (Friend friend: friends) {
+                writer.value(friend.getId());
+            }
+            writer.endArray();
+            writer.endObject();
+            writer.close();
+
+            String result = readText(httpUrlConnection.getInputStream());
+            trace(result);
+
+            int code = Integer.valueOf(result.split("\n")[0]);
+
+            boolean isPosted = false;
+            isPosted = code == 1 ? true : false;
+            return isPosted;
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new UnhandledException("httpPostSwear IO Exception", e);
+        } finally {
+            closeConnection(httpUrlConnection);
+            Utils.closeIO(writer);
+        }
     }
 
     private String readText(InputStream in) throws IOException {
@@ -241,7 +293,7 @@ public class NetworkChannel implements NetworkInterface {
         }
         reader.endObject();
 
-        if(id == -1 || swear == null || date == null) {
+        if(id == -1 || swear == null) {
             throw new UnhandledException("wrong json format.");
         }
 

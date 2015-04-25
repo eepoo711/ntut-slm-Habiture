@@ -15,6 +15,7 @@ import com.habiture.HabitureModule;
 import java.util.List;
 
 import utils.exception.ExceptionAlertDialog;
+import utils.exception.UnhandledException;
 
 
 public class DeclareActivity extends ActionBarActivity implements DeclareFragment.Listener, InviteFriendFragment.Listener {
@@ -22,8 +23,10 @@ public class DeclareActivity extends ActionBarActivity implements DeclareFragmen
     private static final boolean DEBUG = true;
 
     private HabitureModule mHabitureModule;
-
-
+    private int mPeriod = -1;
+    private int mFrequency = -1;
+    private String mDeclaration = null;
+    private String mCost = null;
 
     private void trace(String message) {
         if(DEBUG)
@@ -89,9 +92,9 @@ public class DeclareActivity extends ActionBarActivity implements DeclareFragmen
     }
 
     @Override
-    public void onDeclareClicked(String peroid, String frequency, String account, String password) {
+    public void onDeclareClicked(String period, String frequency, String declaration, String cost) {
         trace("onDeclareClicked");
-        new DeclareTask().execute(peroid, frequency, account, password);
+        new DeclareTask().execute(period, frequency, declaration, cost);
     }
 
     @Override
@@ -101,10 +104,12 @@ public class DeclareActivity extends ActionBarActivity implements DeclareFragmen
     }
 
     @Override
-    public void onInviteFriendsClicked(List<Long> friendsId) {
-        trace("onInviteFriendsClicked friendsId = " + friendsId);
+    public void onInviteFriendsClicked(List<Friend> friends) {
+        trace("onInviteFriendsClicked");
         //TODO
-        finish();
+        new PostDeclarationTask().execute(friends);
+
+//        finish();
     }
 
     private class DeclareTask extends AsyncTask<String, Void, Boolean> {
@@ -127,13 +132,23 @@ public class DeclareActivity extends ActionBarActivity implements DeclareFragmen
         @Override
         protected Boolean doInBackground(String... params) {
             trace("doDeclareInBackground");
-            boolean declared = false;
+            boolean declared = true;
+//            boolean declared = true;
             try {
-                String peroid = params[0];
-                String frequency = params[1];
-                String account = params[2];
-                String password = params[3];
-                declared = mHabitureModule.declare(peroid, frequency, account, password);
+                //TODO: global ?
+               // mPeriod = Integer.valueOf(params[0]);
+//                mPeriod = 1;
+
+                if (params[0].equals("天"))
+                    mPeriod = 0;
+                else if (params[0].equals("週"))
+                    mPeriod = 1;
+                else
+                    throw new UnhandledException("period unknown input.");
+
+                mFrequency = Integer.valueOf(params[1]);
+                mDeclaration = params[2];
+                mCost = params[3];
             } catch (Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
             }
@@ -147,16 +162,7 @@ public class DeclareActivity extends ActionBarActivity implements DeclareFragmen
             try {
                 progress.dismiss();
 
-
-                String textDeclareSuccessful = DeclareActivity.this.getString(R.string.declare_successfully);
-                String textDeclareFailed = DeclareActivity.this.getString(R.string.declare_failed);
-                Toast.makeText(
-                        DeclareActivity.this,
-                        success ? textDeclareSuccessful : textDeclareFailed,
-                        Toast.LENGTH_SHORT).show();
-
-                if(success) {
-
+                if(success){
                     new QueryFriendsTask().execute();
                 }
 
@@ -209,6 +215,62 @@ public class DeclareActivity extends ActionBarActivity implements DeclareFragmen
         @Override
         protected List<Friend> doInBackground(Void... params) {
             return mHabitureModule.queryFriends();
+        }
+    }
+
+    private class PostDeclarationTask extends AsyncTask<List<Friend>, Void, Boolean> {
+
+        private ProgressDialog progress;
+
+        @Override
+        protected Boolean doInBackground(List<Friend>... params) {
+            trace("doDeclareInBackground");
+            boolean declared = false;
+//            boolean declared = true;
+            try {
+                //TODO: global ?
+                declared = mHabitureModule.postDeclaration(mHabitureModule.getAccount(), mHabitureModule.getPassword(),
+                        mPeriod, mFrequency, mDeclaration, params[0]);
+            } catch (Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+
+            return declared;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            trace("onDeclarePreExecute");
+
+            try {
+                progress = ProgressDialog.show(DeclareActivity.this,
+                        DeclareActivity.this.getString(R.string.progress_title),
+                        DeclareActivity.this.getString(R.string.declaring));
+            } catch(Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            trace("onDeclarePostExecute");
+            try {
+                progress.dismiss();
+
+                String textDeclareSuccessful = DeclareActivity.this.getString(R.string.declare_successfully);
+                String textDeclareFailed = DeclareActivity.this.getString(R.string.declare_failed);
+                Toast.makeText(
+                        DeclareActivity.this,
+                        success ? textDeclareSuccessful : textDeclareFailed,
+                        Toast.LENGTH_SHORT).show();
+
+                finish();
+
+            } catch(Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+
         }
     }
 }
