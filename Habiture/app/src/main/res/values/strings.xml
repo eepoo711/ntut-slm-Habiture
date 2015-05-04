@@ -37,5 +37,6 @@
     <string name="invite_friend">邀請好友</string>
     <string name="searching_friends">搜尋好友中...</string>
     <string name="no_friend">無任何好友</string>
+    <string name="no_group">無任何群組</string>
 
 </resources>

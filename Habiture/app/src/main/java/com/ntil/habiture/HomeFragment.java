@@ -70,9 +70,18 @@ public class HomeFragment extends Fragment {
                 mListener.onShowDeclarationClicked();
             }
         });
+
+        getActivity().findViewById(R.id.btnGroup).setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                mListener.onShowGroupClicked();
+            }
+        });
     }
 
     public interface Listener {
         public void onShowDeclarationClicked();
+        public void onShowGroupClicked();
     }
 }

@@ -1,3 +1,6 @@
+2015/05/04 Ed 19:55 (0.17.20150504)
+1. merge group UI
+
 2015/04/24 Ed & Gawin 21:46 (0.16.20150424)
 1. merge declaration UI & model
 2. modify InviteFriendAdaptor

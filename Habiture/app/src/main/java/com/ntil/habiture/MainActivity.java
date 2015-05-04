@@ -10,8 +10,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.habiture.Group;
 import com.habiture.HabitureModule;
 import com.habiture.NetworkChannel;
+
+import java.util.List;
 
 import utils.exception.ExceptionAlertDialog;
 
@@ -101,6 +104,11 @@ public class MainActivity extends ActionBarActivity implements LoginFragment.Lis
         startActivity(new Intent(MainActivity.this, DeclareActivity.class));
     }
 
+    @Override
+    public void onShowGroupClicked() {
+        trace("onShowGroupClicked");
+        new QueryGroupsTask().execute();
+    }
 
     private class LoginTask extends AsyncTask<String, Void, Boolean> {
         private ProgressDialog progress;
@@ -161,6 +169,51 @@ public class MainActivity extends ActionBarActivity implements LoginFragment.Lis
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
             }
 
+        }
+    }
+
+    private class QueryGroupsTask extends AsyncTask<Void, Void, List<Group>> {
+        private ProgressDialog progress;
+        @Override
+        protected void onPreExecute() {
+            trace("onDeclarePreExecute");
+
+            try {
+                progress = ProgressDialog.show(MainActivity.this,
+                        MainActivity.this.getString(R.string.progress_title),
+                        MainActivity.this.getString(R.string.searching_friends));
+            } catch(Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+        }
+
+        @Override
+        protected void onPostExecute(List<Group> groups) {
+            trace("onDeclarePostExecute");
+            try {
+                progress.dismiss();
+
+                if(groups == null || groups.size() == 0) {
+                    Toast.makeText(
+                            MainActivity.this,
+                            R.string.no_group,
+                            Toast.LENGTH_SHORT).show();
+                    return ;
+                }
+
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.container, GroupFragment.newInstance(groups))
+                        .addToBackStack(null)
+                        .commit();
+
+            } catch(Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+        }
+
+        @Override
+        protected List<Group> doInBackground(Void... params) {
+            return mHabitureModule.queryGroups();
         }
     }
 }

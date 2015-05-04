@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.habiture.Friend;
@@ -23,8 +22,6 @@ public class InviteFriendFragment extends Fragment {
     private ListView item_list;
 
     private InviteFriendAdapter invitefriendAdapter;
-
-    private Button btnCancel, btnConfirm;
 
     private static List<Friend> friends;
 

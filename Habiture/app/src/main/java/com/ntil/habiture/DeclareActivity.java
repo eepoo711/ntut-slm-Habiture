@@ -109,7 +109,6 @@ public class DeclareActivity extends ActionBarActivity implements DeclareFragmen
         //TODO
         new PostDeclarationTask().execute(friends);
 
-//        finish();
     }
 
     private class DeclareTask extends AsyncTask<String, Void, Boolean> {
