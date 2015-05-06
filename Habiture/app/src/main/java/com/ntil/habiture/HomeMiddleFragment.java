@@ -9,11 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class HomeFragment extends Fragment {
+public class HomeMiddleFragment extends Fragment {
 
     private static final boolean DEBUG = false;
-
-    private static final String ARGS_NAME = "name";
 
     private TextView textView;
 
@@ -21,23 +19,14 @@ public class HomeFragment extends Fragment {
 
     private void trace(String message) {
         if(DEBUG)
-            Log.d("HomeFragment", message);
+            Log.d("HomeMiddleFragment", message);
     }
 
-    public HomeFragment() {
+    public HomeMiddleFragment() {
 
     }
 
-    public static HomeFragment newInstance(String name) {
-        HomeFragment fragment = new HomeFragment();
 
-        Bundle args = new Bundle();
-        args.putString(ARGS_NAME, name);
-
-        fragment.setArguments(args);
-
-        return fragment;
-    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -49,7 +38,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         trace("onCreateView");
-        return inflater.inflate(R.layout.fragment_main_page, container, false);
+        return inflater.inflate(R.layout.fragment_home_middle, container, false);
     }
 
     @Override
@@ -58,11 +47,6 @@ public class HomeFragment extends Fragment {
 
         trace("onActivityCreated");
 
-        Bundle args = this.getArguments();
-        String name = args.getString(ARGS_NAME);
-
-        textView = (TextView) getActivity().findViewById(R.id.name);
-        textView.setText(name);
 
         getActivity().findViewById(R.id.btnDeclare).setOnClickListener(new View.OnClickListener(){
             @Override
@@ -78,10 +62,20 @@ public class HomeFragment extends Fragment {
                 mListener.onShowGroupClicked();
             }
         });
+
+        getActivity().findViewById(R.id.btnPaint).setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                mListener.onShowPaintClicked();
+            }
+        });
+
     }
 
     public interface Listener {
         public void onShowDeclarationClicked();
         public void onShowGroupClicked();
+        public void onShowPaintClicked();
     }
 }

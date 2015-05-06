@@ -24,6 +24,9 @@
         <activity
             android:name="com.ntil.habiture.DeclareActivity" >
         </activity>
+
+        <activity android:name=".HomeActivity"></activity>
+
     </application>
 
 </manifest>
