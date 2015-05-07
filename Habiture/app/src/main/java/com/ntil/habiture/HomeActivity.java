@@ -18,7 +18,7 @@ import utils.exception.ExceptionAlertDialog;
 /**
  * Created by GawinHsu on 5/6/15.
  */
-public class HomeActivity extends Activity implements HomeMiddleFragment.Listener{
+public class HomeActivity extends Activity implements HomeMiddleFragment.Listener, HomeBottomFragment.Listener{
     private HabitureModule mHabitureModule;
 
     private static final boolean DEBUG = false;
@@ -49,13 +49,6 @@ public class HomeActivity extends Activity implements HomeMiddleFragment.Listene
     }
 
     @Override
-    public void onShowDeclarationClicked() {
-        trace("onShowDeclarationClicked");
-
-        startActivity(new Intent(this, DeclareActivity.class));
-    }
-
-    @Override
     public void onShowGroupClicked() {
         trace("onShowGroupClicked");
         new QueryGroupsTask().execute();
@@ -64,10 +57,43 @@ public class HomeActivity extends Activity implements HomeMiddleFragment.Listene
     @Override
     public void onShowPaintClicked() {
         trace("onShowPaintClicked");
-        PushView pv = new PushView(this, null);
+        PokeView pv = new PokeView(this, null);
         setContentView(pv);
 
     }
+
+    @Override
+    public void onTabHabit() {
+        trace("onTabHabit");
+        getFragmentManager().beginTransaction()
+                .replace(R.id.middleContainer, new HabitListFragment())
+                .commit();
+    }
+
+    @Override
+    public void onTabPoke() {
+        trace("onTabPoke");
+        // TODO
+    }
+
+    @Override
+    public void onTabDeclare() {
+        trace("onTabDeclare");
+        startActivity(new Intent(this, DeclareActivity.class));
+    }
+
+    @Override
+    public void onTabFriend() {
+        trace("onTabFriend");
+        // TODO
+    }
+
+    @Override
+    public void onTabMore() {
+        trace("onTabMore");
+        // TODO
+    }
+
     private class QueryGroupsTask extends AsyncTask<Void, Void, List<Group>> {
         private ProgressDialog progress;
         @Override

@@ -6,13 +6,6 @@
     >
 
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/declare"
-        android:id="@+id/btnDeclare"
-        android:layout_gravity="bottom"
-        android:textSize="30sp"/>
 
     <Button
         android:layout_width="wrap_content"

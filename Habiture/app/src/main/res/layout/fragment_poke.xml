@@ -6,45 +6,56 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textView4" />
+        android:text="我想要跑步 / 剩餘3週"
+        android:layout_marginBottom="5dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/tvDeclare" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textView5" />
+        android:text="一次沒做就裸奔"
+        android:layout_marginBottom="5dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/tvPunishment" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textView6" />
+        android:text="PM 6:00 / 每週3次 / 持續4週"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/tvTime" />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:baselineAligned="false">
 
-        <ImageButton
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageButton" />
+            android:text="camera"
+            android:id="@+id/btnCamera" />
 
-        <ImageButton
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageButton2" />
+            android:text="friends"
+            android:id="@+id/BtnFriends" />
 
-        <ImageButton
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageButton3" />
+            android:id="@+id/btnRecords"
+            android:text="records"/>
 
-        <ImageButton
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageButton4" />
+            android:text="tool"
+            android:id="@+id/btnTool" />
     </LinearLayout>
 
     <LinearLayout
@@ -53,23 +64,13 @@
         android:layout_height="wrap_content"
         android:gravity="center">
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageButton5"
-            />
-
         <view
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            class="com.ntil.habiture.PushView"
-            android:id="@+id/view"
-            android:layout_weight="1" />
-
-        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageButton6" />
+            class="com.ntil.habiture.PokeView"
+            android:id="@+id/view"
+            android:layout_weight="10" />
+
 
     </LinearLayout>
 

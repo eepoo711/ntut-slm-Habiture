@@ -27,6 +27,8 @@
 
         <activity android:name=".HomeActivity"></activity>
 
+        <activity android:name=".PokeActivity"></activity>
+
     </application>
 
 </manifest>

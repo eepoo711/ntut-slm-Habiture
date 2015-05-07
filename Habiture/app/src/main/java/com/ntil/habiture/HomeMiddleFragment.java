@@ -47,14 +47,6 @@ public class HomeMiddleFragment extends Fragment {
 
         trace("onActivityCreated");
 
-
-        getActivity().findViewById(R.id.btnDeclare).setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                mListener.onShowDeclarationClicked();
-            }
-        });
-
         getActivity().findViewById(R.id.btnGroup).setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -74,7 +66,6 @@ public class HomeMiddleFragment extends Fragment {
     }
 
     public interface Listener {
-        public void onShowDeclarationClicked();
         public void onShowGroupClicked();
         public void onShowPaintClicked();
     }

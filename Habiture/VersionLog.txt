@@ -1,3 +1,8 @@
+2015/05/07 Gawin & Brian (0.20.20150507)
+1. finish habit list layout
+2. finish poke activity UI but not implement yet
+3. implement tab listener
+
 2015/05/07 Brian 15:10 (0.19.20150506)
 1. add a preview for activity_home.xml
 
