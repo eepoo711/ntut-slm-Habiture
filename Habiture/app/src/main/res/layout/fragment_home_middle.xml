@@ -1,50 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    >
 
-    <LinearLayout
-        android:orientation="horizontal"
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:weightSum="1">
+        android:text="@string/declare"
+        android:id="@+id/btnDeclare"
+        android:layout_gravity="bottom"
+        android:textSize="30sp"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/ivProfilePicture" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="群組"
+        android:id="@+id/btnGroup"
+        android:layout_gravity="bottom"
+        android:textSize="30sp" />
 
-    </LinearLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="畫布"
+        android:id="@+id/btnPaint"
+        android:layout_gravity="bottom"
+        android:textSize="30sp" />
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/declare"
-            android:id="@+id/btnDeclare"
-            android:layout_gravity="bottom"
-            android:textSize="30sp"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="群組"
-            android:id="@+id/btnGroup"
-            android:layout_gravity="bottom"
-            android:textSize="30sp" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="畫布"
-            android:id="@+id/btnPaint"
-            android:layout_gravity="bottom"
-            android:textSize="30sp" />
-    </LinearLayout>
 
 </LinearLayout>

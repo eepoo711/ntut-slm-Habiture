@@ -9,6 +9,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/topContainer">
 
+        <include layout="@layout/fragment_home_top" />
+
     </FrameLayout>
 
     <FrameLayout
@@ -17,6 +19,8 @@
         android:id="@+id/middleContainer"
         android:layout_weight="1">
 
+        <include layout="@layout/fragment_home_middle" />
+
     </FrameLayout>
 
     <FrameLayout
@@ -24,6 +28,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/bottomContainer">
+
+        <include layout="@layout/fragment_home_bottom" />
 
     </FrameLayout>
 
