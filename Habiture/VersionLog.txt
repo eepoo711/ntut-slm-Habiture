@@ -1,3 +1,6 @@
+2015/05/07 Gawin (0.21.20150508)
+1. finish poke activity
+
 2015/05/07 Gawin & Brian (0.20.20150507)
 1. finish habit list layout
 2. finish poke activity UI but not implement yet

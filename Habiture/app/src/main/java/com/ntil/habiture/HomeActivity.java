@@ -55,14 +55,6 @@ public class HomeActivity extends Activity implements HomeMiddleFragment.Listene
     }
 
     @Override
-    public void onShowPaintClicked() {
-        trace("onShowPaintClicked");
-        PokeView pv = new PokeView(this, null);
-        setContentView(pv);
-
-    }
-
-    @Override
     public void onTabHabit() {
         trace("onTabHabit");
         getFragmentManager().beginTransaction()
@@ -74,6 +66,7 @@ public class HomeActivity extends Activity implements HomeMiddleFragment.Listene
     public void onTabPoke() {
         trace("onTabPoke");
         // TODO
+        startActivity(new Intent(this, PokeActivity.class));
     }
 
     @Override

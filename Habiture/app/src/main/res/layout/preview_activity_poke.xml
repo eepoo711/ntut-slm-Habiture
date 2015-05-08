@@ -7,7 +7,10 @@
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/profileContainer">
+        android:id="@+id/profileContainer"
+        >
+
+        <include layout="@layout/fragment_home_top"/>
 
     </FrameLayout>
 
@@ -16,7 +19,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/pokeContainer"
         android:layout_weight="1">
-
+        <include layout="@layout/fragment_poke"/>
 
 
     </FrameLayout>

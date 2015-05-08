@@ -31,13 +31,7 @@ public class PokeView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         trace("onDraw");
-        // mPaint.setColor(Color.WHITE);
-        Canvas drawCanvas = new Canvas(bitmapDrawing);
-        drawCanvas.drawBitmap(bitmapTool, mX, mY, mPaint);
-        canvas.drawBitmap(bitmapDrawing, 0, 0, mPaint);
-
-        //Draw Profile Picture
-        //  mCanvas.bitmapDrawing();
+        drawSampleTool(canvas);
     }
 
     @Override
@@ -60,6 +54,12 @@ public class PokeView extends View {
         }
 
         return super.onTouchEvent(event);
+    }
+
+    private void drawSampleTool(Canvas canvas) {
+        Canvas drawCanvas = new Canvas(bitmapDrawing);
+        drawCanvas.drawBitmap(bitmapTool, mX, mY, mPaint);
+        canvas.drawBitmap(bitmapDrawing, 0, 0, mPaint);
     }
 
     private void trace(String message) {

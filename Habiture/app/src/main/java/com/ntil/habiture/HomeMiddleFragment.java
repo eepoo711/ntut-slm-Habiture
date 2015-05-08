@@ -55,18 +55,9 @@ public class HomeMiddleFragment extends Fragment {
             }
         });
 
-        getActivity().findViewById(R.id.btnPaint).setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                mListener.onShowPaintClicked();
-            }
-        });
-
     }
 
     public interface Listener {
         public void onShowGroupClicked();
-        public void onShowPaintClicked();
     }
 }
