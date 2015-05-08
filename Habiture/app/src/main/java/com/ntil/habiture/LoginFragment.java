@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import utils.exception.UnhandledException;
 
@@ -74,9 +75,19 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 trace("onClick");
-                mListener.onLoginClicked(
-                        etAccount.getText().toString(),
-                        etPassword.getText().toString());
+                String account =  etAccount.getText().toString();
+                String password = etPassword.getText().toString();
+                String toastHint = getActivity().getString(R.string.please_input_account_password);
+
+                if(account == null || password == null || account.length() == 0 || password.length() == 0) {
+                    Toast.makeText(getActivity(), toastHint, Toast.LENGTH_SHORT).show();
+                    return;
+
+                }
+
+
+                mListener.onLoginClicked(account, password);
+
             }
         });
     }

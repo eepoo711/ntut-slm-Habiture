@@ -1,6 +1,7 @@
 package com.ntil.habiture;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -18,7 +19,8 @@ import utils.exception.ExceptionAlertDialog;
 /**
  * Created by GawinHsu on 5/6/15.
  */
-public class HomeActivity extends Activity implements HomeMiddleFragment.Listener, HomeBottomFragment.Listener{
+public class HomeActivity extends Activity implements HomeMiddleFragment.Listener, HomeBottomFragment.Listener,
+        ExitAlertDialog.Listener{
     private HabitureModule mHabitureModule;
 
     private static final boolean DEBUG = false;
@@ -46,6 +48,13 @@ public class HomeActivity extends Activity implements HomeMiddleFragment.Listene
                     .commit();
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        trace("onBackPressed");
+        DialogFragment newFragment = new ExitAlertDialog();
+        newFragment.show(getFragmentManager(), "dialog");
     }
 
     @Override
@@ -85,6 +94,11 @@ public class HomeActivity extends Activity implements HomeMiddleFragment.Listene
     public void onTabMore() {
         trace("onTabMore");
         // TODO
+    }
+
+    @Override
+    public void onExit() {
+        finish();
     }
 
     private class QueryGroupsTask extends AsyncTask<Void, Void, List<Group>> {
@@ -131,4 +145,6 @@ public class HomeActivity extends Activity implements HomeMiddleFragment.Listene
             return mHabitureModule.queryGroups();
         }
     }
+
+
 }

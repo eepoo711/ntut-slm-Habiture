@@ -32,7 +32,7 @@ public class NetworkChannel implements NetworkInterface {
     }
 
     @Override
-    public boolean httpGetLoginResult(String account, String password) {
+    public int httpGetLoginResult(String account, String password) {
         trace("httpGetLoginResult");
 
 
@@ -44,22 +44,19 @@ public class NetworkChannel implements NetworkInterface {
 
             String data = readText(in);
 
-            int code = Integer.valueOf(data.split("\n")[0]);
+            int uid = Integer.valueOf(data.split("\n")[0]);
 
-            boolean isLogined = false;
-            isLogined = code == 1 ? true : false;
-
-            return isLogined;
+            return uid;
 
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             closeConnection(httpUrlConnection);
         }
-        return false;
+        return -1;
     }
 
-    public boolean httpPostDeclaration(String account, String password, int period, int frequency, String declaration, List<Friend> friends) {
+    public boolean httpPostDeclaration(int uid, int frequency, String declaration, List<Friend> friends, int period) {
         trace("httpPostSwear");
         HttpURLConnection httpUrlConnection = null;
         JsonWriter writer = null;
@@ -81,8 +78,7 @@ public class NetworkChannel implements NetworkInterface {
             // make json
             writer.setIndent("  ");
             writer.beginObject();
-            writer.name("account").value(account);
-            writer.name("password").value(password);
+            writer.name("uid").value(uid);
             writer.name("period").value(period);
             writer.name("frequency").value(frequency);
             writer.name("swear").value(declaration);

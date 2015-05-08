@@ -12,6 +12,7 @@ public class HabitureModule {
 
     private String account = null;
     private String password = null;
+    private int uid = -1;
 
     public HabitureModule(NetworkInterface networkInterface) {
         trace("HabitureModule");
@@ -21,7 +22,9 @@ public class HabitureModule {
     public boolean login(String account, String password) {
         trace("login");
 
-        boolean isLogined = networkInterface.httpGetLoginResult(account, password);
+        uid = networkInterface.httpGetLoginResult(account, password);
+
+        boolean isLogined = uid > 0 ? true : false;
 
         if(isLogined) {
             this.account = account;
@@ -34,7 +37,7 @@ public class HabitureModule {
     public boolean postDeclaration(String account, String password, int period, int frequency, String declaration, List<Friend> friends) {
         trace("declare");
 		// TODO
-        boolean isDeclared = networkInterface.httpPostDeclaration(account, password, period, frequency, declaration, friends);
+        boolean isDeclared = networkInterface.httpPostDeclaration(uid, frequency, declaration, friends, period);
 
         return isDeclared;
     }

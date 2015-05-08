@@ -21,8 +21,8 @@ public class NetworkChannelTest extends AndroidTestCase {
     }
 
     public void testLogin() {
-        boolean isLogined = networkChannel.httpGetLoginResult("guest", "guest");
-        assertTrue(isLogined);
+        int uid = networkChannel.httpGetLoginResult("guest", "guest");
+        assertEquals(uid, 1);
     }
 
     public void testQueryFriends() {
@@ -40,11 +40,12 @@ public class NetworkChannelTest extends AndroidTestCase {
 
     public void testPostSwear() {
         //TODO: How to isolate httpGetFriend ?
-        List<Friend> friends = networkChannel.httpGetFriends("guest", "guest");
-        assertNotNull(friends);
-
-        boolean isPosted = networkChannel.httpPostDeclaration("guest", "guest", 1, 1, "123", friends);
-        assertTrue(isPosted);
+//        List<Friend> friends = networkChannel.httpGetFriends("guest", "guest");
+//        assertNotNull(friends);
+//
+//        boolean isPosted = networkChannel.httpPostDeclaration(, 1, "123", friends, 1);
+//        assertTrue(isPosted);
+        fail();
     }
 
     public void testQueryGroups() {

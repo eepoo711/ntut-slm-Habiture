@@ -8,8 +8,8 @@ import java.util.List;
 public class StubLoginFailed implements NetworkInterface {
 
     @Override
-    public boolean httpGetLoginResult(String account, String password) {
-        return false;
+    public int httpGetLoginResult(String account, String password) {
+        return 0;
     }
 
     @Override
@@ -23,7 +23,7 @@ public class StubLoginFailed implements NetworkInterface {
     }
 
     @Override
-    public boolean httpPostDeclaration(String account, String password, int period, int frequency, String declaration, List<Friend> friends) {
+    public boolean httpPostDeclaration(int uid, int frequency, String declaration, List<Friend> friends, int period) {
         throw new RuntimeException("wrong call");
     }
 

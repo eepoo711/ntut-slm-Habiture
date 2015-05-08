@@ -9,8 +9,8 @@ import java.util.List;
 public class StubQueryGroups implements NetworkInterface{
 
     @Override
-    public boolean httpGetLoginResult(String account, String password) {
-        return true;
+    public int httpGetLoginResult(String account, String password) {
+        return 1;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class StubQueryGroups implements NetworkInterface{
     }
 
     @Override
-    public boolean httpPostDeclaration(String account, String password, int period, int frequency, String declaration, List<Friend> friends) {
+    public boolean httpPostDeclaration(int uid, int frequency, String declaration, List<Friend> friends, int period) {
         throw new RuntimeException("wrong call");
     }
 }

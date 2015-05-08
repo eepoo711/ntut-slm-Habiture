@@ -1,4 +1,8 @@
-2015/05/07 Gawin (0.21.20150508)
+2015/05/08 (0.22.20150508)
+1. finish back dialog
+2. finish check null input
+
+2015/05/08 Gawin (0.21.20150508)
 1. finish poke activity
 
 2015/05/07 Gawin & Brian (0.20.20150507)
