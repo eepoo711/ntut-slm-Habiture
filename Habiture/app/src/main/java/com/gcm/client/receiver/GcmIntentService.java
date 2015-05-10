@@ -135,6 +135,7 @@ public class GcmIntentService extends IntentService {
     }
 
     private void PlaySound(int tool) {
+        Log.i(TAG, "service PlaySound");
         Intent broadcastIntent = new Intent(getApplicationContext().getString(R.string.play_tool_sound));
         broadcastIntent.putExtra("tool_id",tool);
         sendBroadcast(broadcastIntent);

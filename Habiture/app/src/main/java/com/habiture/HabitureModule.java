@@ -3,11 +3,23 @@ package com.habiture;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+
 import android.util.Log;
 
 import com.gcm.client.receiver.GcmModel;
 
+
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.util.Log;
+
+import com.gcm.client.receiver.GcmModel;
+import com.ntil.habiture.R;
+
+import java.io.ByteArrayOutputStream;
 import java.util.List;
+
+import utils.BitmapHelper;
 
 
 public class HabitureModule {
@@ -81,13 +93,13 @@ public class HabitureModule {
     }
 
     public List<Friend> queryFriends() {
-        List<Friend> friends = networkInterface.httpGetFriends(uid,account, password);
+        List<Friend> friends = networkInterface.httpGetFriends(uid);
 
         return friends;
     }
 
     public List<Group> queryGroups() {
-        List<Group> groups = networkInterface.httpGetGroups(account, password);
+        List<Group> groups = networkInterface.httpGetGroups(uid);
 
         return groups;
     }
@@ -109,9 +121,27 @@ public class HabitureModule {
     public boolean sendSoundToPartner(int to_id, int pid, int sound_id ) {
         trace("sendSoundToPartner, uid="+uid+", to_id="+to_id+", pid="+pid+", sound_id="+sound_id);
         // TODO
-        boolean isSoundSent = networkInterface.httpSendSound(uid, to_id, pid , sound_id);
-
+        boolean isSoundSent = networkInterface.httpSendSound(uid,to_id, pid , sound_id);
         return isSoundSent;
+    }
+
+    public boolean uploadProofImage(int pid, Bitmap image) {
+        trace("uploadProofImage");
+        //for test
+        //if(image==null) image = BitmapFactory.decodeResource(mActivity.getResources(),R.drawable.sample_human);
+        // encode image to base64
+        String imageData =null;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
+        imageData = Base64.encodeToString(b, Base64.DEFAULT);
+        return networkInterface.httpUploadProofImage(uid, pid, "JPG", imageData);
+    }
+
+    public List<GroupHistory> gueryGroupHistory(int pid) {
+        List<GroupHistory> groupHistories = networkInterface.httpGetGropuHistory(pid);
+
+        return groupHistories;
     }
 
     private void trace(String log) {

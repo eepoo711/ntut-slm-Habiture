@@ -1,3 +1,8 @@
+2015/05/10 Codus & Brian 11:34 (0.23.20150510)
+1. finish GCM poke notification
+2. finish Model > uploadRecord
+3. merge above task to master.
+
 2015/05/08 (0.22.20150508)
 1. finish back dialog
 2. finish check null input

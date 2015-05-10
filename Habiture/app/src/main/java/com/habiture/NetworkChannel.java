@@ -1,5 +1,6 @@
 package com.habiture;
 
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.JsonReader;
 import android.util.JsonWriter;
@@ -28,6 +29,8 @@ public class NetworkChannel implements NetworkInterface {
     public static final String URL_QUERY_HABITURES = "http://140.124.144.121/Habiture/home.cgi?";
     public static final String URL_POST_SWEAR = "http://140.124.144.121/Habiture/posts.cgi";
     public static final String URL_PUSH_TOOL = "http://140.124.144.121/Habiture/push.cgi?";
+    public static final String URL_UPLOAD_PROOF_IMAGE = "http://140.124.144.121/Habiture/record.cgi";
+    public static final String URL_QUERY_GROUP_HISTORIES = "http://140.124.144.121/Habiture/history.cgi?";
 
     private void trace(String message) {
         if(DEBUG)
@@ -160,7 +163,7 @@ public class NetworkChannel implements NetworkInterface {
     }
 
     @Override
-    public List<Friend> httpGetFriends(int uid, String account, String password) {
+    public List<Friend> httpGetFriends(int uid) {
         trace("httpGetFriends");
 
         String parameters =
@@ -184,12 +187,9 @@ public class NetworkChannel implements NetworkInterface {
     }
 
     @Override
-    public List<Group> httpGetGroups(String account, String password) {
-        String parameters =
-                "account=".concat(account)
-                        .concat("&")
-                        .concat("password=").concat(password);
-        String url = URL_QUERY_GROUPS.concat(parameters);
+    public List<Group> httpGetGroups(int uid) {
+        String url = URL_QUERY_GROUPS.concat(
+                "uid=".concat(String.valueOf(uid)));
 
         HttpURLConnection connection = null;
 
@@ -229,7 +229,29 @@ public class NetworkChannel implements NetworkInterface {
 
         return null;
     }
+	
+    public List<GroupHistory> httpGetGropuHistory(int pid) {
+        trace("httpGetGropuHistory");
 
+        String parameters =
+                "pid=".concat(String.valueOf(pid));
+        String url = URL_QUERY_GROUP_HISTORIES.concat(parameters);
+
+        HttpURLConnection connection = null;
+
+        try {
+            connection = createHttpURLConnection(url);
+            return readGroupHistories(connection.getInputStream());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection(connection);
+        }
+
+        return null;
+    }
+	
     private void closeConnection(HttpURLConnection connection) {
         trace("closeConnection");
         if(connection != null)
@@ -269,7 +291,7 @@ public class NetworkChannel implements NetworkInterface {
         reader.endArray();
         return habitures;
     }
-
+	
     private Habiture readHabiture(JsonReader reader) throws IOException {
         trace("readHabiture");
 
@@ -308,6 +330,108 @@ public class NetworkChannel implements NetworkInterface {
         return habiture;
     }
 
+
+    private List<GroupHistory> readGroupHistories(InputStream is) {
+        trace("readGroupHistories");
+
+        JsonReader reader = null;
+        try {
+            reader = new JsonReader(new InputStreamReader(is));
+            reader.beginObject();
+
+            if(!"history".equals(reader.nextName()))
+                throw new UnhandledException("wrong json format");
+            List<GroupHistory> groupHistories = readGroupHistoriesArray(reader);
+
+            reader.endObject();
+            return groupHistories;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            Utils.closeIO(reader);
+        }
+
+        return null;
+    }
+
+    private List<GroupHistory> readGroupHistoriesArray(JsonReader reader) throws IOException {
+        trace("readGroupHistoriesArray");
+        reader.beginArray();
+        List<GroupHistory> groupHistories = new ArrayList<>();
+        while (reader.hasNext()) {
+            groupHistories.add(readGroupHistory(reader));
+        }
+        reader.endArray();
+        return groupHistories;
+    }
+
+    private GroupHistory readGroupHistory(JsonReader reader) throws IOException {
+        trace("readGroupHistories");
+
+        Bitmap image =null;
+        String url  = null;
+        String date =null;
+        String name =null;
+
+        reader.beginObject();
+        while(reader.hasNext()) {
+            String key = reader.nextName();
+            if("url".equals(key)) {
+                url = reader.nextString();
+            } else if("date".equals(key)) {
+                date = reader.nextString();
+            } else if("name".equals(key)) {
+                name = reader.nextString();
+            } else {
+                reader.skipValue();
+            }
+        }
+        reader.endObject();
+        if(url == null || name == null || date ==null) {
+            throw new UnhandledException("wrong json format.");
+        }
+
+        GroupHistory groupHistory = new GroupHistory();
+        groupHistory.setUrl(url);
+        groupHistory.setImage(getBitmapByUrl(url));
+        groupHistory.setName(name);
+        groupHistory.setDate(date);
+
+        return groupHistory;
+    }
+
+    private Bitmap getBitmapByUrl(String url) {
+
+        try {
+            URL imgUrl = new URL(url);
+            HttpURLConnection httpURLConnection
+                    = (HttpURLConnection) imgUrl.openConnection();
+            httpURLConnection.connect();
+            InputStream inputStream = httpURLConnection.getInputStream();
+            int length = (int) httpURLConnection.getContentLength();
+            int tmpLength = 512;
+            int readLen = 0,desPos = 0;
+            byte[] img = new byte[length];
+            byte[] tmp = new byte[tmpLength];
+            if (length != -1) {
+                while ((readLen = inputStream.read(tmp)) > 0) {
+                    System.arraycopy(tmp, 0, img, desPos, readLen);
+                    desPos += readLen;
+                }
+                if(desPos != length){
+                    throw new IOException("Only read" + desPos +"bytes");
+                }
+                return  BitmapFactory.decodeByteArray(img, 0, img.length);
+            }
+            trace("get image,length="+length);
+            httpURLConnection.disconnect();
+        }
+        catch (IOException e) {
+            Log.e("IOException",e.toString());
+        }
+        return null;
+    }
+
     private List<Group> readGroups(InputStream is) {
         trace("readGroups");
         JsonReader reader = null;
@@ -342,19 +466,31 @@ public class NetworkChannel implements NetworkInterface {
 
     private Group readGroup(JsonReader reader) throws IOException {
         trace("readGroup");
-        long id = -1;
-        String swear = null;
-        String date = null;
+        int goal =-1;
+        String url =null;
+        String swear =null;
+        int frequency =-1;
+        int do_it_time =-1;
+        int id =-1;
+        int icon =-1;
 
         reader.beginObject();
         while(reader.hasNext()) {
             String key = reader.nextName();
             if("swear".equals(key)) {
                 swear = reader.nextString();
-            } else if("date".equals(key)) {
-                date = reader.nextString();
+            } else if("goal".equals(key)) {
+                goal = reader.nextInt();
+            } else if("url".equals(key)) {
+                url = reader.nextString();
+            } else if("frequency".equals(key)) {
+                frequency = reader.nextInt();
+            } else if("do_it_time".equals(key)) {
+                do_it_time = reader.nextInt();
             } else if("id".equals(key)) {
-                id = reader.nextLong();
+                id = reader.nextInt();
+            } else if("icon".equals(key)) {
+                icon = reader.nextInt();
             } else {
                 reader.skipValue();
             }
@@ -368,6 +504,11 @@ public class NetworkChannel implements NetworkInterface {
         Group group = new Group();
         group.setSwear(swear);
         group.setId(id);
+        group.setGoal(goal);
+        group.setUrl(url);
+        group.setFrequency(frequency);
+        group.setDoItTime(do_it_time);
+        group.setIcon(icon);
 
         return group;
     }
@@ -442,8 +583,6 @@ public class NetworkChannel implements NetworkInterface {
 
     public boolean httpSendSound(int from_id , int to_id, int pid, int sound_id){
         trace("httpSendSound, uid="+from_id+", to_id="+to_id+", pid="+pid+", sound_id="+sound_id);
-
-
         HttpURLConnection httpUrlConnection = null;
         try {
             httpUrlConnection = createHttpURLConnection(URL_PUSH_TOOL.concat("from_id=" + from_id + "&to_id=" + to_id  + "&pid=" + pid  + "&tool=" + sound_id));
@@ -452,16 +591,57 @@ public class NetworkChannel implements NetworkInterface {
 
             String data = readText(in);
             trace(data);
-
-            //int uid = Integer.valueOf(data.split("\n")[0]);
-
-            //return uid;
-
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             closeConnection(httpUrlConnection);
         }
         return true;
+    }
+
+    public boolean httpUploadProofImage(int uid, int pid, String imageType, String imageData) {
+        trace("httpUploadProofImage");
+        HttpURLConnection httpUrlConnection = null;
+        JsonWriter writer = null;
+
+        try {
+            trace("try");
+            URL url = new URL(URL_UPLOAD_PROOF_IMAGE);
+            httpUrlConnection = (HttpURLConnection)url.openConnection();
+
+            httpUrlConnection.setDoOutput(true);
+            httpUrlConnection.setChunkedStreamingMode(0);
+            httpUrlConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+
+            OutputStream out = httpUrlConnection.getOutputStream();
+            OutputStreamWriter ow = new OutputStreamWriter(out, "UTF-8");
+            writer = new JsonWriter(ow);
+
+            writer.setIndent("  ");
+            writer.beginObject();
+
+            writer.name("uid").value(uid);
+            writer.name("pid").value(pid);
+            writer.name("imageType").value(imageType);
+            writer.name("imageData").value(imageData);
+            writer.endObject();
+            writer.close();
+
+            trace("close");
+            String result = readText(httpUrlConnection.getInputStream());
+            trace(result);
+
+            //int code = Integer.valueOf(result.split("\n")[0]);
+
+            //boolean isPosted = false;
+            //isPosted = code == 1 ? true : false;
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new UnhandledException("httpPostSwear IO Exception", e);
+        } finally {
+            closeConnection(httpUrlConnection);
+            Utils.closeIO(writer);
+        }
     }
 }

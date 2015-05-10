@@ -1,6 +1,7 @@
 package com.ntil.habiture;
 
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -14,6 +15,7 @@ import com.habiture.HabitureModule;
 
 import java.util.List;
 
+import utils.BitmapHelper;
 import utils.exception.ExceptionAlertDialog;
 import utils.exception.UnhandledException;
 
@@ -142,6 +144,7 @@ public class DeclareActivity extends ActionBarActivity implements DeclareFragmen
 
             } catch (Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
+                trace(e.toString());
             }
             return declared;
         }

@@ -79,11 +79,13 @@ public class ToolModel {
         BroadcastReceiver toolBroadReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                Log.i(TAG, "receiver broadcast");
                 int tool_id =intent.getIntExtra("tool_id",1);
                 PlaySound(tool_id);
             }
         };
         mContext.registerReceiver(toolBroadReceiver,new IntentFilter(mContext.getString(R.string.tool_clicck_intent_name)));
+        mContext.registerReceiver(toolBroadReceiver,new IntentFilter(mContext.getString(R.string.play_tool_sound)));
     }
 
     private void PlaySound(int tool) {
