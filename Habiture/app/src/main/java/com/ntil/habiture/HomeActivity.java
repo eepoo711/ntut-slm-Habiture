@@ -9,7 +9,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.gcm.client.receiver.DemoActivity;
+import com.habiture.Friend;
 import com.habiture.Group;
+import com.habiture.Habiture;
 import com.habiture.HabitureModule;
 
 import java.util.List;
@@ -42,11 +45,14 @@ public class HomeActivity extends Activity implements HomeMiddleFragment.Listene
 
             String name = mHabitureModule.getAccount();
             getFragmentManager().beginTransaction()
-                    .add(R.id.topContainer, HomeTopFragment.newInstance(name))
+                    .add(R.id.topContainer, HomeTopFragment.newInstance(name,mHabitureModule.getHeader()))
                     .add(R.id.middleContainer, new HomeMiddleFragment())
                     .add(R.id.bottomContainer, new HomeBottomFragment())
                     .commit();
         }
+
+        mHabitureModule.registerGCM();
+
 
     }
 
@@ -66,15 +72,12 @@ public class HomeActivity extends Activity implements HomeMiddleFragment.Listene
     @Override
     public void onTabHabit() {
         trace("onTabHabit");
-        getFragmentManager().beginTransaction()
-                .replace(R.id.middleContainer, new HabitListFragment())
-                .commit();
+        new QueryHabituresTask().execute();
     }
 
     @Override
     public void onTabPoke() {
         trace("onTabPoke");
-        // TODO
         startActivity(new Intent(this, PokeActivity.class));
     }
 
@@ -87,7 +90,7 @@ public class HomeActivity extends Activity implements HomeMiddleFragment.Listene
     @Override
     public void onTabFriend() {
         trace("onTabFriend");
-        // TODO
+        new QueryFriendsTask().execute();
     }
 
     @Override
@@ -110,7 +113,7 @@ public class HomeActivity extends Activity implements HomeMiddleFragment.Listene
             try {
                 progress = ProgressDialog.show(HomeActivity.this,
                         HomeActivity.this.getString(R.string.progress_title),
-                        HomeActivity.this.getString(R.string.searching_friends));
+                        HomeActivity.this.getString(R.string.searching_groups));
             } catch(Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
             }
@@ -146,5 +149,99 @@ public class HomeActivity extends Activity implements HomeMiddleFragment.Listene
         }
     }
 
+    private class QueryFriendsTask extends AsyncTask<Void, Void, List<Friend>> {
+        private ProgressDialog progress;
+
+        @Override
+        protected void onPreExecute() {
+            trace("onDeclarePreExecute");
+
+            try {
+                progress = ProgressDialog.show(HomeActivity.this,
+                        HomeActivity.this.getString(R.string.progress_title),
+                        HomeActivity.this.getString(R.string.searching_friends));
+            } catch (Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+        }
+
+        @Override
+        protected void onPostExecute(List<Friend> friends) {
+            trace("onDeclarePostExecute");
+            try {
+                progress.dismiss();
+
+                if (friends == null || friends.size() == 0) {
+                    Toast.makeText(
+                            HomeActivity.this,
+                            R.string.no_friend,
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //TODO...
+
+                /*getFragmentManager().beginTransaction()
+                        .replace(R.id.middleContainer, FriendFragment.newInstance(friends))
+                        .addToBackStack(null)
+                        .commit();*/
+
+            } catch (Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+        }
+
+        @Override
+        protected List<Friend> doInBackground(Void... params) {
+            return mHabitureModule.queryFriends();
+        }
+    }
+
+    private class QueryHabituresTask extends AsyncTask<Void, Void, List<Habiture>> {
+        private ProgressDialog progress;
+
+        @Override
+        protected void onPreExecute() {
+            trace("onDeclarePreExecute");
+
+            try {
+                progress = ProgressDialog.show(HomeActivity.this,
+                        HomeActivity.this.getString(R.string.progress_title),
+                        HomeActivity.this.getString(R.string.searching_habiture));
+            } catch (Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+        }
+
+        @Override
+        protected void onPostExecute(List<Habiture> habitures) {
+            trace("onDeclarePostExecute");
+            try {
+                progress.dismiss();
+
+                if (habitures == null || habitures.size() == 0) {
+                    Toast.makeText(
+                            HomeActivity.this,
+                            R.string.no_habiture,
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // TODO...
+                // add habitures
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.middleContainer, new HabitListFragment())
+                        .commit();
+
+            } catch (Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+        }
+
+        @Override
+        protected List<Habiture> doInBackground(Void... params) {
+            return mHabitureModule.queryHabitures();
+        }
+    }
 
 }

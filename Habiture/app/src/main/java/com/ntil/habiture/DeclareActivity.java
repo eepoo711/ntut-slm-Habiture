@@ -1,6 +1,7 @@
 package com.ntil.habiture;
 
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -14,6 +15,7 @@ import com.habiture.HabitureModule;
 
 import java.util.List;
 
+import utils.BitmapHelper;
 import utils.exception.ExceptionAlertDialog;
 import utils.exception.UnhandledException;
 
@@ -91,10 +93,9 @@ public class DeclareActivity extends ActionBarActivity implements DeclareFragmen
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onDeclareClicked(String period, String frequency, String declaration, String cost) {
+    public void onDeclareClicked(String declaration, String punishment, String frequency, String do_it_time, String goal) {
         trace("onDeclareClicked");
-        new DeclareTask().execute(period, frequency, declaration, cost);
+        new DeclareTask().execute(declaration, punishment, frequency, do_it_time, goal);
     }
 
     @Override
@@ -132,26 +133,19 @@ public class DeclareActivity extends ActionBarActivity implements DeclareFragmen
         protected Boolean doInBackground(String... params) {
             trace("doDeclareInBackground");
             boolean declared = true;
-//            boolean declared = true;
             try {
-                //TODO: global ?
-               // mPeriod = Integer.valueOf(params[0]);
-//                mPeriod = 1;
+                String declaration, punishment, frequency, do_it_time, goal;
+                declaration =params[0];
+                punishment =params[1];
+                frequency = params[2];
+                do_it_time =params[3];
+                goal =      params[4];
+                mHabitureModule.postDeclaration(frequency,declaration,punishment,goal,do_it_time);
 
-                if (params[0].equals("天"))
-                    mPeriod = 0;
-                else if (params[0].equals("週"))
-                    mPeriod = 1;
-                else
-                    throw new UnhandledException("period unknown input.");
-
-                mFrequency = Integer.valueOf(params[1]);
-                mDeclaration = params[2];
-                mCost = params[3];
             } catch (Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
+                trace(e.toString());
             }
-
             return declared;
         }
 
@@ -162,7 +156,9 @@ public class DeclareActivity extends ActionBarActivity implements DeclareFragmen
                 progress.dismiss();
 
                 if(success){
-                    new QueryFriendsTask().execute();
+                    //new QueryFriendsTask().execute();
+                    Toast.makeText(DeclareActivity.this,getApplicationContext().getString(R.string.declare_successfully),Toast.LENGTH_SHORT).show();
+                    finish();
                 }
 
             } catch(Throwable e) {
@@ -228,8 +224,8 @@ public class DeclareActivity extends ActionBarActivity implements DeclareFragmen
 //            boolean declared = true;
             try {
                 //TODO: global ?
-                declared = mHabitureModule.postDeclaration(mHabitureModule.getAccount(), mHabitureModule.getPassword(),
-                        mPeriod, mFrequency, mDeclaration, params[0]);
+                //declared = mHabitureModule.postDeclaration(mHabitureModule.getAccount(), mHabitureModule.getPassword(),
+                        //mPeriod, mFrequency, mDeclaration, params[0]);
             } catch (Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
             }

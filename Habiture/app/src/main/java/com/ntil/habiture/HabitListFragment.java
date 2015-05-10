@@ -9,17 +9,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import com.habiture.Habiture;
+
+import java.util.List;
+
 /**
  * Created by GawinHsu on 5/7/15.
  */
 public class HabitListFragment extends ListFragment {
+
+    private static List<Habiture> habitures;
 
     private static final boolean DEBUG = false;
     private void trace(String message) {
         if(DEBUG)
             Log.d("HabitListFragment", message);
     }
-
 
     public class HabitAdapter extends BaseAdapter {
 

@@ -71,6 +71,8 @@ public class DeclareFragment extends Fragment {
 
         final EditText etDeclaration = (EditText) getActivity().findViewById(R.id.etDeclaration);
         final EditText etCost = (EditText) getActivity().findViewById(R.id.etCost);
+        final EditText etGoal = (EditText) getActivity().findViewById(R.id.etGoal);
+        final Spinner spDoItTime = (Spinner) getActivity().findViewById(R.id.spDoItTime);
         final Spinner spPeroid = (Spinner) getActivity().findViewById(R.id.spPeroid);
         final Spinner spFrequency = (Spinner) getActivity().findViewById(R.id.spFrequency);
 
@@ -79,11 +81,15 @@ public class DeclareFragment extends Fragment {
         ArrayAdapter peroidList = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, peroid);
         spPeroid.setAdapter(peroidList);
 
-
         // initial spinner items of frequency
-        String[] frequency = {"1"};
+        String[] frequency = getActivity().getResources().getStringArray(R.array.declare_weekly_frequency);
         ArrayAdapter frequencyList = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, frequency);
         spFrequency.setAdapter(frequencyList);
+
+        // initial spinner items of do it time
+        String[] do_it_time = getActivity().getResources().getStringArray(R.array.declare_do_it_time);
+        ArrayAdapter do_it_time_list = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, do_it_time);
+        spDoItTime.setAdapter(do_it_time_list);
 
         // initial selected listener of frequency
         spPeroid.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
@@ -94,26 +100,22 @@ public class DeclareFragment extends Fragment {
                     ArrayAdapter frequencyList = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, frequency);
                     spFrequency.setAdapter(frequencyList);
                 }
-                else if(position ==1) {
-                    String[] frequency = getActivity().getResources().getStringArray(R.array.declare_weekly_frequency);
-                    ArrayAdapter frequencyList = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, frequency);
-                    spFrequency.setAdapter(frequencyList);
-                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
-
+//public void onDeclareClicked(String declaration, String punishment, String frequency, String do_it_time, String goal) {
         getActivity().findViewById(R.id.btnDeclare).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 trace("onClick btnDeclare");
                 mListener.onDeclareClicked(
-                        spPeroid.getSelectedItem().toString(),
-                        spFrequency.getSelectedItem().toString(),
                         etDeclaration.getText().toString(),
-                        etCost.getText().toString());
+                        etCost.getText().toString(),
+                        spFrequency.getSelectedItem().toString(),
+                        spDoItTime.getSelectedItem().toString(),
+                        etGoal.getText().toString());
             }
         });
 
@@ -135,7 +137,7 @@ public class DeclareFragment extends Fragment {
     }
 
     public interface Listener {
-        public void onDeclareClicked(String period, String frequency, String declaration, String cost);
+        public void onDeclareClicked(String declaration, String punishment, String frequency, String do_it_time, String goal);
         public void onCancelClicked();
     }
 
