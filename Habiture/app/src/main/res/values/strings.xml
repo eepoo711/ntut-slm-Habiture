@@ -17,10 +17,9 @@
     <string name="declaring">發佈中...</string>
     <string name="declare_successfully">發佈成功</string>
     <string name="declare_failed">發佈失敗</string>
-    <string name="enter_declaration">我想要...</string>
-    <string name="enter_cost">如果...</string>
+    <string name="enter_declaration">我想要宣示習慣...</string>
+    <string name="enter_cost">如果沒做到，我要付出甚麼代價...</string>
     <string-array name="declare_period" >
-        <item >天</item>
         <item >週</item>
     </string-array>
     <string-array name="declare_daily_frequency" >
@@ -34,11 +33,46 @@
         <item>5</item>
         <item>6</item>
     </string-array>
+    <string-array name="declare_do_it_time" >
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+    </string-array>
     <string name="confirm">確定</string>
     <string name="cancel">取消</string>
     <string name="invite_friend">邀請好友</string>
     <string name="searching_friends">搜尋好友中...</string>
+    <string name="searching_groups">搜尋群組中...</string>
+    <string name="searching_habiture">搜尋習慣中...</string>
     <string name="no_friend">無任何好友</string>
     <string name="no_group">無任何群組</string>
+    <string name="no_habiture">無任何習慣</string>
+    <string name="tool_clicck_intent_name">tool clicked broadcast intent</string>
+    <string name="tool_sent_successful">使用工具傳送提醒!</string>
+    <string name="tool_sent_failed">傳送提醒失敗!</string>
+    <string name="declaration_do_it_time_hint">別人可於何時提醒我</string>
+    <string name="play_tool_sound">play_tool_sound</string>
+
 
 </resources>

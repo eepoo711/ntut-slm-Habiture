@@ -6,11 +6,15 @@ public interface NetworkInterface {
 
 
 
-    public int httpGetLoginResult(String account, String password);
+    public LoginInfo httpGetLoginResult(String account, String password, String reg_id,LoginInfo loginInfo);
 
-    public List<Friend> httpGetFriends(String account, String password);
+    public List<Friend> httpGetFriends(int uid, String account, String password);
 
     public List<Group> httpGetGroups(String account, String password);
 
-    public boolean httpPostDeclaration(int uid, int frequency, String declaration, List<Friend> friends, int period);
+    public List<Habiture> httpGetHabitures(int uid);
+
+    public boolean httpPostDeclaration(int uid, String frequency, String declaration, String punishment, String goal,  String do_it_time);
+
+    public boolean httpSendSound(int from_id , int to_id, int pid, int sound_id);
 }

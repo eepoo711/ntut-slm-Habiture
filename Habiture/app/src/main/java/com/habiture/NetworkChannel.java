@@ -1,5 +1,6 @@
 package com.habiture;
 
+import android.graphics.BitmapFactory;
 import android.util.JsonReader;
 import android.util.JsonWriter;
 import android.util.Log;
@@ -24,7 +25,9 @@ public class NetworkChannel implements NetworkInterface {
     public static final String URL_LOGIN =  "http://140.124.144.121/Habiture/login.cgi?";
     public static final String URL_QUERY_FRIENDS = "http://140.124.144.121/Habiture/friends.cgi?";
     public static final String URL_QUERY_GROUPS = "http://140.124.144.121/Habiture/groups.cgi?";
+    public static final String URL_QUERY_HABITURES = "http://140.124.144.121/Habiture/home.cgi?";
     public static final String URL_POST_SWEAR = "http://140.124.144.121/Habiture/posts.cgi";
+    public static final String URL_PUSH_TOOL = "http://140.124.144.121/Habiture/push.cgi?";
 
     private void trace(String message) {
         if(DEBUG)
@@ -32,31 +35,74 @@ public class NetworkChannel implements NetworkInterface {
     }
 
     @Override
-    public int httpGetLoginResult(String account, String password) {
+    public LoginInfo httpGetLoginResult(String account, String password, String reg_id,LoginInfo loginInfo) {
         trace("httpGetLoginResult");
 
 
         HttpURLConnection httpUrlConnection = null;
         try {
-            httpUrlConnection = createHttpURLConnection(URL_LOGIN.concat("account=" + account + "&password=" + password));
+            httpUrlConnection = createHttpURLConnection(URL_LOGIN.concat("account=" + account + "&password=" + password + "&reg_id=" + reg_id));
 
             InputStream in = httpUrlConnection.getInputStream();
 
-            String data = readText(in);
+            JsonReader reader = new JsonReader(new InputStreamReader(in));
+            reader.beginObject();
+            while(reader.hasNext()) {
+                String key = reader.nextName();
+                if("url".equals(key)) {
+                    loginInfo.setUrl(reader.nextString());
+                } else if("id".equals(key)) {
+                    loginInfo.setId(reader.nextInt());
+                } else {
+                    reader.skipValue();
+                }
+            }
+            reader.endObject();
 
-            int uid = Integer.valueOf(data.split("\n")[0]);
+            trace("login info="+loginInfo.getUrl());
 
-            return uid;
+            if(loginInfo.getUrl()!=null&&loginInfo.getUrl()!="") {
+
+                try {
+                    URL imgUrl = new URL(loginInfo.getUrl());
+                    HttpURLConnection httpURLConnection
+                            = (HttpURLConnection) imgUrl.openConnection();
+                    httpURLConnection.connect();
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    int length = (int) httpURLConnection.getContentLength();
+                    int tmpLength = 512;
+                    int readLen = 0,desPos = 0;
+                    byte[] img = new byte[length];
+                    byte[] tmp = new byte[tmpLength];
+                    if (length != -1) {
+                        while ((readLen = inputStream.read(tmp)) > 0) {
+                            System.arraycopy(tmp, 0, img, desPos, readLen);
+                            desPos += readLen;
+                        }
+                        loginInfo.setImage( BitmapFactory.decodeByteArray(img, 0, img.length));
+                        if(desPos != length){
+                            throw new IOException("Only read" + desPos +"bytes");
+                        }
+                    }
+                    trace("get image,length="+length);
+                    httpURLConnection.disconnect();
+                }
+                catch (IOException e) {
+                    Log.e("IOException",e.toString());
+                }
+            }
+
+            return loginInfo;
 
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             closeConnection(httpUrlConnection);
         }
-        return -1;
+        return null;
     }
 
-    public boolean httpPostDeclaration(int uid, int frequency, String declaration, List<Friend> friends, int period) {
+    public boolean httpPostDeclaration(int uid, String frequency, String declaration, String punishment, String goal,  String do_it_time) {
         trace("httpPostSwear");
         HttpURLConnection httpUrlConnection = null;
         JsonWriter writer = null;
@@ -78,16 +124,13 @@ public class NetworkChannel implements NetworkInterface {
             // make json
             writer.setIndent("  ");
             writer.beginObject();
+
             writer.name("uid").value(uid);
-            writer.name("period").value(period);
+            writer.name("do_it_time").value(do_it_time);
             writer.name("frequency").value(frequency);
+            writer.name("punishment").value(punishment);
             writer.name("swear").value(declaration);
-            writer.name("friends_id");
-            writer.beginArray();
-            for (Friend friend: friends) {
-                writer.value(friend.getId());
-            }
-            writer.endArray();
+            writer.name("goal").value(goal);
             writer.endObject();
             writer.close();
 
@@ -117,13 +160,11 @@ public class NetworkChannel implements NetworkInterface {
     }
 
     @Override
-    public List<Friend> httpGetFriends(String account, String password) {
+    public List<Friend> httpGetFriends(int uid, String account, String password) {
         trace("httpGetFriends");
 
         String parameters =
-                "account=".concat(account)
-                .concat("&")
-                .concat("password=").concat(password);
+                "uid=".concat(String.valueOf(uid));
         String url = URL_QUERY_FRIENDS.concat(parameters);
 
         HttpURLConnection connection = null;
@@ -166,26 +207,49 @@ public class NetworkChannel implements NetworkInterface {
         return null;
     }
 
+    public List<Habiture> httpGetHabitures(int uid){
+        trace("httpGetHabitures");
+
+        String parameters =
+                "uid=".concat(String.valueOf(uid));
+        String url = URL_QUERY_HABITURES.concat(parameters);
+
+        HttpURLConnection connection = null;
+
+
+        try {
+            connection = createHttpURLConnection(url);
+            return readHabitures(connection.getInputStream());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection(connection);
+        }
+
+        return null;
+    }
+
     private void closeConnection(HttpURLConnection connection) {
         trace("closeConnection");
         if(connection != null)
             connection.disconnect();
     }
 
-    private List<Friend> readFriends(InputStream is) {
-        trace("readFriends");
+    private List<Habiture> readHabitures(InputStream is) {
+        trace("readHabitures");
 
         JsonReader reader = null;
         try {
             reader = new JsonReader(new InputStreamReader(is));
             reader.beginObject();
 
-            if(!"friends".equals(reader.nextName()))
+            if(!"home".equals(reader.nextName()))
                 throw new UnhandledException("wrong json format");
-            List<Friend> friends = readFriendArray(reader);
+            List<Habiture> habitures = readHabitureArray(reader);
 
             reader.endObject();
-            return friends;
+            return habitures;
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -195,45 +259,53 @@ public class NetworkChannel implements NetworkInterface {
         return null;
     }
 
-    private List<Friend> readFriendArray(JsonReader reader) throws IOException {
-        trace("readFriendArray");
+    private List<Habiture> readHabitureArray(JsonReader reader) throws IOException {
+        trace("readHabitureArray");
         reader.beginArray();
-        List<Friend> friends = new ArrayList<>();
+        List<Habiture> habitures = new ArrayList<>();
         while (reader.hasNext()) {
-            friends.add(readFriend(reader));
+            habitures.add(readHabiture(reader));
         }
         reader.endArray();
-        return friends;
+        return habitures;
     }
 
-    private Friend readFriend(JsonReader reader) throws IOException {
-        trace("readFriend");
+    private Habiture readHabiture(JsonReader reader) throws IOException {
+        trace("readHabiture");
 
         long id = -1;
-        String account = null;
+        long remain = -1;
+        String swear = null;
+        String punishment = null;
 
         reader.beginObject();
         while(reader.hasNext()) {
             String key = reader.nextName();
-            if("account".equals(key)) {
-                account = reader.nextString();
+            if("remain".equals(key)) {
+                remain = reader.nextLong();
+            } else if("swear".equals(key)) {
+                swear = reader.nextString();
             } else if("id".equals(key)) {
                 id = reader.nextLong();
-            } else {
+            } else if("punishment".equals(key)) {
+                punishment = reader.nextString();
+            }else {
                 reader.skipValue();
             }
         }
         reader.endObject();
 
-        if(id == -1 || account == null || account.length() == 0) {
+        if(id == -1 || punishment == null ||remain == -1 || swear == null ) {
             throw new UnhandledException("wrong json format.");
         }
 
-        Friend friend = new Friend();
-        friend.setName(account);
-        friend.setId(id);
+        Habiture habiture = new Habiture();
+        habiture.setgetPunishment(punishment);
+        habiture.setSwear(swear);
+        habiture.setRemain(remain);
+        habiture.setId(id);
 
-        return friend;
+        return habiture;
     }
 
     private List<Group> readGroups(InputStream is) {
@@ -300,9 +372,96 @@ public class NetworkChannel implements NetworkInterface {
         return group;
     }
 
+    private List<Friend> readFriends(InputStream is) {
+        trace("readFriends");
+
+        JsonReader reader = null;
+        try {
+            reader = new JsonReader(new InputStreamReader(is));
+            reader.beginObject();
+
+            if(!"friends".equals(reader.nextName()))
+                throw new UnhandledException("wrong json format");
+            List<Friend> friends = readFriendArray(reader);
+
+            reader.endObject();
+            return friends;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            Utils.closeIO(reader);
+        }
+
+        return null;
+    }
+
+    private List<Friend> readFriendArray(JsonReader reader) throws IOException {
+        trace("readFriendArray");
+        reader.beginArray();
+        List<Friend> friends = new ArrayList<>();
+        while (reader.hasNext()) {
+            friends.add(readFriend(reader));
+        }
+        reader.endArray();
+        return friends;
+    }
+
+    private Friend readFriend(JsonReader reader) throws IOException {
+        trace("readFriend");
+
+        long id = -1;
+        String account = null;
+
+        reader.beginObject();
+        while(reader.hasNext()) {
+            String key = reader.nextName();
+            if("account".equals(key)) {
+                account = reader.nextString();
+            } else if("id".equals(key)) {
+                id = reader.nextLong();
+            } else {
+                reader.skipValue();
+            }
+        }
+        reader.endObject();
+
+        if(id == -1 || account == null || account.length() == 0) {
+            throw new UnhandledException("wrong json format.");
+        }
+
+        Friend friend = new Friend();
+        friend.setName(account);
+        friend.setId(id);
+
+        return friend;
+    }
     private HttpURLConnection createHttpURLConnection(String url) throws IOException{
         trace("createHttpURLConnection");
         return (HttpURLConnection) new URL(url).openConnection();
     }
 
+    public boolean httpSendSound(int from_id , int to_id, int pid, int sound_id){
+        trace("httpSendSound, uid="+from_id+", to_id="+to_id+", pid="+pid+", sound_id="+sound_id);
+
+
+        HttpURLConnection httpUrlConnection = null;
+        try {
+            httpUrlConnection = createHttpURLConnection(URL_PUSH_TOOL.concat("from_id=" + from_id + "&to_id=" + to_id  + "&pid=" + pid  + "&tool=" + sound_id));
+
+            InputStream in = httpUrlConnection.getInputStream();
+
+            String data = readText(in);
+            trace(data);
+
+            //int uid = Integer.valueOf(data.split("\n")[0]);
+
+            //return uid;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection(httpUrlConnection);
+        }
+        return true;
+    }
 }
