@@ -84,7 +84,6 @@ public class ToolModel {
                 PlaySound(tool_id);
             }
         };
-        mContext.registerReceiver(toolBroadReceiver,new IntentFilter(mContext.getString(R.string.tool_clicck_intent_name)));
         mContext.registerReceiver(toolBroadReceiver,new IntentFilter(mContext.getString(R.string.play_tool_sound)));
     }
 

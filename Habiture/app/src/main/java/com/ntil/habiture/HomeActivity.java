@@ -179,12 +179,10 @@ public class HomeActivity extends Activity implements HomeMiddleFragment.Listene
                     return;
                 }
 
-                //TODO...
-
-                /*getFragmentManager().beginTransaction()
+                getFragmentManager().beginTransaction()
                         .replace(R.id.middleContainer, FriendFragment.newInstance(friends))
                         .addToBackStack(null)
-                        .commit();*/
+                        .commit();
 
             } catch (Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
@@ -227,10 +225,8 @@ public class HomeActivity extends Activity implements HomeMiddleFragment.Listene
                     return;
                 }
 
-                // TODO...
-                // add habitures
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.middleContainer, new HabitListFragment())
+                        .replace(R.id.middleContainer, HabitListFragment.newInstance(habitures))
                         .commit();
 
             } catch (Throwable e) {

@@ -142,15 +142,18 @@ public class GcmModel{
      *         registration ID.
      */
     public String getRegistrationId() {
-
-        final SharedPreferences prefs = getGCMPreferences(happtureActivity);
+        SharedPreferences prefs = getGCMPreferences(happtureActivity);
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
 
         if (registrationId.isEmpty()) {
             registerInBackground();
+            prefs = getGCMPreferences(happtureActivity);
             registrationId = prefs.getString(PROPERTY_REG_ID, "");
         }
-
+        if (registrationId.isEmpty()) {
+            Log.i(TAG, "Registration not found.");
+            return "";
+        }
         // Check if app was updated; if so, it must clear the registration ID
         // since the existing registration ID is not guaranteed to work with
         // the new app version.
