@@ -17,9 +17,12 @@ import com.gcm.client.receiver.GcmModel;
 import com.ntil.habiture.R;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.List;
 
 import utils.BitmapHelper;
+import utils.exception.UnhandledException;
 
 
 public class HabitureModule {
@@ -125,17 +128,22 @@ public class HabitureModule {
         return isSoundSent;
     }
 
-    public boolean uploadProofImage(int pid, Bitmap image) {
+    public boolean uploadProofImage(int pid, String imagePath) {
         trace("uploadProofImage");
-        //for test
-        //if(image==null) image = BitmapFactory.decodeResource(mActivity.getResources(),R.drawable.sample_human);
-        // encode image to base64
+        trace("imagePath = " + imagePath);
         String imageData =null;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] b = baos.toByteArray();
-        imageData = Base64.encodeToString(b, Base64.DEFAULT);
-        return networkInterface.httpUploadProofImage(uid, pid, "JPG", imageData);
+//        }
+        try {
+            Bitmap image = null;
+            image = BitmapFactory.decodeFile(imagePath);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] b = baos.toByteArray();
+            imageData = Base64.encodeToString(b, Base64.DEFAULT);
+        } catch (Exception e) {
+            throw new UnhandledException("uploadProofImage failed, " + e );
+        }
+        return networkInterface.httpUploadProofImage(uid, pid, "jpg", imageData);
     }
 
     public List<GroupHistory> gueryGroupHistory(int pid) {

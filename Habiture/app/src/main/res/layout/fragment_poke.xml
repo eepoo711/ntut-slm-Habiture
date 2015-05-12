@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="friends"
-            android:id="@+id/BtnFriends" />
+            android:id="@+id/btnFriends" />
 
         <Button
             android:layout_width="wrap_content"

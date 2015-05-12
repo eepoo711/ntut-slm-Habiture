@@ -421,6 +421,7 @@ public class NetworkChannel implements NetworkInterface {
                 if(desPos != length){
                     throw new IOException("Only read" + desPos +"bytes");
                 }
+                trace("return bitmap");
                 return  BitmapFactory.decodeByteArray(img, 0, img.length);
             }
             trace("get image,length="+length);
@@ -429,6 +430,7 @@ public class NetworkChannel implements NetworkInterface {
         catch (IOException e) {
             Log.e("IOException",e.toString());
         }
+        trace("return null");
         return null;
     }
 
