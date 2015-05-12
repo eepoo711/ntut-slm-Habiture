@@ -3,12 +3,6 @@ package com.habiture;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-
-import android.util.Log;
-
-import com.gcm.client.receiver.GcmModel;
-
-
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.util.Log;
@@ -122,6 +116,8 @@ public class HabitureModule {
         trace("sendSoundToPartner, uid="+uid+", to_id="+to_id+", pid="+pid+", sound_id="+sound_id);
         // TODO
         boolean isSoundSent = networkInterface.httpSendSound(uid,to_id, pid , sound_id);
+        //boolean isSoundSent = networkInterface.httpSendSound(uid, to_id, pid , sound_id);
+
         return isSoundSent;
     }
 
@@ -143,6 +139,7 @@ public class HabitureModule {
 
         return groupHistories;
     }
+
 
     private void trace(String log) {
         if(DEBUG)

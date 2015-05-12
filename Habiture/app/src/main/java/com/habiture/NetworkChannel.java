@@ -229,7 +229,7 @@ public class NetworkChannel implements NetworkInterface {
 
         return null;
     }
-	
+
     public List<GroupHistory> httpGetGropuHistory(int pid) {
         trace("httpGetGropuHistory");
 
@@ -251,7 +251,7 @@ public class NetworkChannel implements NetworkInterface {
 
         return null;
     }
-	
+
     private void closeConnection(HttpURLConnection connection) {
         trace("closeConnection");
         if(connection != null)
@@ -291,7 +291,8 @@ public class NetworkChannel implements NetworkInterface {
         reader.endArray();
         return habitures;
     }
-	
+
+
     private Habiture readHabiture(JsonReader reader) throws IOException {
         trace("readHabiture");
 
@@ -387,6 +388,7 @@ public class NetworkChannel implements NetworkInterface {
             }
         }
         reader.endObject();
+
         if(url == null || name == null || date ==null) {
             throw new UnhandledException("wrong json format.");
         }
@@ -551,28 +553,33 @@ public class NetworkChannel implements NetworkInterface {
         trace("readFriend");
 
         long id = -1;
-        String account = null;
+        String name = null;
+        String url =null;
 
         reader.beginObject();
         while(reader.hasNext()) {
             String key = reader.nextName();
-            if("account".equals(key)) {
-                account = reader.nextString();
+            if("name".equals(key)) {
+                name = reader.nextString();
             } else if("id".equals(key)) {
                 id = reader.nextLong();
+            } else if("url".equals(key)) {
+                url = reader.nextString();
             } else {
                 reader.skipValue();
             }
         }
         reader.endObject();
 
-        if(id == -1 || account == null || account.length() == 0) {
+        if(id == -1 || url == null || url.length() == 0) {
             throw new UnhandledException("wrong json format.");
         }
 
         Friend friend = new Friend();
-        friend.setName(account);
+        friend.setName(name);
         friend.setId(id);
+        friend.setUrl(url);
+        friend.setImage(getBitmapByUrl(url));
 
         return friend;
     }
@@ -591,6 +598,7 @@ public class NetworkChannel implements NetworkInterface {
 
             String data = readText(in);
             trace(data);
+
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
