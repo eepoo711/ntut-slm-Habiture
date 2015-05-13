@@ -86,23 +86,26 @@ public class HabitListFragment extends Fragment {
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.item_habit, parent, false);
                 holder = new ViewHolder();
-                holder.tv5 = (TextView) convertView.findViewById(R.id.textView5);
-                holder.tv4 = (TextView) convertView.findViewById(R.id.textView4);
+                holder.tvSwear = (TextView) convertView.findViewById(R.id.tvSwear);
+                holder.tvPunishment = (TextView) convertView.findViewById(R.id.tvPunishment);
+                holder.tvRemain = (TextView) convertView.findViewById(R.id.tvRemain);
                 convertView.setTag(holder);
             }
             else {
                 holder = (ViewHolder)convertView.getTag();
             }
             Item item = (Item) getItem(position);
-            holder.tv5.setText(item.habiture.getSwear() + "," + item.habiture.getPunishment());
-            holder.tv4.setText(item.habiture.getRemain()+"/"+item.habiture.getId());
+            holder.tvSwear.setText("我想要 " + item.habiture.getSwear());
+            holder.tvPunishment.setText("做不到的話就 " + item.habiture.getPunishment());
+            holder.tvRemain.setText("持續 " + item.habiture.getRemain() + " 週");
 
             return convertView;
         }
 
         private class ViewHolder {
-            TextView tv5;
-            TextView tv4;
+            TextView tvSwear;
+            TextView tvPunishment;
+            TextView tvRemain;
         }
     }
 
