@@ -31,6 +31,7 @@ import com.habiture.HabitureModule;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Random;
 
 import utils.exception.ExceptionAlertDialog;
 import utils.exception.UnhandledException;
@@ -41,13 +42,27 @@ import utils.exception.UnhandledException;
 public class PokeActivity extends Activity implements PokeFragment.Listener{
 
     private final static int CAMERA_REQUEST = 66 ;
-    private Bitmap mCapturedPhoto;
     private HabitureModule mHabitureModule;
+    private int mPid;
+    private String mSwear;
     private static final boolean DEBUG = true;
 
     private void trace(String message) {
         if(DEBUG)
             Log.d("PokeActivity", message);
+    }
+
+    public static void startActivity(Context context, String url, String swear, String punishment,
+            int pid, int frequency, int doItTime, int goal) {
+        Intent intent = new Intent(context, PokeActivity.class);
+        intent.putExtra("url", url);
+        intent.putExtra("swear", swear);
+        intent.putExtra("punishment", punishment);
+        intent.putExtra("pid", pid);
+        intent.putExtra("frequency", frequency);
+        intent.putExtra("doItTime", doItTime);
+        intent.putExtra("goal", goal);
+        context.startActivity(intent);
     }
 
     @Override
@@ -56,16 +71,12 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         setContentView(R.layout.activity_poke);
         String name = MainApplication.getInstance().getHabitureModel().getAccount();
         mHabitureModule = MainApplication.getInstance().getHabitureModel();
-
-        if(savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.profileContainer, HomeTopFragment.newInstance(name,mHabitureModule.getHeader()))
-                    .add(R.id.pokeContainer, new PokeFragment())
-                    .commit();
-        }
-
+        mPid = getIntent().getIntExtra("pid", -1);
+        new QueryOwnerPhoto().execute(getIntent().getStringExtra("url"));
+        trace("pid = " + mPid);
         registerToolBroadReceiver();
     }
+
     private void registerToolBroadReceiver() {
         BroadcastReceiver toolBroadReceiver = new BroadcastReceiver() {
             @Override
@@ -86,10 +97,10 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         // call this function after capture
         trace("onActivityResult");
 
-        if (requestCode == CAMERA_REQUEST) {
+        if (requestCode == CAMERA_REQUEST && data != null) {
             String path = Environment.getExternalStorageDirectory()+"/image.jpg";
-            new UploadProofTask().execute("154", path);
-            trace("path = " + path);
+            String pid = "" + mPid;
+            new UploadProofTask().execute(pid, path);
         }
     }
 
@@ -99,7 +110,8 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         File tmpFile = new File( Environment.getExternalStorageDirectory(), "/image.jpg");
         Uri outputFileUri = Uri.fromFile(tmpFile);
 
-        Intent intent =  new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);    //利用intent去開啟android本身的照相介面
+        // open camera
+        Intent intent =  new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
         startActivityForResult(intent, CAMERA_REQUEST);
 //        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -120,6 +132,19 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
     @Override
     public void onClickTool() {
         trace("onClickTool");
+    }
+
+    @Override
+    public void onPoke() {
+        Random random_tool = new Random();
+        int random_tool_id =random_tool.nextInt(6)+1;
+        // TODO: to guest now
+        int to_id =1;
+        Intent broadcastIntent = new Intent(this.getString(R.string.tool_clicck_intent_name));
+        broadcastIntent.putExtra("to_id",1);
+        broadcastIntent.putExtra("pid",mPid);
+        broadcastIntent.putExtra("tool_id",random_tool_id);
+        this.sendBroadcast(broadcastIntent);
     }
 
     private class GroupHistoryTask extends AsyncTask<Integer, Void, List<GroupHistory>> {
@@ -237,5 +262,62 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
             }
 
         }
+    }
+
+    private class QueryOwnerPhoto extends AsyncTask<String, Void, Bitmap> {
+        private ProgressDialog progress;
+        private int pid;
+        private String url;
+
+        @Override
+        protected void onPreExecute() {
+            trace("QueryOwnerPhoto onPreExecute");
+            try {
+                progress = ProgressDialog.show(PokeActivity.this,
+                        "習慣成真",
+                        "載入中...");
+            } catch (Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            trace("QueryOwnerPhoto doInBackground");
+            url = params[0];
+            Bitmap bitmap = null;
+
+            try {
+                bitmap = mHabitureModule.queryBitmapUrl(url);
+            } catch (Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+            return bitmap;
+
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            trace("QueryOwnerPhoto onPostExecute");
+            try {
+                progress.dismiss();
+                if (bitmap != null) {
+                    getFragmentManager().beginTransaction()
+                            .add(R.id.profileContainer, HomeTopFragment.newInstance(
+                                    mHabitureModule.getAccount()
+                                    , mHabitureModule.getHeader()))
+                            .add(R.id.pokeContainer, PokeFragment.newInstance(bitmap, "123", "456", 1, 1, 1))
+                            .commit();
+                } else {
+                    Toast.makeText(PokeActivity.this, "載入資料失敗", Toast.LENGTH_SHORT).show();
+                }
+
+            } catch (Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+        }
+
+
+
     }
 }

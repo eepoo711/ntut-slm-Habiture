@@ -1,3 +1,7 @@
+2015/05/13 Gawin (0.25.20150513)
+1. modify poke view to imageview
+2. modify onTabPoke flow
+
 2015/05/12 Codus & Gawin (0.24.20150512)
 1. finish feature - upload record
 2. finish feature - habit list

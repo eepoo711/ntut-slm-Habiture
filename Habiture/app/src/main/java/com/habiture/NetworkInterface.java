@@ -1,5 +1,7 @@
 package com.habiture;
 
+import android.graphics.Bitmap;
+
 import java.util.List;
 
 public interface NetworkInterface {
@@ -19,6 +21,10 @@ public interface NetworkInterface {
     public boolean httpSendSound(int from_id , int to_id, int pid, int sound_id);
 
     public boolean httpUploadProofImage(int uid, int pid, String imageType, String imageData);
+
+    public PokeData httpGetPokePage(int pid);
+
+    public Bitmap httpGetBitmapUrl(String url);
 
     public List<GroupHistory> httpGetGropuHistory(int pid);
 }
