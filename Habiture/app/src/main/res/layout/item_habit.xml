@@ -1,66 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="fill_parent"
     android:layout_height="match_parent"
-    android:id="@+id/habiture_list_item">
+    android:background="#48fff78a">
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp">
+
+        <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/imageButton4"
+            android:src="@mipmap/tool1"
+            android:scaleType="fitCenter"
+            android:background="#0013ff2f" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
+            android:text="騎腳踏車"
             android:id="@+id/textView5"
-            android:layout_gravity="center_horizontal|left" />
+            android:layout_gravity="center_horizontal|left"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:layout_weight="1" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
-            android:layout_gravity="right"
-            android:id="@+id/textView4" />
+            android:text="本週剩餘 ? 次數"
+            android:layout_gravity="bottom|right"
+            android:id="@+id/textView4"
+            android:textSize="20dp"
+            android:layout_marginRight="10dp" />
+
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/imageButton3"
+            android:src="@drawable/setting"
+            android:scaleType="fitCenter"
+            android:background="#0013ff2f"
+            android:layout_gravity="right" />
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="5dp"
+        android:id="@+id/imageView3"
+        android:background="#df0d0072"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/textView6" />
+        android:text="做不到就裸奔！！"
+        android:id="@+id/textView6"
+        android:textSize="30dp"
+        android:layout_margin="20dp"
+        android:textColor="#ff0b8e37" />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Button"
-            android:id="@+id/button1" />
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="more..."
+            android:id="@+id/button1"
+            android:layout_weight="1"
+            android:background="#00ffffff"
+            android:textSize="12dp"
+            android:clickable="true"
+            android:gravity="fill_vertical"
+            android:paddingLeft="20dp"
+            android:textColor="#ff65666b" />
 
-        <Button
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="New Button"
-            android:id="@+id/button2" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Button"
-            android:id="@+id/button3" />
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/button2"
+                android:layout_weight="1"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:text="PASS"
+                android:background="#00ffffff" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Button"
-            android:id="@+id/button4" />
+            <ImageButton
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:id="@+id/imageButton"
+                android:layout_weight="1"
+                android:src="@mipmap/camera"
+                android:scaleType="fitCenter"
+                android:background="#00ffffff" />
+
+            <ImageButton
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:id="@+id/imageButton2"
+                android:layout_weight="1"
+                android:src="@mipmap/invite"
+                android:scaleType="fitCenter"
+                android:background="#00ffffff" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

@@ -4,40 +4,55 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content">
 
-    <Button
-        android:layout_width="0dp"
+    <ImageButton
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="habiture list"
         android:id="@+id/btnHabitList"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:src="@mipmap/cow"
+        android:scaleType="fitCenter"
+        android:background="#00ffffff"/>
 
-    <Button
-        android:layout_width="0dp"
+    <ImageButton
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="poke list"
         android:id="@+id/btnPokeList"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:src="@mipmap/note"
+        android:scaleType="fitCenter"
+        android:background="#00ffffff"/>
 
-    <Button
-        android:layout_width="0dp"
+    <ImageButton
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="declare"
         android:id="@+id/btnDeclare"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:src="@mipmap/pen"
+        android:scaleType="fitCenter"
+        android:background="#00ffffff" />
 
-    <Button
-        android:layout_width="0dp"
+    <ImageButton
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="friend list"
         android:id="@+id/btnFriendList"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:src="@mipmap/friend"
+        android:scaleType="fitCenter"
+        android:background="#00ffffff"/>
 
-    <Button
-        android:layout_width="0dp"
+    <ImageButton
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="  more..."
         android:id="@+id/btnMore"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:src="@mipmap/more"
+        android:scaleType="fitCenter"
+        android:background="#00ffffff"/>
 
 
 

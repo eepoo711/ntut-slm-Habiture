@@ -73,13 +73,7 @@ public class DeclareFragment extends Fragment {
         final EditText etCost = (EditText) getActivity().findViewById(R.id.etCost);
         final EditText etGoal = (EditText) getActivity().findViewById(R.id.etGoal);
         final Spinner spDoItTime = (Spinner) getActivity().findViewById(R.id.spDoItTime);
-        final Spinner spPeroid = (Spinner) getActivity().findViewById(R.id.spPeroid);
         final Spinner spFrequency = (Spinner) getActivity().findViewById(R.id.spFrequency);
-
-        //initial spinner items of peroid
-        String[] peroid = getActivity().getResources().getStringArray(R.array.declare_period);
-        ArrayAdapter peroidList = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, peroid);
-        spPeroid.setAdapter(peroidList);
 
         // initial spinner items of frequency
         String[] frequency = getActivity().getResources().getStringArray(R.array.declare_weekly_frequency);
@@ -91,20 +85,6 @@ public class DeclareFragment extends Fragment {
         ArrayAdapter do_it_time_list = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, do_it_time);
         spDoItTime.setAdapter(do_it_time_list);
 
-        // initial selected listener of frequency
-        spPeroid.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
-            @Override
-            public void onItemSelected(AdapterView<?> arg0, View arg1,int position, long arg3) {
-                if(position==0) {
-                    String[] frequency = getActivity().getResources().getStringArray(R.array.declare_daily_frequency);
-                    ArrayAdapter frequencyList = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, frequency);
-                    spFrequency.setAdapter(frequencyList);
-                }
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-            }
-        });
 //public void onDeclareClicked(String declaration, String punishment, String frequency, String do_it_time, String goal) {
         getActivity().findViewById(R.id.btnDeclare).setOnClickListener(new View.OnClickListener() {
             @Override
