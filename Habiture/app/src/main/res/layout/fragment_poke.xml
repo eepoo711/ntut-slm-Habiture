@@ -1,67 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="我想要跑步 / 剩餘3週"
-        android:layout_marginBottom="5dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/tvDeclare" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="一次沒做就裸奔"
-        android:layout_marginBottom="5dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/tvPunishment" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="PM 6:00 / 每週3次 / 持續4週"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_marginBottom="5dp"
-        android:id="@+id/tvTime" />
+    android:layout_height="match_parent"
+    android:id="@+id/posts_page"
+    android:background="#3f00fdff">
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:baselineAligned="false">
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/shape"
+        android:alpha="0.9">
 
-        <Button
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="camera"
-            android:id="@+id/btnCamera" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="名稱："
+            android:id="@+id/textView11"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
 
-        <Button
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="我想要跑步 / 剩餘3週"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/tvDeclare"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/shape"
+        android:alpha="0.9">
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="friends"
-            android:id="@+id/btnFriends" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="處罰："
+            android:id="@+id/textView10"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
 
-        <Button
-            android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/btnRecords"
-            android:text="records"/>
+            android:text="一次沒做就裸奔"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/tvPunishment"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
 
-        <Button
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/shape"
+        android:alpha="0.9">
+
+        <TextView
             android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="時間："
+            android:id="@+id/textView12"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
+
+        <TextView
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="tool"
-            android:id="@+id/btnTool" />
+            android:text="PM 6:00 / 每週3次 / 持續4週"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/tvTime"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center_vertical" />
+
     </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"></LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:id="@+id/btnCamera"
+            android:src="@mipmap/camera"
+            android:layout_weight="1"
+            android:scaleType="fitCenter"
+            android:background="#00ffffff" />
+
+        <ImageButton
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:id="@+id/btnFriends"
+            android:src="@mipmap/group_member"
+            android:layout_weight="1"
+            android:scaleType="fitCenter"
+            android:background="#00ffffff" />
+
+        <ImageButton
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:id="@+id/btnRecords"
+            android:src="@mipmap/histroy"
+            android:layout_weight="1"
+            android:scaleType="fitCenter"
+            android:background="#00ffffff" />
+
+        <ImageButton
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:text="tool"
+            android:id="@+id/btnTool"
+            android:src="@mipmap/tool1"
+            android:scaleType="fitCenter"
+            android:layout_weight="1"
+            android:background="#00ffffff" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center">
 
 
