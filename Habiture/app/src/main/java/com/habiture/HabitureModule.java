@@ -148,6 +148,13 @@ public class HabitureModule {
         return groupHistories;
     }
 
+    public Bitmap queryBitmapUrl(String url) {
+        return networkInterface.httpGetBitmapUrl(url);
+    }
+
+    public PokeData queryPokeData(int pid) {
+        return networkInterface.httpGetPokePage(pid);
+    }
 
     private void trace(String log) {
         if(DEBUG)

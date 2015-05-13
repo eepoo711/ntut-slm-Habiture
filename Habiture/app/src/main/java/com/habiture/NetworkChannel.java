@@ -21,7 +21,7 @@ import utils.exception.UnhandledException;
 
 public class NetworkChannel implements NetworkInterface {
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     public static final String URL_LOGIN =  "http://140.124.144.121/Habiture/login.cgi?";
     public static final String URL_QUERY_FRIENDS = "http://140.124.144.121/Habiture/friends.cgi?";
@@ -31,6 +31,7 @@ public class NetworkChannel implements NetworkInterface {
     public static final String URL_PUSH_TOOL = "http://140.124.144.121/Habiture/push.cgi?";
     public static final String URL_UPLOAD_PROOF_IMAGE = "http://140.124.144.121/Habiture/record.cgi";
     public static final String URL_QUERY_GROUP_HISTORIES = "http://140.124.144.121/Habiture/history.cgi?";
+    public static final String URL_QUERY_POKE_PAGE = "http://140.124.144.121/Habiture/posts_page.cgi?";
 
     private void trace(String message) {
         if(DEBUG)
@@ -395,14 +396,14 @@ public class NetworkChannel implements NetworkInterface {
 
         GroupHistory groupHistory = new GroupHistory();
         groupHistory.setUrl(url);
-        groupHistory.setImage(getBitmapByUrl(url));
+        groupHistory.setImage(httpGetBitmapUrl(url));
         groupHistory.setName(name);
         groupHistory.setDate(date);
 
         return groupHistory;
     }
 
-    private Bitmap getBitmapByUrl(String url) {
+    public Bitmap httpGetBitmapUrl(String url) {
 
         try {
             URL imgUrl = new URL(url);
@@ -581,7 +582,7 @@ public class NetworkChannel implements NetworkInterface {
         friend.setName(name);
         friend.setId(id);
         friend.setUrl(url);
-        friend.setImage(getBitmapByUrl(url));
+        friend.setImage(httpGetBitmapUrl(url));
 
         return friend;
     }
@@ -654,4 +655,29 @@ public class NetworkChannel implements NetworkInterface {
             Utils.closeIO(writer);
         }
     }
+
+    @Override
+    public PokeData httpGetPokePage(int pid) {
+        trace("httpGetPokePage");
+        String parameters =
+                "pid=".concat(String.valueOf(pid));
+        String url = URL_QUERY_POKE_PAGE.concat(parameters);
+
+        HttpURLConnection connection = null;
+
+        try {
+            connection = createHttpURLConnection(url);
+            //TODO: resolve json
+            //return readPokePage(connection.getInputStream());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection(connection);
+        }
+
+        return null;
+    }
+
 }
+

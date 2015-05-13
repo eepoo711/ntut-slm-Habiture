@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import com.habiture.Friend;
 import com.habiture.Group;
 import com.habiture.Habiture;
 import com.habiture.HabitureModule;
+import com.habiture.PokeData;
 
 import java.util.List;
 
@@ -22,11 +24,11 @@ import utils.exception.ExceptionAlertDialog;
 /**
  * Created by GawinHsu on 5/6/15.
  */
-public class HomeActivity extends Activity implements HomeMiddleFragment.Listener, HomeBottomFragment.Listener,
-        ExitAlertDialog.Listener{
+public class HomeActivity extends Activity implements HomeBottomFragment.Listener,
+        ExitAlertDialog.Listener, GroupAdapter.Listener{
     private HabitureModule mHabitureModule;
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     private void trace(String message) {
         if(DEBUG)
             Log.d("HomeActivity", message);
@@ -64,12 +66,6 @@ public class HomeActivity extends Activity implements HomeMiddleFragment.Listene
     }
 
     @Override
-    public void onShowGroupClicked() {
-        trace("onShowGroupClicked");
-        new QueryGroupsTask().execute();
-    }
-
-    @Override
     public void onTabHabit() {
         trace("onTabHabit");
         new QueryHabituresTask().execute();
@@ -78,7 +74,8 @@ public class HomeActivity extends Activity implements HomeMiddleFragment.Listene
     @Override
     public void onTabPoke() {
         trace("onTabPoke");
-        startActivity(new Intent(this, PokeActivity.class));
+        //startActivity(new Intent(this, PokeActivity.class));
+        new QueryGroupsTask().execute();
     }
 
     @Override
@@ -102,6 +99,59 @@ public class HomeActivity extends Activity implements HomeMiddleFragment.Listene
     @Override
     public void onExit() {
         finish();
+    }
+
+    @Override
+    public void onClickGroupSingleItem(int pid, String url) {
+        trace("onClickGroupSingleItem pid = " + pid);
+        // TODO: QueryPokePageTask
+        //new QueryPokePageTask().execute(pid);
+        PokeActivity.startActivity(this, url, "123", "456", pid, 1, 1, 1);
+    }
+
+    private class QueryPokePageTask extends AsyncTask<Integer, Void, PokeData> {
+        private ProgressDialog progress;
+        @Override
+        protected void onPreExecute() {
+            trace("QueryPokePageTask onPreExecute");
+
+            try {
+                progress = ProgressDialog.show(HomeActivity.this,
+                        HomeActivity.this.getString(R.string.progress_title),
+                        "載入中...");
+            } catch(Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+        }
+
+        @Override
+        protected PokeData doInBackground(Integer... params) {
+            trace("QueryPokePageTask doInBackground");
+            int pid = Integer.valueOf(params[0]);
+            return mHabitureModule.queryPokeData(pid);
+        }
+
+
+        @Override
+        protected void onPostExecute(PokeData pokeData) {
+            trace("QueryPokePageTask onPostExecute");
+            try {
+                progress.dismiss();
+
+                if (pokeData != null) {
+                    // TODO: startPokeActivity
+                    //PokeActivity.startActivity(this, pokeData.get, "123", "456", pid, 1, 1, 1);
+                } else {
+                    Toast.makeText(HomeActivity.this, "讀取失敗", Toast.LENGTH_SHORT).show();
+                }
+
+
+            } catch(Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+        }
+
+
     }
 
     private class QueryGroupsTask extends AsyncTask<Void, Void, List<Group>> {

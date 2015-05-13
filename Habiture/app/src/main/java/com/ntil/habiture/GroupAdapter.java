@@ -2,9 +2,11 @@ package com.ntil.habiture;
 
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,6 +19,14 @@ import java.util.List;
 public class GroupAdapter extends BaseAdapter{
     private List<Item> items;
     private LayoutInflater inflater;
+    private Listener listener;
+
+    private static final boolean DEBUG = true;
+
+    private void trace(String message) {
+        if(DEBUG)
+            Log.d("PokeActivity", message);
+    }
 
     public GroupAdapter(Context context, List<Group> groups){
         inflater = LayoutInflater.from(context);
@@ -26,6 +36,7 @@ public class GroupAdapter extends BaseAdapter{
             item.group = group;
             items.add(item);
         }
+        listener = (Listener) context;
     }
 
     public class Item {
@@ -49,7 +60,7 @@ public class GroupAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
         if (convertView == null) {
@@ -63,10 +74,18 @@ public class GroupAdapter extends BaseAdapter{
             holder = (ViewHolder)convertView.getTag();
         }
         Item item = (Item) getItem(position);
-        // 設定群組圖案
         holder.ivIcon.setImageResource(R.drawable.default_icon);
-        // 設定群組名稱
         holder.tvName.setText(item.group.getSwear());
+        holder.tvName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                trace("onClick, pid = " + ((Item) getItem(position)).getGroup().getId());
+                int pid = ((Item) getItem(position)).getGroup().getId();
+                String url = ((Item) getItem(position)).getGroup().getUrl();
+                listener.onClickGroupSingleItem(pid, url);
+            }
+        });
+
 
         return convertView;
     }
@@ -75,4 +94,10 @@ public class GroupAdapter extends BaseAdapter{
         ImageView ivIcon;
         TextView tvName;
     }
+
+    public interface Listener {
+        public void onClickGroupSingleItem(int pid, String url);
+    }
+
+
 }
