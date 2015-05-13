@@ -124,14 +124,11 @@ public class HabitureModule {
         return isSoundSent;
     }
 
-    public boolean uploadProofImage(int pid, String imagePath) {
+    public boolean uploadProofImage(int pid, Bitmap image) {
         trace("uploadProofImage");
-        trace("imagePath = " + imagePath);
         String imageData =null;
 //        }
         try {
-            Bitmap image = null;
-            image = BitmapFactory.decodeFile(imagePath);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] b = baos.toByteArray();
