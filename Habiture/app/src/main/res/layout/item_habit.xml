@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="騎腳踏車"
-            android:id="@+id/textView5"
+            android:id="@+id/tvSwear"
             android:layout_gravity="center_horizontal|left"
             android:textSize="30dp"
             android:textStyle="bold"
@@ -36,7 +36,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="本週剩餘 ? 次數"
             android:layout_gravity="bottom|right"
-            android:id="@+id/textView4"
+            android:id="@+id/tvRemain"
             android:textSize="20dp"
             android:layout_marginRight="10dp" />
 
@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="做不到就裸奔！！"
-        android:id="@+id/textView6"
+        android:id="@+id/tvPunishment"
         android:textSize="30dp"
         android:layout_margin="20dp"
         android:textColor="#ff0b8e37" />

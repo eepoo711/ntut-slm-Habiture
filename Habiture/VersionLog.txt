@@ -1,3 +1,6 @@
+2015/05/13 Gawin & DeWie & Codus (0.26.20150513)
+1. merge xml & app
+
 2015/05/13 Gawin (0.25.20150513)
 1. modify poke view to imageview
 2. modify onTabPoke flow

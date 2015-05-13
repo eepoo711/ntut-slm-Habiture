@@ -15,7 +15,7 @@ public class HomeMiddleFragment extends Fragment {
 
     private TextView textView;
 
-    private Listener mListener;
+    //private Listener mListener;
 
     private void trace(String message) {
         if(DEBUG)
@@ -32,7 +32,7 @@ public class HomeMiddleFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        mListener = (Listener) activity;
+        //mListener = (Listener) activity;
     }
 
     @Override
@@ -47,17 +47,17 @@ public class HomeMiddleFragment extends Fragment {
 
         trace("onActivityCreated");
 
-        getActivity().findViewById(R.id.btnGroup).setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                mListener.onShowGroupClicked();
-            }
-        });
+//        getActivity().findViewById(R.id.btnGroup).setOnClickListener(new View.OnClickListener(){
+//
+//            @Override
+//            public void onClick(View v) {
+//                mListener.onShowGroupClicked();
+//            }
+//        });
 
     }
 
-    public interface Listener {
-        public void onShowGroupClicked();
-    }
+//    public interface Listener {
+//        public void onShowGroupClicked();
+//    }
 }

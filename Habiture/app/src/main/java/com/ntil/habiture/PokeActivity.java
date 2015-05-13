@@ -45,6 +45,7 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
     private HabitureModule mHabitureModule;
     private int mPid;
     private String mSwear;
+    private Bitmap mBitmapCaputred;
     private static final boolean DEBUG = true;
 
     private void trace(String message) {
@@ -95,27 +96,20 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // call this function after capture
-        trace("onActivityResult");
+        trace("onActivityResult, requestCode = " + requestCode + ", resultCode = " + resultCode);
 
-        if (requestCode == CAMERA_REQUEST && data != null) {
-            String path = Environment.getExternalStorageDirectory()+"/image.jpg";
-            String pid = "" + mPid;
-            new UploadProofTask().execute(pid, path);
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            mBitmapCaputred = (Bitmap) data.getExtras().get("data");
+            new UploadProofTask().execute(mPid);
+
         }
     }
 
     @Override
     public void onClickCamera() {
         trace("onClickCamera");
-        File tmpFile = new File( Environment.getExternalStorageDirectory(), "/image.jpg");
-        Uri outputFileUri = Uri.fromFile(tmpFile);
-
-        // open camera
-        Intent intent =  new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-        startActivityForResult(intent, CAMERA_REQUEST);
-//        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
 
     @Override
@@ -148,10 +142,17 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
     }
 
     private class GroupHistoryTask extends AsyncTask<Integer, Void, List<GroupHistory>> {
-
+        private ProgressDialog progress;
         @Override
         protected void onPreExecute() {
             trace("GroupHistoryTask onPreExecute");
+            try {
+                progress = ProgressDialog.show(PokeActivity.this,
+                        "習慣成真",
+                        "載入中...");
+            } catch(Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
         }
 
         @Override
@@ -170,6 +171,7 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         @Override
         protected void onPostExecute(List<GroupHistory> groupHistories) {
             trace("GroupHistoryTask onPostExecute");
+            progress.dismiss();
             getFragmentManager().beginTransaction()
                     .replace(R.id.pokeContainer, HistoryFragment.newInstance(groupHistories))
                     .addToBackStack(null)
@@ -178,7 +180,7 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
     }
 
 
-    private class UploadProofTask extends AsyncTask<String, Void, Boolean> {
+    private class UploadProofTask extends AsyncTask<Integer, Void, Boolean> {
         private ProgressDialog progress;
         @Override
         protected void onPreExecute() {
@@ -194,14 +196,13 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         }
 
         @Override
-        protected Boolean doInBackground(String... params) {
+        protected Boolean doInBackground(Integer... params) {
             trace("UploadProofTask doInBackground");
             boolean is_upload = false;
             try {
-                int pid = Integer.valueOf(params[0]);
-                String path = params[1];
+                int pid = params[0];
 
-                is_upload = mHabitureModule.uploadProofImage(pid, path);
+                is_upload = mHabitureModule.uploadProofImage(pid, mBitmapCaputred);
             } catch (Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
             }
