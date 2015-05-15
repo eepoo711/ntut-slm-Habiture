@@ -32,32 +32,33 @@
         <item>4</item>
         <item>5</item>
         <item>6</item>
+        <item>7</item>
     </string-array>
     <string-array name="declare_do_it_time" >
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-        <item>11</item>
-        <item>12</item>
-        <item>13</item>
-        <item>14</item>
-        <item>15</item>
-        <item>16</item>
-        <item>17</item>
-        <item>18</item>
-        <item>19</item>
-        <item>20</item>
-        <item>21</item>
-        <item>22</item>
-        <item>23</item>
+        <item>Am 12</item>
+        <item>Am 1</item>
+        <item>Am 2</item>
+        <item>Am 3</item>
+        <item>Am 4</item>
+        <item>Am 5</item>
+        <item>Am 6</item>
+        <item>Am 7</item>
+        <item>Am 8</item>
+        <item>Am 9</item>
+        <item>Am 10</item>
+        <item>Am 11</item>
+        <item>Pm 12</item>
+        <item>Pm 1</item>
+        <item>Pm 2</item>
+        <item>Pm 3</item>
+        <item>Pm 4</item>
+        <item>Pm 5</item>
+        <item>Pm 6</item>
+        <item>Pm 7</item>
+        <item>Pm 8</item>
+        <item>Pm 9</item>
+        <item>Pm 10</item>
+        <item>Pm 11</item>
     </string-array>
     <string name="confirm">確定</string>
     <string name="cancel">取消</string>
@@ -73,6 +74,7 @@
     <string name="tool_sent_failed">傳送提醒失敗!</string>
     <string name="declaration_do_it_time_hint">別人可於何時提醒我</string>
     <string name="play_tool_sound">play_tool_sound</string>
+    <string name="return_register_id">return_register_id</string>
 
 
 </resources>

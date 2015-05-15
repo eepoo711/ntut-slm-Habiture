@@ -10,9 +10,9 @@
         android:text="habiture list"
         android:id="@+id/btnHabitList"
         android:layout_weight="1"
-        android:src="@mipmap/cow"
-        android:scaleType="fitCenter"
-        android:background="#00ffffff"/>
+        android:src="@mipmap/note"
+        android:scaleType="center"
+        android:background="#00ffffff" />
 
     <ImageButton
         android:layout_width="fill_parent"
@@ -20,9 +20,9 @@
         android:text="poke list"
         android:id="@+id/btnPokeList"
         android:layout_weight="1"
-        android:src="@mipmap/note"
-        android:scaleType="fitCenter"
-        android:background="#00ffffff"/>
+        android:src="@mipmap/cow"
+        android:scaleType="center"
+        android:background="#00ffffff" />
 
     <ImageButton
         android:layout_width="fill_parent"
@@ -31,7 +31,7 @@
         android:id="@+id/btnDeclare"
         android:layout_weight="1"
         android:src="@mipmap/pen"
-        android:scaleType="fitCenter"
+        android:scaleType="center"
         android:background="#00ffffff" />
 
     <ImageButton
@@ -41,8 +41,8 @@
         android:id="@+id/btnFriendList"
         android:layout_weight="1"
         android:src="@mipmap/friend"
-        android:scaleType="fitCenter"
-        android:background="#00ffffff"/>
+        android:scaleType="center"
+        android:background="#00ffffff" />
 
     <ImageButton
         android:layout_width="fill_parent"
@@ -51,8 +51,8 @@
         android:id="@+id/btnMore"
         android:layout_weight="1"
         android:src="@mipmap/more"
-        android:scaleType="fitCenter"
-        android:background="#00ffffff"/>
+        android:scaleType="center"
+        android:background="#00ffffff" />
 
 
 

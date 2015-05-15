@@ -26,5 +26,7 @@ public interface NetworkInterface {
 
     public Bitmap httpGetBitmapUrl(String url);
 
+    public boolean httpSendRegisterId(int uid, String reg_id);
+
     public List<GroupHistory> httpGetGropuHistory(int pid);
 }
