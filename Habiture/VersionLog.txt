@@ -1,3 +1,6 @@
+2015/05/15 Brian & Codus (0.27.20150515) 16:29
+1. fix gcm not unregister bug
+
 2015/05/13 Gawin & DeWie & Codus (0.26.20150513)
 1. merge xml & app
 
