@@ -6,8 +6,11 @@ public class Habiture {
     private String swear = null;
     private String punishment = null;
     private long remain = -1;
-    private long id = -1;
+    private int id = -1;
+    private String url =null;
 
+    public String getUrl(){return url;}
+    void setUrl(String url){this.url =url;}
 
     public String getPunishment() {
         return punishment;
@@ -31,11 +34,11 @@ public class Habiture {
     public long getRemain() {
         return remain;
     }
-    void setId(long id) {
+    void setId(int id) {
         this.id = id;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 

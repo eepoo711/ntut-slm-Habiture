@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -45,9 +46,16 @@ public class HabitListFragment extends Fragment {
         return fragment;
     }
 
-    public class HabitureAdapter extends BaseAdapter {
+    public static class HabitureAdapter extends BaseAdapter {
         private List<Item> items;
         private LayoutInflater inflater;
+        private Listener listener;
+
+        private static final boolean DEBUG = true;
+        private void trace(String message) {
+            if(DEBUG)
+                Log.d("HabitListFragment", message);
+        }
 
         public HabitureAdapter(Context context, List<Habiture> habitures){
             inflater = LayoutInflater.from(context);
@@ -57,6 +65,7 @@ public class HabitListFragment extends Fragment {
                 item.habiture = habiture;
                 items.add(item);
             }
+            listener = (Listener) context;
         }
 
         public class Item {
@@ -80,7 +89,7 @@ public class HabitListFragment extends Fragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
 
             if (convertView == null) {
@@ -89,15 +98,26 @@ public class HabitListFragment extends Fragment {
                 holder.tvSwear = (TextView) convertView.findViewById(R.id.tvSwear);
                 holder.tvPunishment = (TextView) convertView.findViewById(R.id.tvPunishment);
                 holder.tvRemain = (TextView) convertView.findViewById(R.id.tvRemain);
+                holder.btnMore = (Button) convertView.findViewById(R.id.btnMore);
                 convertView.setTag(holder);
             }
             else {
                 holder = (ViewHolder)convertView.getTag();
             }
             Item item = (Item) getItem(position);
-            holder.tvSwear.setText("我想要 " + item.habiture.getSwear());
+            holder.tvSwear.setText(item.habiture.getSwear());
             holder.tvPunishment.setText("做不到的話就 " + item.habiture.getPunishment());
-            holder.tvRemain.setText("持續 " + item.habiture.getRemain() + " 週");
+            holder.tvRemain.setText("本週剩餘 " + item.habiture.getRemain() + " 次數");
+            holder.btnMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    trace("onClick, pid = " + ((Item) getItem(position)).getHabiture().getId());
+                    int pid = ((Item) getItem(position)).getHabiture().getId();
+                    //String url = ((Item) getItem(position)).getHabiture().getUrl();
+                    String url = "http://140.124.144.121/Habiture/profile/10176068_726992954019352_539454252837054186_n.jpg";
+                    listener.onClickHabitSingleItem(pid, url);
+                }
+            });
 
             return convertView;
         }
@@ -106,6 +126,11 @@ public class HabitListFragment extends Fragment {
             TextView tvSwear;
             TextView tvPunishment;
             TextView tvRemain;
+            Button btnMore;
+        }
+
+        public interface Listener {
+            public void onClickHabitSingleItem(int pid, String url);
         }
     }
 

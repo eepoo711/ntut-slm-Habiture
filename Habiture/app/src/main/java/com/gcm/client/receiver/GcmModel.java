@@ -2,6 +2,7 @@ package com.gcm.client.receiver;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -55,6 +56,9 @@ public class GcmModel{
             Log.i(TAG, regid);
             if (regid.isEmpty()) {
                 registerInBackground();
+            } else {
+                //reg-id already created, tell model
+                returnHabitModelRegisterID(regid);
             }
         } else {
             Log.i(TAG, "No valid Google Play Services APK found.");
@@ -98,6 +102,9 @@ public class GcmModel{
                     }
                     Log.i(TAG, "start register");
                     regid = gcm.register(SENDER_ID);
+
+                    //reg-id  got, tell model
+                    returnHabitModelRegisterID(regid);
                     Log.i(TAG, "get msg");
                     msg = "Device registered, registration ID=" + regid;
                     Log.i(TAG,msg);
@@ -213,5 +220,12 @@ public class GcmModel{
             // should never happen
             throw new RuntimeException("Could not get package name: " + e);
         }
+    }
+
+    private void returnHabitModelRegisterID(String reg_id) {
+
+        Intent broadcastIntent = new Intent(happtureActivity.getString(R.string.return_register_id));
+        broadcastIntent.putExtra("reg_id",reg_id);
+        happtureActivity.sendBroadcast(broadcastIntent);
     }
 }

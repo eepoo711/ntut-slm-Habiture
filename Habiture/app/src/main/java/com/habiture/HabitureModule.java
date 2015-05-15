@@ -61,8 +61,8 @@ public class HabitureModule {
 
     public boolean postDeclaration( String frequency, String declaration, String punishment, String goal,  String do_it_time) {
         trace("declare");
-		// TODO
-        boolean isDeclared = networkInterface.httpPostDeclaration(uid, frequency, declaration, punishment, goal, do_it_time);
+        String do_it_time_server_format =do_it_time.substring(3);
+        boolean isDeclared = networkInterface.httpPostDeclaration(uid, frequency, declaration, punishment, goal, do_it_time_server_format);
 
         return isDeclared;
     }
@@ -151,6 +151,12 @@ public class HabitureModule {
 
     public PokeData queryPokeData(int pid) {
         return networkInterface.httpGetPokePage(pid);
+    }
+    public boolean sendRegisterIdToServer(String reg_id) {
+        trace("sendRegisterIdToServer, reg_id="+reg_id);
+        boolean isRegistered = networkInterface.httpSendRegisterId(uid,reg_id);
+        return isRegistered;
+
     }
 
     private void trace(String log) {

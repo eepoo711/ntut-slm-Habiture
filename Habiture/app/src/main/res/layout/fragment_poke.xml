@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/shape"
         android:alpha="0.9">
 
@@ -95,7 +95,8 @@
             android:id="@+id/tvTime"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_gravity="center_vertical" />
+            android:layout_gravity="center_vertical"
+            android:textSize="20dp" />
 
     </LinearLayout>
 

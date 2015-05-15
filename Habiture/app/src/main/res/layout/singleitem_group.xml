@@ -5,31 +5,39 @@
     android:orientation="horizontal">
 
 
-    <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:id="@+id/ivGroupIcon"
-        android:scaleType="fitCenter"
-        android:layout_margin="2dp"
-        android:src="@drawable/moo" />
-
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/tvGroupName"
-        android:gravity="center_vertical"
-        android:paddingLeft="15dp"
-        android:layout_margin="2dp"
-        android:layout_weight="1" />
+        android:layout_margin="10dp">
 
-    <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:id="@+id/imageView"
-        android:layout_margin="2dp"
-        android:src="@drawable/setting"
-        android:layout_gravity="right"
-        android:scaleType="fitCenter" />
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/ivGroupIcon"
+            android:scaleType="fitCenter"
+            android:layout_margin="2dp"
+            android:src="@drawable/moo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Large Text"
+            android:id="@+id/tvGroupName"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:textSize="30dp" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/imageView"
+            android:layout_margin="2dp"
+            android:src="@drawable/setting"
+            android:layout_gravity="center_vertical|right"
+            android:scaleType="fitCenter" />
+    </LinearLayout>
 </LinearLayout>

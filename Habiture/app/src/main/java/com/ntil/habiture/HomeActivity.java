@@ -3,7 +3,10 @@ package com.ntil.habiture;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,7 +28,7 @@ import utils.exception.ExceptionAlertDialog;
  * Created by GawinHsu on 5/6/15.
  */
 public class HomeActivity extends Activity implements HomeBottomFragment.Listener,
-        ExitAlertDialog.Listener, GroupAdapter.Listener{
+        ExitAlertDialog.Listener, GroupAdapter.Listener, HabitListFragment.HabitureAdapter.Listener{
     private HabitureModule mHabitureModule;
 
     private static final boolean DEBUG = true;
@@ -53,9 +56,23 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
                     .commit();
         }
 
+        registerRegisterIDBroadReceiver();
         mHabitureModule.registerGCM();
 
 
+    }
+    private void registerRegisterIDBroadReceiver() {
+        BroadcastReceiver toolBroadReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String reg_id =intent.getStringExtra("reg_id");
+                trace("registerRegisterIDBroadReceiver(), reg_id="+reg_id);
+                if(reg_id!="") {
+                    new send_register_id_to_server().execute(reg_id);
+                }
+            }
+        };
+        registerReceiver(toolBroadReceiver, new IntentFilter(this.getString(R.string.return_register_id)));
     }
 
     @Override
@@ -106,6 +123,11 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
         trace("onClickGroupSingleItem pid = " + pid);
         // TODO: QueryPokePageTask
         //new QueryPokePageTask().execute(pid);
+        PokeActivity.startActivity(this, url, "123", "456", pid, 1, 1, 1);
+    }
+
+    @Override
+    public void onClickHabitSingleItem(int pid, String url) {
         PokeActivity.startActivity(this, url, "123", "456", pid, 1, 1, 1);
     }
 
@@ -290,4 +312,46 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
         }
     }
 
+    private class send_register_id_to_server extends AsyncTask<String, Void, Boolean> {
+        private ProgressDialog progress;
+
+        @Override
+        protected void onPreExecute() {
+            trace("onPreExecute");
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            trace("doInBackground");
+
+            boolean is_registered_sent = false;
+            try {
+                String reg_id = params[0];
+                is_registered_sent =mHabitureModule.sendRegisterIdToServer(reg_id);
+            } catch (Throwable e) {
+                //ExceptionAlertDialog.showException(getFragmentManager(), e);
+                Toast.makeText(
+                        HomeActivity.this,
+                        "GCM register failed",
+                        Toast.LENGTH_SHORT).show();
+            }
+            return is_registered_sent;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            trace("onPostExecute");
+
+            try {
+                Toast.makeText(
+                        HomeActivity.this,
+                        success ? "GCM register done" : "GCM register failed",
+                        Toast.LENGTH_SHORT).show();
+
+            } catch(Throwable e) {
+                //ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+
+        }
+    }
 }

@@ -21,7 +21,7 @@ import utils.exception.UnhandledException;
 
 public class NetworkChannel implements NetworkInterface {
 
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
 
     public static final String URL_LOGIN =  "http://140.124.144.121/Habiture/login.cgi?";
     public static final String URL_QUERY_FRIENDS = "http://140.124.144.121/Habiture/friends.cgi?";
@@ -32,6 +32,7 @@ public class NetworkChannel implements NetworkInterface {
     public static final String URL_UPLOAD_PROOF_IMAGE = "http://140.124.144.121/Habiture/record.cgi";
     public static final String URL_QUERY_GROUP_HISTORIES = "http://140.124.144.121/Habiture/history.cgi?";
     public static final String URL_QUERY_POKE_PAGE = "http://140.124.144.121/Habiture/posts_page.cgi?";
+    public static final String URL_UPDATE_GCM_REGISTER_ID  ="http://140.124.144.121/Habiture/update.cgi?";
 
     private void trace(String message) {
         if(DEBUG)
@@ -297,7 +298,7 @@ public class NetworkChannel implements NetworkInterface {
     private Habiture readHabiture(JsonReader reader) throws IOException {
         trace("readHabiture");
 
-        long id = -1;
+        int id = -1;
         long remain = -1;
         String swear = null;
         String punishment = null;
@@ -310,7 +311,7 @@ public class NetworkChannel implements NetworkInterface {
             } else if("swear".equals(key)) {
                 swear = reader.nextString();
             } else if("id".equals(key)) {
-                id = reader.nextLong();
+                id = reader.nextInt();
             } else if("punishment".equals(key)) {
                 punishment = reader.nextString();
             }else {
@@ -679,5 +680,35 @@ public class NetworkChannel implements NetworkInterface {
         return null;
     }
 
+    public boolean httpSendRegisterId(int uid, String reg_id) {
+        trace("httpSendRegisterId,id="+reg_id);
+
+        // worning! you must wait , or update as soon as login will encounter error
+        for (int i=0; i<1; i++) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+            }
+        }
+        HttpURLConnection httpUrlConnection = null;
+        try {
+            httpUrlConnection = createHttpURLConnection(URL_UPDATE_GCM_REGISTER_ID.concat("uid=" + uid + "&reg_id=" + reg_id));
+
+            InputStream in = httpUrlConnection.getInputStream();
+            String result = readText(in);
+
+            int code = Integer.valueOf(result.split("\n")[0]);
+            trace("gcm reg,result="+result+",code="+code);
+            boolean isUpdated = false;
+            isUpdated = code == 1 ? true : false;
+            return isUpdated;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection(httpUrlConnection);
+        }
+        return false;
+    }
 }
 
