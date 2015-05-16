@@ -64,15 +64,17 @@ public class HabitureModuleTest extends AndroidTestCase {
     }
 
     public void testPostSwearSuccessfully() {
-        stubLogin(new StubPostSwearSuccessfully());
-        List<Friend> friends = new ArrayList<>();
-        assertTrue(hm.postDeclaration(hm.getAccount(), hm.getPassword(), 1, 1, "Running", friends));
+//        stubLogin(new StubPostSwearSuccessfully());
+//        List<Friend> friends = new ArrayList<>();
+//        assertTrue(hm.postDeclaration(hm.getAccount(), hm.getPassword(), 1, 1, "Running", friends));
+        fail();
     }
 
     public void testPostSwearFailed() {
-        stubLogin(new StubPostSwearFailed());
-        List<Friend> friends = new ArrayList<>();
-        assertFalse(hm.postDeclaration(hm.getAccount(), hm.getPassword(), 1, 1, "Running", friends));
+//        stubLogin(new StubPostSwearFailed());
+//        List<Friend> friends = new ArrayList<>();
+//        assertFalse(hm.postDeclaration(hm.getAccount(), hm.getPassword(), 1, 1, "Running", friends));
+        fail();
     }
 
     private boolean stubLogin(NetworkInterface networkInterface) {

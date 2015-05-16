@@ -7,9 +7,11 @@ package com.habiture.tests;
         import com.habiture.Group;
         import com.habiture.NetworkChannel;
 
+        import junit.framework.TestCase;
+
         import java.util.List;
 
-public class NetworkChannelTest extends AndroidTestCase {
+public class NetworkChannelTest extends TestCase {
 
     private NetworkChannel networkChannel;
 
