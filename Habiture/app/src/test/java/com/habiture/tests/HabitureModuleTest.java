@@ -1,18 +1,13 @@
 package com.habiture.tests;
 
 import android.app.Activity;
-import android.test.AndroidTestCase;
 
-import com.habiture.Friend;
-import com.habiture.Group;
 import com.habiture.HabitureModule;
+import com.habiture.MockGcmModel;
 import com.habiture.NetworkInterface;
+import com.habiture.StubGcmModelLogin;
 import com.habiture.StubLoginFailed;
 import com.habiture.StubLoginSuccessfully;
-import com.habiture.StubPostSwearFailed;
-import com.habiture.StubPostSwearSuccessfully;
-import com.habiture.StubQueryFriends;
-import com.habiture.StubQueryGroups;
 
 import junit.framework.TestCase;
 
@@ -27,22 +22,16 @@ public class HabitureModuleTest extends TestCase {
     private HabitureModule hm = null;
 
     @Mock
-    private Activity activity;
+    private Activity mockActivity;
 
     @Test
     public void testLoginSuccessfully() {
-//        assertTrue(stubLogin(new StubLoginSuccessfully()));
-
-        hm = new HabitureModule(new StubLoginSuccessfully());
-        hm.setActivityAndConstructGcm(activity);
-        boolean result = hm.login("testAccount", "testPassword");
-        assertTrue(result);
-
+        assertTrue(stubLogin(new StubLoginSuccessfully()));
     }
 
-//    public void testLoginFailed() {
-//        assertFalse(stubLogin(new StubLoginFailed()));
-//    }
+    public void testLoginFailed() {
+        assertFalse(stubLogin(new StubLoginFailed()));
+    }
 //
 //    public void testGetProfileAfterLoginSuccessfully() {
 //        stubLogin(new StubLoginSuccessfully());
@@ -93,10 +82,11 @@ public class HabitureModuleTest extends TestCase {
 //        fail();
 //    }
 //
-//    private boolean stubLogin(NetworkInterface networkInterface) {
-//        hm = new HabitureModule(networkInterface);
-//        boolean result = hm.login("testAccount", "testPassword");
-//        return result;
-//    }
+    private boolean stubLogin(NetworkInterface networkInterface) {
+        MockGcmModel gcmModel = new StubGcmModelLogin(mockActivity);
+        hm = new HabitureModule(networkInterface, gcmModel);
+        boolean result = hm.login("testAccount", "testPassword");
+        return result;
+    }
 
 }

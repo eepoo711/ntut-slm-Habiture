@@ -32,9 +32,10 @@ public class HabitureModule {
     private String self_url =null;
     private LoginInfo loginInfo =null;
 
-    public HabitureModule(NetworkInterface networkInterface) {
+    public HabitureModule(NetworkInterface networkInterface, GcmModel gcmModel) {
         trace("HabitureModule");
         this.networkInterface = networkInterface;
+        this.gcmModel = gcmModel;
     }
 
     public boolean login(String account, String password) {
@@ -107,10 +108,6 @@ public class HabitureModule {
         return habitures;
     }
 
-    public void setActivityAndConstructGcm(Activity activity) {
-        mActivity =activity;
-        gcmModel = new GcmModel(mActivity);
-    }
     public void registerGCM() {
         gcmModel.registerGcm();
     }
