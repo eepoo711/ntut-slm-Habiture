@@ -21,7 +21,7 @@ import utils.exception.UnhandledException;
 
 public class HabitureModule {
 
-    private final boolean DEBUG = false;
+    private final boolean DEBUG = true;
     private NetworkInterface networkInterface = null;
     private GcmModel gcmModel =null;
     private Activity mActivity =null;
@@ -52,7 +52,7 @@ public class HabitureModule {
             this.account = account;
             this.password = password;
         }
-        trace("login down, url="+loginInfo.getUrl());
+        trace("login done, url="+loginInfo.getUrl());
         return isLogined;
     }
 
@@ -61,7 +61,7 @@ public class HabitureModule {
     }
 
     public boolean postDeclaration( String frequency, String declaration, String punishment, String goal,  String do_it_time) {
-        trace("declare");
+        trace("postDeclaration >> frequency="+frequency+" declaration="+declaration+" punishment="+punishment+" goal="+goal+" do_it_time="+do_it_time);
         String do_it_time_server_format =do_it_time.substring(3);
         boolean isDeclared = networkInterface.httpPostDeclaration(uid, frequency, declaration, punishment, goal, do_it_time_server_format);
 
@@ -113,7 +113,7 @@ public class HabitureModule {
     }
 
     public boolean sendSoundToPartner(int to_id, int pid, int sound_id ) {
-        trace("sendSoundToPartner, uid="+uid+", to_id="+to_id+", pid="+pid+", sound_id="+sound_id);
+        trace("sendSoundToPartner, uid=" + uid + ", to_id=" + to_id + ", pid=" + pid + ", sound_id=" +sound_id);
         // TODO
         boolean isSoundSent = networkInterface.httpSendSound(uid,to_id, pid , sound_id);
         //boolean isSoundSent = networkInterface.httpSendSound(uid, to_id, pid , sound_id);
@@ -149,6 +149,7 @@ public class HabitureModule {
     public PokeData queryPokeData(int pid) {
         return networkInterface.httpGetPokePage(pid);
     }
+
     public boolean sendRegisterIdToServer(String reg_id) {
         trace("sendRegisterIdToServer, reg_id="+reg_id);
         boolean isRegistered = networkInterface.httpSendRegisterId(uid,reg_id);
