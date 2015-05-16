@@ -1,3 +1,7 @@
+2015/05/16 Brian (0.29.20150516) 13:05
+1. finish test cases for LoginSuccessfully and LoginFailed
+2. build a local unit testing environment
+
 2015/05/15 Brian & Codus (0.28.20150515) 16:38
 1. fix UI background load failed.
 
