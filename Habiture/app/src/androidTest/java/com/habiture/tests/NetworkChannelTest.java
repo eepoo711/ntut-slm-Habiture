@@ -4,6 +4,7 @@ package com.habiture.tests;
 import android.test.AndroidTestCase;
 
 import com.habiture.Friend;
+import com.habiture.Group;
 import com.habiture.Profile;
 import com.habiture.NetworkChannel;
 
@@ -33,7 +34,8 @@ public class NetworkChannelTest extends AndroidTestCase {
     }
 
     public void testQueryFriends() {
-        List<Friend> friends = networkChannel.httpGetFriends(1);
+        Profile profile = networkChannel.httpGetLoginResult("guest", "guest", "123");
+        List<Friend> friends = networkChannel.httpGetFriends(profile.getId());
         assertNotNull(friends);
 
         Friend deWei = friends.get(0);
@@ -55,15 +57,10 @@ public class NetworkChannelTest extends AndroidTestCase {
 ////        fail();
 //    }
 //
-//    public void testQueryGroups() {
-////        List<Group> groups = networkChannel.httpGetGroups("guest", "guest");
-////        assertNotNull(groups);
-////
-////        Group guest = groups.get(0);
-////        assertEquals("123", guest.getSwear());
-////        //assertEquals(64, guest.getId());
-//        fail();
-//
-//    }
+    public void testQueryGroups() {
+        Profile profile = networkChannel.httpGetLoginResult("guest", "guest", "123");
+        List<Group> groups = networkChannel.httpGetGroups(profile.getId());
+        assertNotNull(groups);
+    }
 
 }

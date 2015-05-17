@@ -16,8 +16,6 @@ import com.habiture.StubPostSwearSuccessfully;
 import com.habiture.StubQueryFriends;
 import com.habiture.StubQueryGroups;
 
-import junit.framework.TestCase;
-
 import java.util.ArrayList;
 import java.util.List;
 

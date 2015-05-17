@@ -43,7 +43,7 @@ public class NetworkChannel implements NetworkInterface {
     public Profile httpGetLoginResult(String account, String password, String reg_id) {
         trace("httpGetLoginResult >> account="+account+" password="+password+" reg_id="+reg_id);
 
-        Profile profile = new Profile();
+
 
         HttpURLConnection httpUrlConnection = null;
         try {
@@ -51,6 +51,7 @@ public class NetworkChannel implements NetworkInterface {
 
             InputStream in = httpUrlConnection.getInputStream();
 
+            Profile profile = new Profile();
             JsonReader reader = new JsonReader(new InputStreamReader(in));
             reader.beginObject();
             while(reader.hasNext()) {
