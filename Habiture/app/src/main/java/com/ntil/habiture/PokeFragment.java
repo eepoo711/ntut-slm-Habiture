@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import utils.BitmapHelper;
 
@@ -35,32 +36,31 @@ public class PokeFragment extends Fragment {
     public Listener listener;
     private static final boolean DEBUG = true;
     private ImageView ivPoke;
+    private TextView tvSwearAndRemain;
+    private TextView tvPunishment;
+    private TextView tvTime;
     private Bitmap mBitmapDrawing;
     private Bitmap mBitmapTool;
     private Paint mPaint = new Paint();
 
-    private static Bitmap mBitmapOwner = null;
-    private String mSwear = null;
-    private String mPunishment = null;
-    private int mFrequency = -1;
-    private int mDoItTime = -1;
-    private int mGoal = -1;
+    private Bitmap mBitmapOwner = null;
 
     private void trace(String message) {
         if(DEBUG)
             Log.d("PokeFragment", message);
     }
 
-    public static PokeFragment newInstance(Bitmap bitmapOwner, String swear, String punishment
-            , int frequency, int doItTime, int goal) {
+    public static PokeFragment newInstance(String swear, String punishment
+            , int frequency, int doItTime, int goal, int remain) {
         PokeFragment fragment = new PokeFragment();
-        mBitmapOwner = bitmapOwner;
+        //mBitmapOwner = bitmapOwner;
         Bundle args = new Bundle();
         args.putString("swear", swear);
         args.putString("punishment", punishment);
         args.putInt("frequency", frequency);
         args.putInt("doItTime", doItTime);
         args.putInt("goal", goal);
+        args.putInt("remain", remain);
         fragment.setArguments(args);
         return fragment;
     }
@@ -81,11 +81,7 @@ public class PokeFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Bundle args = this.getArguments();
-        mSwear = "" + args.getString("SWEAR");
-        mPunishment = args.getString("PUNISHMENT");
-        mFrequency = args.getInt("FREQUENCY");
-        mDoItTime = args.getInt("DOITTIME");
-        mGoal = args.getInt("GOAL");
+        trace("onActivityCreated");
 
         getActivity().findViewById(R.id.btnCamera).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,17 +116,30 @@ public class PokeFragment extends Fragment {
         });
 
         ivPoke = (ImageView) getActivity().findViewById(R.id.ivPoke);
-        ViewTreeObserver vto = ivPoke.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                trace("onGlobalLayout");
-                mBitmapDrawing = Bitmap.createScaledBitmap(mBitmapOwner, ivPoke.getWidth(), ivPoke.getHeight(), false);
-                mBitmapTool = BitmapFactory.decodeResource(getResources(), R.drawable.sample_tool).copy(Bitmap.Config.ARGB_8888, true);
-                ivPoke.setImageBitmap(mBitmapDrawing);
-            }
-        });
+        tvSwearAndRemain = (TextView) getActivity().findViewById(R.id.tvSwearAndRemain);
+        tvPunishment = (TextView) getActivity().findViewById(R.id.tvPunishment);
+        tvTime = (TextView) getActivity().findViewById(R.id.tvTime);
 
+        tvSwearAndRemain.setText(getArguments().getString("swear") + " / 剩餘 " +
+                getArguments().getInt("remain") + " 週");
+        tvPunishment.setText(getArguments().getString("punishment"));
+        tvTime.setText("每週 " + getArguments().getInt("doItTime") + " 次 / 持續 " +
+                getArguments().getInt("frequency") + " 週");
+
+    }
+
+    private void drawSampleTool(float x, float y) {
+        Canvas drawCanvas = new Canvas(mBitmapDrawing);
+        drawCanvas.drawBitmap(mBitmapTool, x, y, mPaint);
+        ivPoke.setImageBitmap(mBitmapDrawing);
+    }
+
+    public void setImage(Bitmap image) {
+        trace("setImage");
+        mBitmapOwner = image;
+        mBitmapDrawing = Bitmap.createScaledBitmap(mBitmapOwner, ivPoke.getWidth(), ivPoke.getHeight(), false);
+        mBitmapTool = BitmapFactory.decodeResource(getResources(), R.drawable.sample_tool).copy(Bitmap.Config.ARGB_8888, true);
+        ivPoke.setImageBitmap(mBitmapDrawing);
         ivPoke.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -143,13 +152,6 @@ public class PokeFragment extends Fragment {
                 return false;
             }
         });
-
-    }
-
-    private void drawSampleTool(float x, float y) {
-        Canvas drawCanvas = new Canvas(mBitmapDrawing);
-        drawCanvas.drawBitmap(mBitmapTool, x, y, mPaint);
-        ivPoke.setImageBitmap(mBitmapDrawing);
     }
 
     public interface Listener {
