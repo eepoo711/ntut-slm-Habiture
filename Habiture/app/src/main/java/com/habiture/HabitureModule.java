@@ -38,6 +38,8 @@ public class HabitureModule {
         trace("login");
 
         profile = networkInterface.httpGetLoginResult(account, password, gcmModel.getRegistrationId());
+        if(profile == null) return false;
+
 
         self_url = profile.getPhotoUrl();
         uid = profile.getId();

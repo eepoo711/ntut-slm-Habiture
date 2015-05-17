@@ -8,6 +8,7 @@ import java.util.List;
  * Created by Yeh on 2015/5/16.
  */
 public class MockNetworkChannel implements NetworkInterface {
+
     @Override
     public Profile httpGetLoginResult(String account, String password, String reg_id) {
         throw new RuntimeException("wrong call");
