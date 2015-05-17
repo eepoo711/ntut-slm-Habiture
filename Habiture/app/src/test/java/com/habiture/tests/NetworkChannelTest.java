@@ -1,19 +1,12 @@
 package com.habiture.tests;
 
 
-import android.test.AndroidTestCase;
-import android.util.Log;
-
-import com.habiture.Friend;
-import com.habiture.Group;
-import com.habiture.LoginInfo;
+import com.habiture.Profile;
 import com.habiture.NetworkChannel;
 
 import junit.framework.TestCase;
 
 import org.junit.Test;
-
-import java.util.List;
 
 public class NetworkChannelTest extends TestCase {
 
@@ -29,9 +22,9 @@ public class NetworkChannelTest extends TestCase {
     @Test
     public void testLogin() {
 
-        LoginInfo loginInfo = new LoginInfo();
-        loginInfo = networkChannel.httpGetLoginResult("guest", "guest", "123", loginInfo);
-        int uid =loginInfo.getId();
+        Profile profile = new Profile();
+        profile = networkChannel.httpGetLoginResult("guest", "guest", "123", profile);
+        int uid = profile.getId();
 
         assertEquals(1, uid);
 //        boolean isLogined = uid > 0 ? true : false;

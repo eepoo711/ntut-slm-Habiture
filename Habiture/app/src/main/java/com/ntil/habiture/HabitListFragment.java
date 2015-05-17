@@ -113,7 +113,7 @@ public class HabitListFragment extends Fragment {
                 public void onClick(View v) {
                     trace("onClick, pid = " + ((Item) getItem(position)).getHabiture().getId());
                     int pid = ((Item) getItem(position)).getHabiture().getId();
-                    //String url = ((Item) getItem(position)).getHabiture().getUrl();
+                    //String url = ((Item) getItem(position)).getHabiture().getPhotoUrl();
                     String url = "http://140.124.144.121/Habiture/profile/10176068_726992954019352_539454252837054186_n.jpg";
                     listener.onClickHabitSingleItem(pid, url);
                 }

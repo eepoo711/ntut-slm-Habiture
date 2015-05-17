@@ -4,7 +4,7 @@ package com.habiture.tests;
 import android.test.AndroidTestCase;
 
 import com.habiture.Friend;
-import com.habiture.LoginInfo;
+import com.habiture.Profile;
 import com.habiture.NetworkChannel;
 
 import java.util.List;
@@ -21,9 +21,15 @@ public class NetworkChannelTest extends AndroidTestCase {
     }
 
     public void testLogin() {
-        LoginInfo loginInfo = networkChannel.httpGetLoginResult("guest", "guest", "123");
-        int uid =loginInfo.getId();
+        Profile profile = networkChannel.httpGetLoginResult("guest", "guest", "123");
+        int uid = profile.getId();
         assertEquals(1, uid);
+    }
+
+    public void testGetProfilePhoto() {
+        Profile profile = networkChannel.httpGetLoginResult("guest", "guest", "123");
+        byte[] image = networkChannel.httpGetPhoto(profile);
+        assertNotNull(image);
     }
 
     public void testQueryFriends() {

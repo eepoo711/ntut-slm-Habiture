@@ -1,21 +1,16 @@
 package com.habiture;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.util.Log;
 
 import com.gcm.client.receiver.GcmModel;
-import com.ntil.habiture.R;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.util.List;
 
-import utils.BitmapHelper;
 import utils.exception.UnhandledException;
 
 
@@ -30,7 +25,8 @@ public class HabitureModule {
     private String password = null;
     private int uid = -1;
     private String self_url =null;
-    private LoginInfo loginInfo =null;
+    private Profile profile =null;
+    private Bitmap profilePhoto = null;
 
     public HabitureModule(NetworkInterface networkInterface, GcmModel gcmModel) {
         trace("HabitureModule");
@@ -41,22 +37,21 @@ public class HabitureModule {
     public boolean login(String account, String password) {
         trace("login");
 
-        loginInfo = networkInterface.httpGetLoginResult(account, password, gcmModel.getRegistrationId());
+        profile = networkInterface.httpGetLoginResult(account, password, gcmModel.getRegistrationId());
 
-        self_url =loginInfo.getUrl();
-        uid =loginInfo.getId();
+        self_url = profile.getPhotoUrl();
+        uid = profile.getId();
         boolean isLogined = uid > 0 ? true : false;
 
         if(isLogined) {
             this.account = account;
             this.password = password;
+
+            byte[] image = networkInterface.httpGetPhoto(profile);
+            profilePhoto = BitmapFactory.decodeByteArray(image, 0, image.length);
         }
-        trace("login done, url="+loginInfo.getUrl());
+        trace("login done, url="+ profile.getPhotoUrl());
         return isLogined;
-    }
-
-    private void saveLoginUid(int uid) {
-
     }
 
     public boolean postDeclaration( String frequency, String declaration, String punishment, String goal,  String do_it_time) {
@@ -86,7 +81,7 @@ public class HabitureModule {
     }
 
     public Bitmap getHeader() {
-        return loginInfo.getImage();
+        return profilePhoto;
     }
 
     public List<Friend> queryFriends() {

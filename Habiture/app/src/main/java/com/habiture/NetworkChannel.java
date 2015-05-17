@@ -40,10 +40,10 @@ public class NetworkChannel implements NetworkInterface {
     }
 
     @Override
-    public LoginInfo httpGetLoginResult(String account, String password, String reg_id) {
+    public Profile httpGetLoginResult(String account, String password, String reg_id) {
         trace("httpGetLoginResult >> account="+account+" password="+password+" reg_id="+reg_id);
 
-        LoginInfo loginInfo = new LoginInfo();
+        Profile profile = new Profile();
 
         HttpURLConnection httpUrlConnection = null;
         try {
@@ -56,23 +56,18 @@ public class NetworkChannel implements NetworkInterface {
             while(reader.hasNext()) {
                 String key = reader.nextName();
                 if("url".equals(key)) {
-                    loginInfo.setUrl(reader.nextString());
+                    profile.setPhotoUrl(reader.nextString());
                 } else if("id".equals(key)) {
-                    loginInfo.setId(reader.nextInt());
+                    profile.setId(reader.nextInt());
                 } else {
                     reader.skipValue();
                 }
             }
             reader.endObject();
 
-            trace("login info="+loginInfo.getUrl());
+            trace("login info="+ profile.getPhotoUrl());
 
-            if(loginInfo.getUrl() != null && loginInfo.getUrl() != "") {
-                byte[] img = getPhoto(loginInfo.getUrl());
-                loginInfo.setImage( BitmapFactory.decodeByteArray(img, 0, img.length));
-            }
-
-            return loginInfo;
+            return profile;
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -80,6 +75,18 @@ public class NetworkChannel implements NetworkInterface {
             closeConnection(httpUrlConnection);
         }
         return null;
+    }
+
+    @Override
+    public byte[] httpGetPhoto(Profile profile) {
+
+        byte[] img = null;
+        if(profile.getPhotoUrl() != null && profile.getPhotoUrl() != "") {
+            img = getPhoto(profile.getPhotoUrl());
+        }
+
+
+        return img;
     }
 
     private byte[] getPhoto(String url) {
