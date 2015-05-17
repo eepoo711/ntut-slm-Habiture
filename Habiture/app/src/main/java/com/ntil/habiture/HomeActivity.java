@@ -26,7 +26,8 @@ import utils.exception.ExceptionAlertDialog;
  * Created by GawinHsu on 5/6/15.
  */
 public class HomeActivity extends Activity implements HomeBottomFragment.Listener,
-        ExitAlertDialog.Listener, GroupFragment.Listener, HabitListFragment.HabitureAdapter.Listener{
+        ExitAlertDialog.Listener, GroupFragment.Listener, HabitListFragment.Listener,
+        HabitListAdapter.Listener{
     private HabitureModule mHabitureModule;
 
     private static final boolean DEBUG = true;

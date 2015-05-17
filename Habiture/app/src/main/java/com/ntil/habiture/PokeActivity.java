@@ -76,10 +76,10 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         mHabitureModule = MainApplication.getInstance().getHabitureModel();
 
         if (savedInstanceState == null) {
-            mPoketFragment = PokeFragment.newInstance(getIntent().getStringExtra("swear"),
-                    getIntent().getStringExtra("punishment"), getIntent().getIntExtra("frequency", 0),
-                    getIntent().getIntExtra("doItTime", 0), getIntent().getIntExtra("goal", 0),
-                    getIntent().getIntExtra("remain", 0));
+            mPoketFragment = PokeFragment.newInstance(getIntent().getBooleanExtra("isFounder", false),
+                    getIntent().getStringExtra("swear"), getIntent().getStringExtra("punishment"),
+                    getIntent().getIntExtra("frequency", 0), getIntent().getIntExtra("doItTime", 0),
+                    getIntent().getIntExtra("goal", 0), getIntent().getIntExtra("remain", 0));
             getFragmentManager().beginTransaction()
                     .add(R.id.profileContainer, HomeTopFragment.newInstance(
                             mHabitureModule.getAccount()
