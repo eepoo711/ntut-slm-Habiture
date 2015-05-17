@@ -41,8 +41,7 @@ public class HabitureModule {
     public boolean login(String account, String password) {
         trace("login");
 
-        loginInfo = new LoginInfo();
-        networkInterface.httpGetLoginResult(account, password,gcmModel.getRegistrationId(),loginInfo);
+        loginInfo = networkInterface.httpGetLoginResult(account, password, gcmModel.getRegistrationId());
 
         self_url =loginInfo.getUrl();
         uid =loginInfo.getId();

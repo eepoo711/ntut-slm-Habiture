@@ -7,7 +7,8 @@ import java.util.List;
  */
 public class StubLoginSuccessfully extends MockNetworkChannel /*implements NetworkInterface*/ {
     @Override
-    public LoginInfo httpGetLoginResult(String account, String password, String reg_id, LoginInfo loginInfo) {
+    public LoginInfo httpGetLoginResult(String account, String password, String reg_id) {
+        LoginInfo loginInfo = new LoginInfo();
         loginInfo.setId(1);
         loginInfo.setUrl("test://12345");
         return null;

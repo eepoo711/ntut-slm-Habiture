@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class MockNetworkChannel implements NetworkInterface {
     @Override
-    public LoginInfo httpGetLoginResult(String account, String password, String reg_id, LoginInfo loginInfo) {
+    public LoginInfo httpGetLoginResult(String account, String password, String reg_id) {
         throw new RuntimeException("wrong call");
     }
 

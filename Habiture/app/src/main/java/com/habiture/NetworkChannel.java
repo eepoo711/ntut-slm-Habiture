@@ -40,9 +40,10 @@ public class NetworkChannel implements NetworkInterface {
     }
 
     @Override
-    public LoginInfo httpGetLoginResult(String account, String password, String reg_id,LoginInfo loginInfo) {
-        trace("httpGetLoginResult");
+    public LoginInfo httpGetLoginResult(String account, String password, String reg_id) {
+        trace("httpGetLoginResult >> account="+account+" password="+password+" reg_id="+reg_id);
 
+        LoginInfo loginInfo = new LoginInfo();
 
         HttpURLConnection httpUrlConnection = null;
         try {
@@ -66,35 +67,9 @@ public class NetworkChannel implements NetworkInterface {
 
             trace("login info="+loginInfo.getUrl());
 
-            if(loginInfo.getUrl()!=null&&loginInfo.getUrl()!="") {
-
-                try {
-                    URL imgUrl = new URL(loginInfo.getUrl());
-                    HttpURLConnection httpURLConnection
-                            = (HttpURLConnection) imgUrl.openConnection();
-                    httpURLConnection.connect();
-                    InputStream inputStream = httpURLConnection.getInputStream();
-                    int length = (int) httpURLConnection.getContentLength();
-                    int tmpLength = 512;
-                    int readLen = 0,desPos = 0;
-                    byte[] img = new byte[length];
-                    byte[] tmp = new byte[tmpLength];
-                    if (length != -1) {
-                        while ((readLen = inputStream.read(tmp)) > 0) {
-                            System.arraycopy(tmp, 0, img, desPos, readLen);
-                            desPos += readLen;
-                        }
-                        loginInfo.setImage( BitmapFactory.decodeByteArray(img, 0, img.length));
-                        if(desPos != length){
-                            throw new IOException("Only read" + desPos +"bytes");
-                        }
-                    }
-                    trace("get image,length="+length);
-                    httpURLConnection.disconnect();
-                }
-                catch (IOException e) {
-                    Log.e("IOException",e.toString());
-                }
+            if(loginInfo.getUrl() != null && loginInfo.getUrl() != "") {
+                byte[] img = getPhoto(loginInfo.getUrl());
+                loginInfo.setImage( BitmapFactory.decodeByteArray(img, 0, img.length));
             }
 
             return loginInfo;
@@ -103,6 +78,38 @@ public class NetworkChannel implements NetworkInterface {
             e.printStackTrace();
         } finally {
             closeConnection(httpUrlConnection);
+        }
+        return null;
+    }
+
+    private byte[] getPhoto(String url) {
+        HttpURLConnection httpURLConnection = null;
+        try {
+            URL imgUrl = new URL(url);
+            httpURLConnection = (HttpURLConnection) imgUrl.openConnection();
+            httpURLConnection.connect();
+            InputStream inputStream = httpURLConnection.getInputStream();
+            int length = (int) httpURLConnection.getContentLength();
+            int tmpLength = 512;
+            int readLen = 0,desPos = 0;
+            byte[] img = new byte[length];
+            byte[] tmp = new byte[tmpLength];
+            if (length != -1) {
+                while ((readLen = inputStream.read(tmp)) > 0) {
+                    System.arraycopy(tmp, 0, img, desPos, readLen);
+                    desPos += readLen;
+                }
+                if(desPos != length){
+                    throw new UnhandledException("Only read" + desPos +"bytes");
+                }
+                return img;
+            }
+            trace("get image,length=" + length);
+        }
+        catch (IOException e) {
+            Log.e("IOException", e.toString());
+        } finally {
+            httpURLConnection.disconnect();
         }
         return null;
     }
