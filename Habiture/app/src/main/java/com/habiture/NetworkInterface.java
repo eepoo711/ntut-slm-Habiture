@@ -8,9 +8,7 @@ public interface NetworkInterface {
 
 
 
-    public Profile httpGetLoginResult(String account, String password, String reg_id);
-
-    byte[] httpGetPhoto(Profile profile);
+    public LoginInfo httpGetLoginResult(String account, String password, String reg_id,LoginInfo loginInfo);
 
     public List<Friend> httpGetFriends(int uid);
 

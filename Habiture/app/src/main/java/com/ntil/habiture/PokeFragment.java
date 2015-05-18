@@ -36,7 +36,6 @@ public class PokeFragment extends Fragment {
 
     private Paint mPaint = new Paint();
 
-
     private void trace(String message) {
         if(DEBUG)
             Log.d("PokeFragment", message);
@@ -53,6 +52,7 @@ public class PokeFragment extends Fragment {
         args.putInt("frequency", frequency);
         args.putInt("doItTime", doItTime);
         args.putInt("goal", goal);
+        args.putInt("remain", remain);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,6 +73,7 @@ public class PokeFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Bundle args = this.getArguments();
+        trace("onActivityCreated");
 
         btnCamera = (ImageButton) getActivity().findViewById(R.id.btnCamera);
 
@@ -149,13 +150,6 @@ public class PokeFragment extends Fragment {
                 return false;
             }
         });
-
-    }
-
-    private void drawSampleTool(float x, float y) {
-        Canvas drawCanvas = new Canvas(bmpDrawing);
-        drawCanvas.drawBitmap(bmpTool, x, y, mPaint);
-        ivPoke.setImageBitmap(bmpDrawing);
     }
 
     public interface Listener {

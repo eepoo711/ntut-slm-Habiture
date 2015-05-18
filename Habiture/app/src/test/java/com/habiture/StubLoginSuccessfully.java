@@ -3,11 +3,19 @@ package com.habiture;
 import java.util.List;
 
 /**
- * Created by GawinHsu on 4/22/15.
+ * Created by Yeh on 2015/4/2.
  */
-public class StubPostSwearFailed extends MockNetworkChannel /* implements NetworkInterface */ {
-//    @Override
+public class StubLoginSuccessfully extends MockNetworkChannel /*implements NetworkInterface*/ {
+    @Override
+    public LoginInfo httpGetLoginResult(String account, String password, String reg_id, LoginInfo loginInfo) {
+        loginInfo.setId(1);
+        loginInfo.setUrl("test://12345");
+        return loginInfo;
+    }
+
+    //    @Override
 //    public int httpGetLoginResult(String account, String password) {
+//
 //        return 1;
 //    }
 //
@@ -23,6 +31,6 @@ public class StubPostSwearFailed extends MockNetworkChannel /* implements Networ
 //
 //    @Override
 //    public boolean httpPostDeclaration(int uid, int frequency, String declaration, List<Friend> friends, int period) {
-//        return false;
+//        throw new RuntimeException("wrong call");
 //    }
 }

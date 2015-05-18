@@ -1,22 +1,27 @@
 package com.habiture;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.util.Log;
 
 import com.gcm.client.receiver.GcmModel;
+import com.ntil.habiture.R;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.List;
 
+import utils.BitmapHelper;
 import utils.exception.UnhandledException;
 
 
 public class HabitureModule {
 
-    private final boolean DEBUG = true;
+    private final boolean DEBUG = false;
     private NetworkInterface networkInterface = null;
     private GcmModel gcmModel =null;
     private Activity mActivity =null;
@@ -25,8 +30,7 @@ public class HabitureModule {
     private String password = null;
     private int uid = -1;
     private String self_url =null;
-    private Profile profile =null;
-    private Bitmap profilePhoto = null;
+    private LoginInfo loginInfo =null;
 
     public HabitureModule(NetworkInterface networkInterface, GcmModel gcmModel) {
         trace("HabitureModule");
@@ -37,27 +41,27 @@ public class HabitureModule {
     public boolean login(String account, String password) {
         trace("login");
 
-        profile = networkInterface.httpGetLoginResult(account, password, gcmModel.getRegistrationId());
-        if(profile == null) return false;
+        loginInfo = new LoginInfo();
+        networkInterface.httpGetLoginResult(account, password,gcmModel.getRegistrationId(),loginInfo);
 
-
-        self_url = profile.getPhotoUrl();
-        uid = profile.getId();
+        self_url =loginInfo.getUrl();
+        uid =loginInfo.getId();
         boolean isLogined = uid > 0 ? true : false;
 
         if(isLogined) {
             this.account = account;
             this.password = password;
-
-            byte[] image = networkInterface.httpGetPhoto(profile);
-            profilePhoto = BitmapFactory.decodeByteArray(image, 0, image.length);
         }
-        trace("login done, url="+ profile.getPhotoUrl());
+        trace("login down, url="+loginInfo.getUrl());
         return isLogined;
     }
 
+    private void saveLoginUid(int uid) {
+
+    }
+
     public boolean postDeclaration( String frequency, String declaration, String punishment, String goal,  String do_it_time) {
-        trace("postDeclaration >> frequency="+frequency+" declaration="+declaration+" punishment="+punishment+" goal="+goal+" do_it_time="+do_it_time);
+        trace("declare");
         String do_it_time_server_format =do_it_time.substring(3);
         boolean isDeclared = networkInterface.httpPostDeclaration(uid, frequency, declaration, punishment, goal, do_it_time_server_format);
 
@@ -83,7 +87,7 @@ public class HabitureModule {
     }
 
     public Bitmap getHeader() {
-        return profilePhoto;
+        return loginInfo.getImage();
     }
 
     public List<Friend> queryFriends() {
@@ -109,7 +113,7 @@ public class HabitureModule {
     }
 
     public boolean sendSoundToPartner(int to_id, int pid, int sound_id ) {
-        trace("sendSoundToPartner, uid=" + uid + ", to_id=" + to_id + ", pid=" + pid + ", sound_id=" +sound_id);
+        trace("sendSoundToPartner, uid="+uid+", to_id="+to_id+", pid="+pid+", sound_id="+sound_id);
         // TODO
         boolean isSoundSent = networkInterface.httpSendSound(uid,to_id, pid , sound_id);
         //boolean isSoundSent = networkInterface.httpSendSound(uid, to_id, pid , sound_id);
@@ -145,7 +149,6 @@ public class HabitureModule {
     public PokeData queryPokeData(int pid) {
         return networkInterface.httpGetPokePage(pid);
     }
-
     public boolean sendRegisterIdToServer(String reg_id) {
         trace("sendRegisterIdToServer, reg_id="+reg_id);
         boolean isRegistered = networkInterface.httpSendRegisterId(uid,reg_id);
