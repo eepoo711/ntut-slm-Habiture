@@ -34,9 +34,29 @@ public class NetworkChannel implements NetworkInterface {
     public static final String URL_QUERY_POKE_PAGE = "http://140.124.144.121/Habiture/posts_page.cgi?";
     public static final String URL_UPDATE_GCM_REGISTER_ID  ="http://140.124.144.121/Habiture/update.cgi?";
 
+    private HttpURLConnection httpURLConnection = null;
+
     private void trace(String message) {
         if(DEBUG)
             Log.d("NetworkChannel", message);
+    }
+
+    @Override
+    public InputStream createGetProfileConnection(String account, String password, String gcmRegisterId) {
+        HttpURLConnection httpUrlConnection = null;
+        try {
+            httpUrlConnection = createHttpURLConnection(URL_LOGIN.concat("account=" + account + "&password=" + password + "&reg_id=" + gcmRegisterId));
+            return httpUrlConnection.getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void closeConnection() {
+        closeConnection(httpURLConnection);
+        httpURLConnection = null;
     }
 
     @Override
@@ -45,36 +65,36 @@ public class NetworkChannel implements NetworkInterface {
 
 
 
-        HttpURLConnection httpUrlConnection = null;
-        try {
-            httpUrlConnection = createHttpURLConnection(URL_LOGIN.concat("account=" + account + "&password=" + password + "&reg_id=" + reg_id));
-
-            InputStream in = httpUrlConnection.getInputStream();
-
-            Profile profile = new Profile();
-            JsonReader reader = new JsonReader(new InputStreamReader(in));
-            reader.beginObject();
-            while(reader.hasNext()) {
-                String key = reader.nextName();
-                if("url".equals(key)) {
-                    profile.setPhotoUrl(reader.nextString());
-                } else if("id".equals(key)) {
-                    profile.setId(reader.nextInt());
-                } else {
-                    reader.skipValue();
-                }
-            }
-            reader.endObject();
-
-            trace("login info="+ profile.getPhotoUrl());
-
-            return profile;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            closeConnection(httpUrlConnection);
-        }
+//        HttpURLConnection httpUrlConnection = null;
+//        try {
+//            httpUrlConnection = createHttpURLConnection(URL_LOGIN.concat("account=" + account + "&password=" + password + "&reg_id=" + reg_id));
+//
+//            InputStream in = httpUrlConnection.getInputStream();
+//
+//            Profile profile = new Profile();
+//            JsonReader reader = new JsonReader(new InputStreamReader(in));
+//            reader.beginObject();
+//            while(reader.hasNext()) {
+//                String key = reader.nextName();
+//                if("url".equals(key)) {
+//                    profile.setPhotoUrl(reader.nextString());
+//                } else if("id".equals(key)) {
+//                    profile.setId(reader.nextInt());
+//                } else {
+//                    reader.skipValue();
+//                }
+//            }
+//            reader.endObject();
+//
+//            trace("login info="+ profile.getPhotoUrl());
+//
+//            return profile;
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            closeConnection(httpUrlConnection);
+//        }
         return null;
     }
 
@@ -270,9 +290,7 @@ public class NetworkChannel implements NetworkInterface {
     }
 
     private void closeConnection(HttpURLConnection connection) {
-        trace("closeConnection");
-        if(connection != null)
-            connection.disconnect();
+
     }
 
     private List<Habiture> readHabitures(InputStream is) {

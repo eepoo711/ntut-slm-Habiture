@@ -33,51 +33,51 @@ public class HabitureModuleTest extends AndroidTestCase {
         assertFalse(stubLogin(new StubLoginFailed()));
     }
 
-    public void testGetProfileAfterLoginSuccessfully() {
-        stubLogin(new StubLoginSuccessfully());
-
-        assertEquals("testAccount", hm.getAccount());
-        assertEquals("testPassword", hm.getPassword());
-    }
-
-    public void testGetProfileAfterLoginFailed() {
-        stubLogin(new StubLoginFailed());
-
-        assertEquals(null, hm.getAccount());
-        assertEquals(null, hm.getPassword());
-
-    }
-
-    public void testQueryFriends() {
-        stubLogin(new StubQueryFriends());
-        List<Friend> friends = hm.queryFriends();
-
-        Friend amanda = friends.get(0);
-
-        assertEquals(1, amanda.getId());
-        assertEquals("Amanda", amanda.getName());
-    }
-
-    public void testQueryGroups() {
-        stubLogin(new StubQueryGroups());
-        List<Group> groups = hm.queryGroups();
-
-        Group running = groups.get(0);
-
-        assertEquals(1, running.getId());
-        assertEquals("Running", running.getSwear());
-    }
-
-    public void testPostSwearSuccessfully() {
-        stubLogin(new StubPostSwearSuccessfully());
-        assertTrue(hm.postDeclaration("1", "eat something", "hit by anyone", "12", "Pm 11"));
-    }
-
-    public void testPostSwearFailed() {
-        stubLogin(new StubPostSwearFailed());
-        List<Friend> friends = new ArrayList<>();
-        assertFalse(hm.postDeclaration("1", "eat something", "hit by anyone", "12", "Pm 11"));
-    }
+//    public void testGetProfileAfterLoginSuccessfully() {
+//        stubLogin(new StubLoginSuccessfully());
+//
+//        assertEquals("testAccount", hm.getAccount());
+//        assertEquals("testPassword", hm.getPassword());
+//    }
+//
+//    public void testGetProfileAfterLoginFailed() {
+//        stubLogin(new StubLoginFailed());
+//
+//        assertEquals(null, hm.getAccount());
+//        assertEquals(null, hm.getPassword());
+//
+//    }
+//
+//    public void testQueryFriends() {
+//        stubLogin(new StubQueryFriends());
+//        List<Friend> friends = hm.queryFriends();
+//
+//        Friend amanda = friends.get(0);
+//
+//        assertEquals(1, amanda.getId());
+//        assertEquals("Amanda", amanda.getName());
+//    }
+//
+//    public void testQueryGroups() {
+//        stubLogin(new StubQueryGroups());
+//        List<Group> groups = hm.queryGroups();
+//
+//        Group running = groups.get(0);
+//
+//        assertEquals(1, running.getId());
+//        assertEquals("Running", running.getSwear());
+//    }
+//
+//    public void testPostSwearSuccessfully() {
+//        stubLogin(new StubPostSwearSuccessfully());
+//        assertTrue(hm.postDeclaration("1", "eat something", "hit by anyone", "12", "Pm 11"));
+//    }
+//
+//    public void testPostSwearFailed() {
+//        stubLogin(new StubPostSwearFailed());
+//        List<Friend> friends = new ArrayList<>();
+//        assertFalse(hm.postDeclaration("1", "eat something", "hit by anyone", "12", "Pm 11"));
+//    }
 
     // TODO testQueryHabituresSuccessfully
     // TODO testQueryHabituresFailed

@@ -2,11 +2,15 @@ package com.habiture;
 
 import android.graphics.Bitmap;
 
+import java.io.InputStream;
 import java.util.List;
 
 public interface NetworkInterface {
 
 
+    InputStream createGetProfileConnection(String account, String password, String gcmRegisterId);
+
+    void closeConnection();
 
     public Profile httpGetLoginResult(String account, String password, String reg_id);
 

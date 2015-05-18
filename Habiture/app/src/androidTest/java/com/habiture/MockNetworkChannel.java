@@ -2,12 +2,23 @@ package com.habiture;
 
 import android.graphics.Bitmap;
 
+import java.io.InputStream;
 import java.util.List;
 
 /**
  * Created by Yeh on 2015/5/16.
  */
 public class MockNetworkChannel implements NetworkInterface {
+
+    @Override
+    public InputStream createGetProfileConnection(String account, String password, String gcmRegisterId) {
+        throw new RuntimeException("wrong call");
+    }
+
+    @Override
+    public void closeConnection() {
+        throw new RuntimeException("wrong call");
+    }
 
     @Override
     public Profile httpGetLoginResult(String account, String password, String reg_id) {

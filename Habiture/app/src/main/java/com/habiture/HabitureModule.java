@@ -2,15 +2,20 @@ package com.habiture;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.util.JsonReader;
 import android.util.Log;
 
 import com.gcm.client.receiver.GcmModel;
+import com.habiture.exceptions.HabitureException;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
+import utils.Utils;
 import utils.exception.UnhandledException;
 
 
@@ -37,24 +42,37 @@ public class HabitureModule {
     public boolean login(String account, String password) {
         trace("login");
 
-        profile = networkInterface.httpGetLoginResult(account, password, gcmModel.getRegistrationId());
-        if(profile == null) return false;
-
-
-        self_url = profile.getPhotoUrl();
-        uid = profile.getId();
-        boolean isLogined = uid > 0 ? true : false;
-
-        if(isLogined) {
-            this.account = account;
-            this.password = password;
-
-            byte[] image = networkInterface.httpGetPhoto(profile);
-            profilePhoto = BitmapFactory.decodeByteArray(image, 0, image.length);
+        try {
+            InputStream in = networkInterface.createGetProfileConnection(account, password, gcmModel.getRegistrationId());
+            profile = new Profile(in);
+            networkInterface.closeConnection();
+            return true;
+        } catch(HabitureException e) {
+            e.printStackTrace();
+            return false;
         }
-        trace("login done, url="+ profile.getPhotoUrl());
-        return isLogined;
+
+// TODO download profile photo
+
+//        profile = networkInterface.httpGetLoginResult(account, password, gcmModel.getRegistrationId());
+//        if(profile == null) return false;
+//
+//
+//        self_url = profile.getPhotoUrl();
+//        uid = profile.getId();
+//        boolean isLogined = uid > 0 ? true : false;
+//
+//        if(isLogined) {
+//            this.account = account;
+//            this.password = password;
+//
+//            byte[] image = networkInterface.httpGetPhoto(profile);
+//            profilePhoto = BitmapFactory.decodeByteArray(image, 0, image.length);
+//        }
+//        trace("login done, url="+ profile.getPhotoUrl());
     }
+
+
 
     public boolean postDeclaration( String frequency, String declaration, String punishment, String goal,  String do_it_time) {
         trace("postDeclaration >> frequency="+frequency+" declaration="+declaration+" punishment="+punishment+" goal="+goal+" do_it_time="+do_it_time);
