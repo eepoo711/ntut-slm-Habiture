@@ -42,3 +42,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 Habiture/app/app.iml
+Habiture/.idea/gradle.xml
+Habiture/Habiture.iml
+*.xml
