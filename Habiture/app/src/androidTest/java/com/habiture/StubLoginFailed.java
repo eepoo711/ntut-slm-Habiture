@@ -1,15 +1,14 @@
 package com.habiture;
 
-import java.util.List;
-
 /**
  * Created by Yeh on 2015/4/2.
  */
 public class StubLoginFailed extends MockNetworkChannel /* implements NetworkInterface */ {
 
     @Override
-    public LoginInfo httpGetLoginResult(String account, String password, String reg_id, LoginInfo loginInfo) {
-        loginInfo.setId(0);
+    public Profile httpGetLoginResult(String account, String password, String reg_id) {
+        Profile profile = new Profile();
+        profile.setId(0);
         return null;
     }
 

@@ -7,7 +7,6 @@ public class Profile {
 
     private String photoUrl = null;
     private int id = -1;
-    private Bitmap photo =null;
 
 
     public String getPhotoUrl() {
