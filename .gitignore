@@ -41,4 +41,7 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
-Habiture/app/app.iml
+
+# Others
+*.iml
+app.xml
