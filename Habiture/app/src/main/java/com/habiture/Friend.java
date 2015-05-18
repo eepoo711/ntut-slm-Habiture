@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.util.JsonReader;
 import android.util.Log;
 
+import com.habiture.exceptions.HabitureException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -28,7 +30,7 @@ public class Friend {
 
     private Friend() {}
 
-    public static List<Friend> readFriends(InputStream is) {
+    public static List<Friend> readFriends(InputStream is) throws HabitureException {
         trace("readFriends");
 
         JsonReader reader = null;
@@ -43,12 +45,10 @@ public class Friend {
             reader.endObject();
             return friends;
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new HabitureException("readFriends : maybe cause by network exception", e);
         } finally {
             Utils.closeIO(reader);
         }
-
-        return null;
     }
 
     private static void trace(String message) {

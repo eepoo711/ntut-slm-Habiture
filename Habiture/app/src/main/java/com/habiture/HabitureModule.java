@@ -4,20 +4,15 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
-import android.util.JsonReader;
 import android.util.Log;
 
 import com.gcm.client.receiver.GcmModel;
 import com.habiture.exceptions.HabitureException;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 
-import utils.Utils;
 import utils.exception.UnhandledException;
 
 
@@ -46,7 +41,7 @@ public class HabitureModule {
         trace("login");
         try {
             this.profile = getProfileFromNetwork(account, password);
-            this.profilePhoto = getProfilePhotoFromNetwork(profile.getPhotoUrl());
+            this.profilePhoto = getPhotoFromNetwork(profile.getPhotoUrl());
 
             this.account = account;
             this.password = password;
@@ -57,7 +52,7 @@ public class HabitureModule {
         return false;
     }
 
-    private Photo getProfilePhotoFromNetwork(String photoUrl) throws HabitureException {
+    private Photo getPhotoFromNetwork(String photoUrl) throws HabitureException {
         Photo photo = null;
         try {
             PhotoInputStream pis = networkInterface.createGetPhotoConnection(photoUrl);
@@ -118,9 +113,16 @@ public class HabitureModule {
 
     public List<Friend> queryFriends() {
         InputStream in = networkInterface.createGetFriendsConnection(uid);
-        List<Friend> friends = Friend.readFriends(in);
-        networkInterface.closeConnection();
-        return friends;
+        List<Friend> friends = null;
+        try {
+            friends = Friend.readFriends(in);
+            return friends;
+        } catch (HabitureException e) {
+            e.printStackTrace();
+        }finally {
+            networkInterface.closeConnection();
+        }
+        return null;
     }
 
     public List<Group> queryGroups() {
