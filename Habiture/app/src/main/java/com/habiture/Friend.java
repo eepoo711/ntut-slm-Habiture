@@ -2,14 +2,106 @@ package com.habiture;
 
 
 import android.graphics.Bitmap;
+import android.util.JsonReader;
+import android.util.Log;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import utils.Utils;
+import utils.exception.UnhandledException;
 
 public class Friend {
 
+    private static final boolean DEBUG = true;
     private String name = null;
     private long id = -1;
     private String url =null;
     private Bitmap image =null;
 
+    public Friend(InputStream in) {
+        // TODO
+    }
+
+    private Friend() {}
+
+    public static List<Friend> readFriends(InputStream is) {
+        trace("readFriends");
+
+        JsonReader reader = null;
+        try {
+            reader = new JsonReader(new InputStreamReader(is));
+            reader.beginObject();
+
+            if(!"friends".equals(reader.nextName()))
+                throw new UnhandledException("wrong json format");
+            List<Friend> friends = readFriendArray(reader);
+
+            reader.endObject();
+            return friends;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            Utils.closeIO(reader);
+        }
+
+        return null;
+    }
+
+    private static void trace(String message) {
+        if(DEBUG)
+            Log.d("Friend", message);
+    }
+
+    private static List<Friend> readFriendArray(JsonReader reader) throws IOException {
+        trace("readFriendArray");
+        reader.beginArray();
+        List<Friend> friends = new ArrayList<>();
+        while (reader.hasNext()) {
+            friends.add(readFriend(reader));
+        }
+        reader.endArray();
+        return friends;
+    }
+
+    private static Friend readFriend(JsonReader reader) throws IOException {
+        trace("readFriend");
+
+        long id = -1;
+        String name = null;
+        String url =null;
+
+        reader.beginObject();
+        while(reader.hasNext()) {
+            String key = reader.nextName();
+            if("name".equals(key)) {
+                name = reader.nextString();
+            } else if("id".equals(key)) {
+                id = reader.nextLong();
+            } else if("url".equals(key)) {
+                url = reader.nextString();
+            } else {
+                reader.skipValue();
+            }
+        }
+        reader.endObject();
+
+        if(id == -1 || url == null || url.length() == 0) {
+            throw new UnhandledException("wrong json format.");
+        }
+
+
+        Friend friend = new Friend();
+        friend.setName(name);
+        friend.setId(id);
+        friend.setUrl(url);
+        //friend.setImage(httpGetBitmapUrl(url));
+
+        return friend;
+    }
 
     public String getName() {
         return name;

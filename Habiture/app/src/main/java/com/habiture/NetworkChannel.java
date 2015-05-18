@@ -81,6 +81,19 @@ public class NetworkChannel implements NetworkInterface {
         httpURLConnection = null;
     }
 
+    @Override
+    public InputStream createGetFriendsConnection(int uid) {
+        trace("createGetFriendsConnection");
+        HttpURLConnection httpUrlConnection = null;
+        try {
+            httpUrlConnection = createHttpURLConnection(URL_QUERY_FRIENDS.concat("uid=" + uid ));
+            return httpUrlConnection.getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public boolean httpPostDeclaration(int uid, String frequency, String declaration, String punishment, String goal,  String do_it_time) {
         trace("httpPostSwear");
         HttpURLConnection httpUrlConnection = null;
@@ -140,24 +153,24 @@ public class NetworkChannel implements NetworkInterface {
 
     @Override
     public List<Friend> httpGetFriends(int uid) {
-        trace("httpGetFriends");
-
-        String parameters =
-                "uid=".concat(String.valueOf(uid));
-        String url = URL_QUERY_FRIENDS.concat(parameters);
-
-        HttpURLConnection connection = null;
-
-
-        try {
-            connection = createHttpURLConnection(url);
-            return readFriends(connection.getInputStream());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            closeConnection(connection);
-        }
+//        trace("httpGetFriends");
+//
+//        String parameters =
+//                "uid=".concat(String.valueOf(uid));
+//        String url = URL_QUERY_FRIENDS.concat(parameters);
+//
+//        HttpURLConnection connection = null;
+//
+//
+//        try {
+//            connection = createHttpURLConnection(url);
+//            return readFriends(connection.getInputStream());
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            closeConnection(connection);
+//        }
 
         return null;
     }
@@ -492,74 +505,7 @@ public class NetworkChannel implements NetworkInterface {
         return group;
     }
 
-    private List<Friend> readFriends(InputStream is) {
-        trace("readFriends");
 
-        JsonReader reader = null;
-        try {
-            reader = new JsonReader(new InputStreamReader(is));
-            reader.beginObject();
-
-            if(!"friends".equals(reader.nextName()))
-                throw new UnhandledException("wrong json format");
-            List<Friend> friends = readFriendArray(reader);
-
-            reader.endObject();
-            return friends;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            Utils.closeIO(reader);
-        }
-
-        return null;
-    }
-
-    private List<Friend> readFriendArray(JsonReader reader) throws IOException {
-        trace("readFriendArray");
-        reader.beginArray();
-        List<Friend> friends = new ArrayList<>();
-        while (reader.hasNext()) {
-            friends.add(readFriend(reader));
-        }
-        reader.endArray();
-        return friends;
-    }
-
-    private Friend readFriend(JsonReader reader) throws IOException {
-        trace("readFriend");
-
-        long id = -1;
-        String name = null;
-        String url =null;
-
-        reader.beginObject();
-        while(reader.hasNext()) {
-            String key = reader.nextName();
-            if("name".equals(key)) {
-                name = reader.nextString();
-            } else if("id".equals(key)) {
-                id = reader.nextLong();
-            } else if("url".equals(key)) {
-                url = reader.nextString();
-            } else {
-                reader.skipValue();
-            }
-        }
-        reader.endObject();
-
-        if(id == -1 || url == null || url.length() == 0) {
-            throw new UnhandledException("wrong json format.");
-        }
-
-        Friend friend = new Friend();
-        friend.setName(name);
-        friend.setId(id);
-        friend.setUrl(url);
-        friend.setImage(httpGetBitmapUrl(url));
-
-        return friend;
-    }
     private HttpURLConnection createHttpURLConnection(String url) throws IOException{
         trace("createHttpURLConnection");
         return (HttpURLConnection) new URL(url).openConnection();

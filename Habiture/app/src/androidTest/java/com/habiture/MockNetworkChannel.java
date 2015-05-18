@@ -26,6 +26,11 @@ public class MockNetworkChannel implements NetworkInterface {
     }
 
     @Override
+    public InputStream createGetFriendsConnection(int uid) {
+        throw new RuntimeException("wrong call");
+    }
+
+    @Override
     public List<Friend> httpGetFriends(int uid) {
         throw new RuntimeException("wrong call");
     }

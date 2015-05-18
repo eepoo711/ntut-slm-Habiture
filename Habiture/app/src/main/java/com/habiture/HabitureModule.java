@@ -4,15 +4,20 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.util.JsonReader;
 import android.util.Log;
 
 import com.gcm.client.receiver.GcmModel;
 import com.habiture.exceptions.HabitureException;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
+import utils.Utils;
 import utils.exception.UnhandledException;
 
 
@@ -112,8 +117,9 @@ public class HabitureModule {
     }
 
     public List<Friend> queryFriends() {
-        List<Friend> friends = networkInterface.httpGetFriends(uid);
-
+        InputStream in = networkInterface.createGetFriendsConnection(uid);
+        List<Friend> friends = Friend.readFriends(in);
+        networkInterface.closeConnection();
         return friends;
     }
 
