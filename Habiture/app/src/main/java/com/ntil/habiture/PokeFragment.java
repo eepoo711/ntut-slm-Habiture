@@ -73,11 +73,6 @@ public class PokeFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Bundle args = this.getArguments();
-        mSwear = "" + args.getString("SWEAR");
-        mPunishment = args.getString("PUNISHMENT");
-        mFrequency = args.getInt("FREQUENCY");
-        mDoItTime = args.getInt("DOITTIME");
-        mGoal = args.getInt("GOAL");
 
         btnCamera = (ImageButton) getActivity().findViewById(R.id.btnCamera);
 
@@ -158,9 +153,9 @@ public class PokeFragment extends Fragment {
     }
 
     private void drawSampleTool(float x, float y) {
-        Canvas drawCanvas = new Canvas(mBitmapDrawing);
-        drawCanvas.drawBitmap(mBitmapTool, x, y, mPaint);
-        ivPoke.setImageBitmap(mBitmapDrawing);
+        Canvas drawCanvas = new Canvas(bmpDrawing);
+        drawCanvas.drawBitmap(bmpTool, x, y, mPaint);
+        ivPoke.setImageBitmap(bmpDrawing);
     }
 
     public interface Listener {

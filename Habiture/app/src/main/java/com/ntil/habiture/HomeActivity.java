@@ -128,7 +128,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
     }
 
     @Override
-    public void onClickHabitSingleItem(int pid, String url) {
+    public void onClickHabitSingleItem(int pid) {
         PokeActivity.startActivity(this, url, "123", "456", pid, 1, 1, 1);
     }
 
