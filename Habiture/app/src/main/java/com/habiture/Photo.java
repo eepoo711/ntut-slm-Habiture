@@ -1,7 +1,6 @@
 package com.habiture;
 
 import com.habiture.exceptions.HabitureException;
-
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -12,17 +11,19 @@ public class Photo {
 
     public Photo(PhotoInputStream pis) throws HabitureException {
         try {
-            InputStream inputStream = pis.getInputStream();
-            int length = pis.getImageBytes();
-
-            byte[] img = readImage(inputStream, length);
+            byte[] img = readImage(pis.getInputStream(), pis.getImageBytes());
 
             if(img == null)
                 throw new HabitureException("read image failed, maybe network problem.");
+
             imageData = img;
         } catch (IOException e) {
             throw new HabitureException("Photo <init> : maybe cause by network exception", e);
         }
+    }
+
+    public byte[] getImageData() {
+        return imageData;
     }
 
     private byte[] readImage(InputStream inputStream, int length) throws IOException, HabitureException {
