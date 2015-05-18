@@ -40,9 +40,11 @@ public class NetworkChannel implements NetworkInterface {
     }
 
     @Override
-    public LoginInfo httpGetLoginResult(String account, String password, String reg_id,LoginInfo loginInfo) {
-        trace("httpGetLoginResult");
 
+    public Profile httpGetLoginResult(String account, String password, String reg_id) {
+        trace("httpGetLoginResult >> account="+account+" password="+password+" reg_id="+reg_id);
+
+        Profile profile = new Profile();
 
         HttpURLConnection httpUrlConnection = null;
         try {
