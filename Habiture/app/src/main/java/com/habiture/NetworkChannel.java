@@ -40,11 +40,10 @@ public class NetworkChannel implements NetworkInterface {
     }
 
     @Override
-
     public Profile httpGetLoginResult(String account, String password, String reg_id) {
         trace("httpGetLoginResult >> account="+account+" password="+password+" reg_id="+reg_id);
 
-        Profile profile = new Profile();
+
 
         HttpURLConnection httpUrlConnection = null;
         try {
@@ -52,59 +51,73 @@ public class NetworkChannel implements NetworkInterface {
 
             InputStream in = httpUrlConnection.getInputStream();
 
+            Profile profile = new Profile();
             JsonReader reader = new JsonReader(new InputStreamReader(in));
             reader.beginObject();
             while(reader.hasNext()) {
                 String key = reader.nextName();
                 if("url".equals(key)) {
-                    loginInfo.setUrl(reader.nextString());
+                    profile.setPhotoUrl(reader.nextString());
                 } else if("id".equals(key)) {
-                    loginInfo.setId(reader.nextInt());
+                    profile.setId(reader.nextInt());
                 } else {
                     reader.skipValue();
                 }
             }
             reader.endObject();
 
-            trace("login info="+loginInfo.getUrl());
+            trace("login info="+ profile.getPhotoUrl());
 
-            if(loginInfo.getUrl()!=null&&loginInfo.getUrl()!="") {
-
-                try {
-                    URL imgUrl = new URL(loginInfo.getUrl());
-                    HttpURLConnection httpURLConnection
-                            = (HttpURLConnection) imgUrl.openConnection();
-                    httpURLConnection.connect();
-                    InputStream inputStream = httpURLConnection.getInputStream();
-                    int length = (int) httpURLConnection.getContentLength();
-                    int tmpLength = 512;
-                    int readLen = 0,desPos = 0;
-                    byte[] img = new byte[length];
-                    byte[] tmp = new byte[tmpLength];
-                    if (length != -1) {
-                        while ((readLen = inputStream.read(tmp)) > 0) {
-                            System.arraycopy(tmp, 0, img, desPos, readLen);
-                            desPos += readLen;
-                        }
-                        loginInfo.setImage( BitmapFactory.decodeByteArray(img, 0, img.length));
-                        if(desPos != length){
-                            throw new IOException("Only read" + desPos +"bytes");
-                        }
-                    }
-                    trace("get image,length="+length);
-                    httpURLConnection.disconnect();
-                }
-                catch (IOException e) {
-                    Log.e("IOException",e.toString());
-                }
-            }
-
-            return loginInfo;
+            return profile;
 
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             closeConnection(httpUrlConnection);
+        }
+        return null;
+    }
+
+    @Override
+    public byte[] httpGetPhoto(Profile profile) {
+
+        byte[] img = null;
+        if(profile.getPhotoUrl() != null && profile.getPhotoUrl() != "") {
+            img = getPhoto(profile.getPhotoUrl());
+        }
+
+
+        return img;
+    }
+
+    private byte[] getPhoto(String url) {
+        HttpURLConnection httpURLConnection = null;
+        try {
+            URL imgUrl = new URL(url);
+            httpURLConnection = (HttpURLConnection) imgUrl.openConnection();
+            httpURLConnection.connect();
+            InputStream inputStream = httpURLConnection.getInputStream();
+            int length = (int) httpURLConnection.getContentLength();
+            int tmpLength = 512;
+            int readLen = 0,desPos = 0;
+            byte[] img = new byte[length];
+            byte[] tmp = new byte[tmpLength];
+            if (length != -1) {
+                while ((readLen = inputStream.read(tmp)) > 0) {
+                    System.arraycopy(tmp, 0, img, desPos, readLen);
+                    desPos += readLen;
+                }
+                if(desPos != length){
+                    throw new UnhandledException("Only read" + desPos +"bytes");
+                }
+                return img;
+            }
+            trace("get image,length=" + length);
+        }
+        catch (IOException e) {
+            Log.e("IOException", e.toString());
+        } finally {
+            httpURLConnection.disconnect();
         }
         return null;
     }
