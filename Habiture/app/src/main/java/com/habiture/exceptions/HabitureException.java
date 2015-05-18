@@ -3,7 +3,7 @@ package com.habiture.exceptions;
 /**
  * Created by Yeh on 2015/5/18.
  */
-public class HabitureException extends RuntimeException {
+public class HabitureException extends Exception {
     public HabitureException() {
     }
 

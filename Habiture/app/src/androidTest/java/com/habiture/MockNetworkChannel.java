@@ -16,12 +16,12 @@ public class MockNetworkChannel implements NetworkInterface {
     }
 
     @Override
-    public void closeConnection() {
+    public PhotoInputStream createGetPhotoConnection(String url) {
         throw new RuntimeException("wrong call");
     }
 
     @Override
-    public Profile httpGetLoginResult(String account, String password, String reg_id) {
+    public void closeConnection() {
         throw new RuntimeException("wrong call");
     }
 

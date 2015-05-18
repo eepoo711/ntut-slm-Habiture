@@ -20,6 +20,14 @@ public class StubLoginSuccessfully extends MockNetworkChannel {
     }
 
     @Override
+    public PhotoInputStream createGetPhotoConnection(String url) {
+        String packet = "12345";
+        in = new ByteArrayInputStream(packet.getBytes());
+        PhotoInputStream photoInputStream = new PhotoInputStream(in, packet.length());
+        return photoInputStream;
+    }
+
+    @Override
     public void closeConnection() {
         Utils.closeIO(in);
     }

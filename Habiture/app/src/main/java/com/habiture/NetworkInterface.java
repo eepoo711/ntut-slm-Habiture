@@ -10,9 +10,9 @@ public interface NetworkInterface {
 
     InputStream createGetProfileConnection(String account, String password, String gcmRegisterId);
 
-    void closeConnection();
+    PhotoInputStream createGetPhotoConnection(String url);
 
-    public Profile httpGetLoginResult(String account, String password, String reg_id);
+    void closeConnection();
 
     byte[] httpGetPhoto(Profile profile);
 
@@ -35,4 +35,6 @@ public interface NetworkInterface {
     public boolean httpSendRegisterId(int uid, String reg_id);
 
     public List<GroupHistory> httpGetGropuHistory(int pid);
+
+
 }

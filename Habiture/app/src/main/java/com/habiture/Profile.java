@@ -17,7 +17,7 @@ public class Profile {
     private String photoUrl = null;
     private int id = -1;
 
-    public Profile(InputStream in) {
+    public Profile(InputStream in) throws HabitureException {
         JsonReader reader = new JsonReader(new InputStreamReader(in));
 
 

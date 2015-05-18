@@ -2,6 +2,7 @@ package com.habiture;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.util.JsonReader;
 import android.util.Log;
@@ -43,35 +44,45 @@ public class HabitureModule {
         trace("login");
 
         try {
-            InputStream in = networkInterface.createGetProfileConnection(account, password, gcmModel.getRegistrationId());
-            profile = new Profile(in);
-            networkInterface.closeConnection();
+
+            this.profile = getProfileFromNetwork(account, password);
+
+            byte[] photo = getProfilPhotoFromNetwork(profile.getPhotoUrl());
+//            this.profilePhoto = BitmapFactory.decodeByteArray()
+            // get photo
+//            in = networkInterface.createGetPhotoConnection(profile.getId());
+//            Photo photo = new Photo(in);
+//            networkInterface.closeConnection();
+
+            this.account = account;
+            this.password = password;
+
+//            byte[] image = networkInterface.httpGetPhoto(profile);
+//            trace("image length = " + image.length);
+//            profilePhoto = BitmapFactory.decodeByteArray(image, 0, image.length);
+
             return true;
         } catch(HabitureException e) {
             e.printStackTrace();
-            return false;
         }
-
-// TODO download profile photo
-
-//        profile = networkInterface.httpGetLoginResult(account, password, gcmModel.getRegistrationId());
-//        if(profile == null) return false;
-//
-//
-//        self_url = profile.getPhotoUrl();
-//        uid = profile.getId();
-//        boolean isLogined = uid > 0 ? true : false;
-//
-//        if(isLogined) {
-//            this.account = account;
-//            this.password = password;
-//
-//            byte[] image = networkInterface.httpGetPhoto(profile);
-//            profilePhoto = BitmapFactory.decodeByteArray(image, 0, image.length);
-//        }
-//        trace("login done, url="+ profile.getPhotoUrl());
+        return false;
     }
 
+    private byte[] getProfilPhotoFromNetwork(String photoUrl) {
+        Photo photo;
+        return new byte[0];
+    }
+
+    private Profile getProfileFromNetwork(String account, String password) throws HabitureException {
+        Profile profile;
+        try {
+            InputStream in = networkInterface.createGetProfileConnection(account, password, gcmModel.getRegistrationId());
+            profile = new Profile(in);
+        } finally {
+            networkInterface.closeConnection();
+        }
+        return profile;
+    }
 
 
     public boolean postDeclaration( String frequency, String declaration, String punishment, String goal,  String do_it_time) {
