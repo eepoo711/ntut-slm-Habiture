@@ -14,8 +14,6 @@ public interface NetworkInterface {
 
     void closeConnection();
 
-    byte[] httpGetPhoto(Profile profile);
-
     public List<Friend> httpGetFriends(int uid);
 
     public List<Group> httpGetGroups(int uid);

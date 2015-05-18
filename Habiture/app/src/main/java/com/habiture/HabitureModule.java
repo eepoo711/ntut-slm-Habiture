@@ -4,19 +4,15 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
-import android.util.JsonReader;
 import android.util.Log;
 
 import com.gcm.client.receiver.GcmModel;
 import com.habiture.exceptions.HabitureException;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.List;
 
-import utils.Utils;
 import utils.exception.UnhandledException;
 
 
@@ -32,7 +28,8 @@ public class HabitureModule {
     private int uid = -1;
     private String self_url =null;
     private Profile profile =null;
-    private Bitmap profilePhoto = null;
+    private Photo profilePhoto = null;
+    private Bitmap profileBitmap = null;
 
     public HabitureModule(NetworkInterface networkInterface, GcmModel gcmModel) {
         trace("HabitureModule");
@@ -42,25 +39,12 @@ public class HabitureModule {
 
     public boolean login(String account, String password) {
         trace("login");
-
         try {
-
             this.profile = getProfileFromNetwork(account, password);
-
-            byte[] photo = getProfilPhotoFromNetwork(profile.getPhotoUrl());
-//            this.profilePhoto = BitmapFactory.decodeByteArray()
-            // get photo
-//            in = networkInterface.createGetPhotoConnection(profile.getId());
-//            Photo photo = new Photo(in);
-//            networkInterface.closeConnection();
+            this.profilePhoto = getProfilePhotoFromNetwork(profile.getPhotoUrl());
 
             this.account = account;
             this.password = password;
-
-//            byte[] image = networkInterface.httpGetPhoto(profile);
-//            trace("image length = " + image.length);
-//            profilePhoto = BitmapFactory.decodeByteArray(image, 0, image.length);
-
             return true;
         } catch(HabitureException e) {
             e.printStackTrace();
@@ -68,9 +52,15 @@ public class HabitureModule {
         return false;
     }
 
-    private byte[] getProfilPhotoFromNetwork(String photoUrl) {
-        Photo photo;
-        return new byte[0];
+    private Photo getProfilePhotoFromNetwork(String photoUrl) throws HabitureException {
+        Photo photo = null;
+        try {
+            PhotoInputStream pis = networkInterface.createGetPhotoConnection(photoUrl);
+            photo = new Photo(pis);
+        } finally {
+            networkInterface.closeConnection();
+        }
+        return photo;
     }
 
     private Profile getProfileFromNetwork(String account, String password) throws HabitureException {
@@ -112,7 +102,13 @@ public class HabitureModule {
     }
 
     public Bitmap getHeader() {
-        return profilePhoto;
+
+        if(profileBitmap == null && profilePhoto != null) {
+            byte[] image = profilePhoto.getImageData();
+            profileBitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+        }
+
+        return profileBitmap;
     }
 
     public List<Friend> queryFriends() {

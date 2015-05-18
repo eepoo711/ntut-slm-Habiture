@@ -2,22 +2,12 @@ package com.habiture.tests;
 
 import android.app.Activity;
 import android.test.AndroidTestCase;
-
-import com.habiture.Friend;
-import com.habiture.Group;
 import com.habiture.HabitureModule;
 import com.habiture.MockGcmModel;
 import com.habiture.NetworkInterface;
 import com.habiture.StubGcmModelLogin;
 import com.habiture.StubLoginFailed;
 import com.habiture.StubLoginSuccessfully;
-import com.habiture.StubPostSwearFailed;
-import com.habiture.StubPostSwearSuccessfully;
-import com.habiture.StubQueryFriends;
-import com.habiture.StubQueryGroups;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class HabitureModuleTest extends AndroidTestCase {
 
@@ -31,6 +21,7 @@ public class HabitureModuleTest extends AndroidTestCase {
 
     public void testLoginFailed() {
         assertFalse(stubLogin(new StubLoginFailed()));
+        assertNull(hm.getHeader());
     }
 
 //    public void testGetProfileAfterLoginSuccessfully() {

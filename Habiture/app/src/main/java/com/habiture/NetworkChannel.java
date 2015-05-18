@@ -43,6 +43,7 @@ public class NetworkChannel implements NetworkInterface {
 
     @Override
     public InputStream createGetProfileConnection(String account, String password, String gcmRegisterId) {
+        trace("createGetProfileConnection");
         HttpURLConnection httpUrlConnection = null;
         try {
             httpUrlConnection = createHttpURLConnection(URL_LOGIN.concat("account=" + account + "&password=" + password + "&reg_id=" + gcmRegisterId));
@@ -55,99 +56,30 @@ public class NetworkChannel implements NetworkInterface {
 
     @Override
     public PhotoInputStream createGetPhotoConnection(String url) {
+        trace("createGetPhotoConnection url="+url);
+        try {
+            URL imgUrl = new URL(url);
+            httpURLConnection = (HttpURLConnection) imgUrl.openConnection();
+            httpURLConnection.connect();
+
+            InputStream in = httpURLConnection.getInputStream();
+            int length = httpURLConnection.getContentLength();
+            trace("get image,length=" + length);
+
+
+            return new PhotoInputStream(in, length);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
-
-//    @Override
-//    public PhotoInputStream createGetPhotoConnection(String url) {
-//        HttpURLConnection httpURLConnection = null;
-//        try {
-//            URL imgUrl = new URL(url);
-//            httpURLConnection = (HttpURLConnection) imgUrl.openConnection();
-//            httpURLConnection.connect();
-//            InputStream inputStream = httpURLConnection.getInputStream();
-//            int length = (int) httpURLConnection.getContentLength();
-//            PhotoInputStream pis = new PhotoInputStream(inputStream, length);
-//
-//            trace("length="+length+" inputStream.available="+inputStream.available());
-//            int tmpLength = 512;
-//            int readLen = 0,desPos = 0;
-//            byte[] img = new byte[length];
-//            byte[] tmp = new byte[tmpLength];
-//            if (length != -1) {
-//                while ((readLen = inputStream.read(tmp)) > 0) {
-//                    System.arraycopy(tmp, 0, img, desPos, readLen);
-//                    desPos += readLen;
-//                }
-//                if(desPos != length){
-//                    throw new UnhandledException("Only read" + desPos +"bytes");
-//                }
-//                return img;
-//            }
-//            trace("get image,length=" + length);
-//        }
-//        catch (IOException e) {
-//            Log.e("IOException", e.toString());
-//        } finally {
-//            httpURLConnection.disconnect();
-//        }
-//        return null;
-//    }
 
     @Override
     public void closeConnection() {
         closeConnection(httpURLConnection);
         httpURLConnection = null;
     }
-
-    @Override
-    public byte[] httpGetPhoto(Profile profile) {
-//
-//        byte[] img = null;
-//        if(profile.getPhotoUrl() != null && profile.getPhotoUrl() != "") {
-//            img = getPhoto(profile.getPhotoUrl());
-//        }
-//
-//
-//        return img;
-        return null;
-    }
-
-//    private byte[] getPhoto(String url) {
-//        trace("getPhoto url="+url);
-//        HttpURLConnection httpURLConnection = null;
-//        try {
-//            URL imgUrl = new URL(url);
-//            httpURLConnection = (HttpURLConnection) imgUrl.openConnection();
-//            httpURLConnection.connect();
-//            InputStream inputStream = httpURLConnection.getInputStream();
-//            int length = (int) httpURLConnection.getContentLength();
-////            PhotoInputStream pis = new PhotoInputStream(inputStream, length);
-//
-//            trace("length="+length+" inputStream.available="+inputStream.available());
-//            int tmpLength = 512;
-//            int readLen = 0,desPos = 0;
-//            byte[] img = new byte[length];
-//            byte[] tmp = new byte[tmpLength];
-//            if (length != -1) {
-//                while ((readLen = inputStream.read(tmp)) > 0) {
-//                    System.arraycopy(tmp, 0, img, desPos, readLen);
-//                    desPos += readLen;
-//                }
-//                if(desPos != length){
-//                    throw new UnhandledException("Only read" + desPos +"bytes");
-//                }
-//                return img;
-//            }
-//            trace("get image,length=" + length);
-//        }
-//        catch (IOException e) {
-//            Log.e("IOException", e.toString());
-//        } finally {
-//            httpURLConnection.disconnect();
-//        }
-//        return null;
-//    }
 
     public boolean httpPostDeclaration(int uid, String frequency, String declaration, String punishment, String goal,  String do_it_time) {
         trace("httpPostSwear");
@@ -297,7 +229,8 @@ public class NetworkChannel implements NetworkInterface {
     }
 
     private void closeConnection(HttpURLConnection connection) {
-
+        if(connection != null)
+            connection.disconnect();
     }
 
     private List<Habiture> readHabitures(InputStream is) {
