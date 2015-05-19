@@ -109,13 +109,14 @@
                     android:text="PASS"
                     android:background="#00ffffff" />
 
-                <ImageButton
+                <Button
                     android:layout_width="fill_parent"
-                    android:layout_height="50dp"
-                    android:id="@+id/imageButton"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnCamera"
                     android:layout_weight="1"
-                    android:src="@mipmap/camera"
-                    android:scaleType="fitCenter"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:text="CAMERA"
                     android:background="#00ffffff" />
 
                 <ImageButton

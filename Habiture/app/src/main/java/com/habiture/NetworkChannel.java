@@ -278,15 +278,22 @@ public class NetworkChannel implements NetworkInterface {
         trace("readHabiture");
 
         int id = -1;
-        long remain = -1;
+        int remain_frequency = -1;
+        int remain_pass = -1;
+        int notice_enable = -1;
+
         String swear = null;
         String punishment = null;
 
         reader.beginObject();
         while(reader.hasNext()) {
             String key = reader.nextName();
-            if("remain".equals(key)) {
-                remain = reader.nextLong();
+            if("remain_frequency".equals(key)) {
+                remain_frequency = reader.nextInt();
+            } else if("remain_pass".equals(key)) {
+                remain_pass = reader.nextInt();
+            } else if("notice_enable".equals(key)) {
+                notice_enable = reader.nextInt();
             } else if("swear".equals(key)) {
                 swear = reader.nextString();
             } else if("id".equals(key)) {
@@ -299,15 +306,21 @@ public class NetworkChannel implements NetworkInterface {
         }
         reader.endObject();
 
-        if(id == -1 || punishment == null ||remain == -1 || swear == null ) {
+        if(id == -1 || punishment == null || swear == null || notice_enable == -1 ||
+                remain_frequency == -1 || remain_pass == -1) {
             throw new UnhandledException("wrong json format.");
         }
 
         Habiture habiture = new Habiture();
-        habiture.setgetPunishment(punishment);
+        habiture.setPunishment(punishment);
         habiture.setSwear(swear);
-        habiture.setRemain(remain);
+        habiture.setRemainFrequency(remain_frequency);
+        habiture.setRemainPass(remain_pass);
         habiture.setId(id);
+        if (notice_enable == 1)
+            habiture.setNoticeEnable(true);
+        else
+            habiture.setNoticeEnable(false);
 
         return habiture;
     }

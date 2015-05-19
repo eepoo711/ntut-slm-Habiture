@@ -5,7 +5,10 @@ public class Habiture {
 
     private String swear = null;
     private String punishment = null;
-    private long remain = -1;
+
+    private int remainFrequency = -1;
+    private int remainPass = -1;
+    private boolean noticeEnable = false;
     private int id = -1;
     private String url =null;
 
@@ -16,7 +19,7 @@ public class Habiture {
         return punishment;
     }
 
-    void setgetPunishment(String punishment) {
+    void setPunishment(String punishment) {
         this.punishment = punishment;
     }
     public String getSwear() {
@@ -27,17 +30,30 @@ public class Habiture {
         this.swear = swear;
     }
 
-    void setRemain(long remain) {
-        this.remain = remain;
+    void setRemainFrequency(int remain) {
+        this.remainFrequency = remain;
+    }
+    public int getRemainFrequency() {
+        return remainFrequency;
     }
 
-    public long getRemain() {
-        return remain;
+    void setRemainPass(int remainPass) {
+        this.remainPass = remainPass;
     }
+    public int getRemainPass() {
+        return remainPass;
+    }
+
+    void setNoticeEnable(boolean noticeEnable) {
+        this.noticeEnable = noticeEnable;
+    }
+    public boolean getNoticeEnable() {
+        return this.noticeEnable;
+    }
+
     void setId(int id) {
         this.id = id;
     }
-
     public int getId() {
         return id;
     }

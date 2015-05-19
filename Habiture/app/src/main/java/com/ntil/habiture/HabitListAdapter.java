@@ -75,6 +75,8 @@ public class HabitListAdapter extends BaseAdapter {
             holder.tvPunishment = (TextView) convertView.findViewById(R.id.tvPunishment);
             holder.tvRemain = (TextView) convertView.findViewById(R.id.tvRemain);
             holder.btnMore = (Button) convertView.findViewById(R.id.btnMore);
+            holder.btnCamera = (Button) convertView.findViewById(R.id.btnCamera);
+
             convertView.setTag(holder);
         }
         else {
@@ -83,13 +85,44 @@ public class HabitListAdapter extends BaseAdapter {
         Item item = (Item) getItem(position);
         holder.tvSwear.setText(item.habiture.getSwear());
         holder.tvPunishment.setText("做不到的話就 " + item.habiture.getPunishment());
-        holder.tvRemain.setText("本週剩餘 " + item.habiture.getRemain() + " 次數");
+        holder.tvRemain.setText("本週剩餘 " + item.habiture.getRemainFrequency() + " 次數");
+        holder.tvSwear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                trace("onClick, pid = " + ((Item) getItem(position)).getHabiture().getId());
+                int pid = ((Item) getItem(position)).getHabiture().getId();
+                listener.onClickHabitSingleItem(pid);
+            }
+        });
+        holder.tvRemain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                trace("onClick, pid = " + ((Item) getItem(position)).getHabiture().getId());
+                int pid = ((Item) getItem(position)).getHabiture().getId();
+                listener.onClickHabitSingleItem(pid);
+            }
+        });
+        holder.tvPunishment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                trace("onClick, pid = " + ((Item) getItem(position)).getHabiture().getId());
+                int pid = ((Item) getItem(position)).getHabiture().getId();
+                listener.onClickHabitSingleItem(pid);
+            }
+        });
         holder.btnMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 trace("onClick, pid = " + ((Item) getItem(position)).getHabiture().getId());
                 int pid = ((Item) getItem(position)).getHabiture().getId();
                 listener.onClickHabitSingleItem(pid);
+            }
+        });
+        holder.btnCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                trace("onClick, pid = " + ((Item) getItem(position)).getHabiture().getId());
+                listener.onClickHabitCamera(((Item) getItem(position)).getHabiture().getId());
             }
         });
 
@@ -101,9 +134,11 @@ public class HabitListAdapter extends BaseAdapter {
         TextView tvPunishment;
         TextView tvRemain;
         Button btnMore;
+        Button btnCamera;
     }
 
     public interface Listener {
         public void onClickHabitSingleItem(int pid);
+        public void onClickHabitCamera(int pid);
     }
 }
