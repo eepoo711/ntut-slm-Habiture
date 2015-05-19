@@ -150,9 +150,9 @@ public class NetworkChannel implements NetworkInterface {
 
         return new String(dataByte, 0, readLen);
     }
-
-    @Override
-    public List<Friend> httpGetFriends(int uid) {
+// TODO delete this method
+//    @Override
+//    public List<Friend> httpGetFriends(int uid) {
 //        trace("httpGetFriends");
 //
 //        String parameters =
@@ -171,9 +171,9 @@ public class NetworkChannel implements NetworkInterface {
 //        } finally {
 //            closeConnection(connection);
 //        }
-
-        return null;
-    }
+//
+//        return null;
+//    }
 
     @Override
     public List<Group> httpGetGroups(int uid) {

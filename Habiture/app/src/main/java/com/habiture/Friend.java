@@ -25,7 +25,7 @@ public class Friend {
     private Bitmap image =null;
 
     public Friend(InputStream in) {
-        // TODO
+        throw new UnhandledException("Not implemented method.");
     }
 
     private Friend() {}

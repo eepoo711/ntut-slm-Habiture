@@ -16,7 +16,6 @@ public interface NetworkInterface {
 
     InputStream createGetFriendsConnection(int uid);
 
-    public List<Friend> httpGetFriends(int uid);
 
     public List<Group> httpGetGroups(int uid);
 
