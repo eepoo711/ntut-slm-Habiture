@@ -2,6 +2,7 @@ package com.habiture;
 
 import android.graphics.Bitmap;
 
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -10,22 +11,27 @@ import java.util.List;
 public class MockNetworkChannel implements NetworkInterface {
 
     @Override
-    public Profile httpGetLoginResult(String account, String password, String reg_id) {
+    public InputStream createGetProfileConnection(String account, String password, String gcmRegisterId) {
         throw new RuntimeException("wrong call");
     }
 
     @Override
-    public byte[] httpGetPhoto(Profile profile) {
+    public PhotoInputStream createGetPhotoConnection(String url) {
         throw new RuntimeException("wrong call");
     }
 
     @Override
-    public List<Friend> httpGetFriends(int uid) {
+    public void closeConnection() {
         throw new RuntimeException("wrong call");
     }
 
     @Override
-    public List<Group> httpGetGroups(int uid) {
+    public InputStream createGetFriendsConnection(int uid) {
+        throw new RuntimeException("wrong call");
+    }
+
+    @Override
+    public InputStream createGetGroupsConnection(int uid) {
         throw new RuntimeException("wrong call");
     }
 

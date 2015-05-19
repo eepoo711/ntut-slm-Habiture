@@ -7,8 +7,10 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.gcm.client.receiver.GcmModel;
+import com.habiture.exceptions.HabitureException;
 
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.List;
 
 import utils.exception.UnhandledException;
@@ -26,7 +28,8 @@ public class HabitureModule {
     private int uid = -1;
     private String self_url =null;
     private Profile profile =null;
-    private Bitmap profilePhoto = null;
+    private Photo profilePhoto = null;
+    private Bitmap profileBitmap = null;
 
     public HabitureModule(NetworkInterface networkInterface, GcmModel gcmModel) {
         trace("HabitureModule");
@@ -36,25 +39,41 @@ public class HabitureModule {
 
     public boolean login(String account, String password) {
         trace("login");
+        try {
+            this.profile = getProfileFromNetwork(account, password);
+            this.profilePhoto = getPhotoFromNetwork(profile.getPhotoUrl());
 
-        profile = networkInterface.httpGetLoginResult(account, password, gcmModel.getRegistrationId());
-        if(profile == null) return false;
-
-
-        self_url = profile.getPhotoUrl();
-        uid = profile.getId();
-        boolean isLogined = uid > 0 ? true : false;
-
-        if(isLogined) {
             this.account = account;
             this.password = password;
-
-            byte[] image = networkInterface.httpGetPhoto(profile);
-            profilePhoto = BitmapFactory.decodeByteArray(image, 0, image.length);
+            return true;
+        } catch(HabitureException e) {
+            e.printStackTrace();
         }
-        trace("login done, url="+ profile.getPhotoUrl());
-        return isLogined;
+        return false;
     }
+
+    private Photo getPhotoFromNetwork(String photoUrl) throws HabitureException {
+        Photo photo = null;
+        try {
+            PhotoInputStream pis = networkInterface.createGetPhotoConnection(photoUrl);
+            photo = new Photo(pis);
+        } finally {
+            networkInterface.closeConnection();
+        }
+        return photo;
+    }
+
+    private Profile getProfileFromNetwork(String account, String password) throws HabitureException {
+        Profile profile;
+        try {
+            InputStream in = networkInterface.createGetProfileConnection(account, password, gcmModel.getRegistrationId());
+            profile = new Profile(in);
+        } finally {
+            networkInterface.closeConnection();
+        }
+        return profile;
+    }
+
 
     public boolean postDeclaration( String frequency, String declaration, String punishment, String goal,  String do_it_time) {
         trace("postDeclaration >> frequency="+frequency+" declaration="+declaration+" punishment="+punishment+" goal="+goal+" do_it_time="+do_it_time);
@@ -83,19 +102,41 @@ public class HabitureModule {
     }
 
     public Bitmap getHeader() {
-        return profilePhoto;
+
+        if(profileBitmap == null && profilePhoto != null) {
+            byte[] image = profilePhoto.getImageData();
+            profileBitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+        }
+
+        return profileBitmap;
     }
 
     public List<Friend> queryFriends() {
-        List<Friend> friends = networkInterface.httpGetFriends(uid);
-
-        return friends;
+        InputStream in = networkInterface.createGetFriendsConnection(uid);
+        List<Friend> friends = null;
+        try {
+            friends = Friend.readFriends(in);
+            return friends;
+        } catch (HabitureException e) {
+            e.printStackTrace();
+        }finally {
+            networkInterface.closeConnection();
+        }
+        return null;
     }
 
     public List<Group> queryGroups() {
-        List<Group> groups = networkInterface.httpGetGroups(uid);
-
-        return groups;
+        List<Group> groups;
+        try {
+            InputStream in = networkInterface.createGetGroupsConnection(uid);
+            groups = Group.readGroups(in);
+            return groups;
+        } catch (HabitureException e) {
+            e.printStackTrace();
+        } finally {
+            networkInterface.closeConnection();
+        }
+        return null;
     }
 
     public List<Habiture> queryHabitures() {

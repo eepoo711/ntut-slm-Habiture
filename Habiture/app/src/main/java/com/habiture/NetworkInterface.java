@@ -2,19 +2,21 @@ package com.habiture;
 
 import android.graphics.Bitmap;
 
+import java.io.InputStream;
 import java.util.List;
 
 public interface NetworkInterface {
 
 
+    InputStream createGetProfileConnection(String account, String password, String gcmRegisterId);
 
-    public Profile httpGetLoginResult(String account, String password, String reg_id);
+    PhotoInputStream createGetPhotoConnection(String url);
 
-    byte[] httpGetPhoto(Profile profile);
+    void closeConnection();
 
-    public List<Friend> httpGetFriends(int uid);
+    InputStream createGetFriendsConnection(int uid);
 
-    public List<Group> httpGetGroups(int uid);
+    InputStream createGetGroupsConnection(int uid);
 
     public List<Habiture> httpGetHabitures(int uid);
 
@@ -31,4 +33,6 @@ public interface NetworkInterface {
     public boolean httpSendRegisterId(int uid, String reg_id);
 
     public List<GroupHistory> httpGetGropuHistory(int pid);
+
+
 }
