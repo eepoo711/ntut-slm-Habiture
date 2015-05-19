@@ -3,6 +3,8 @@ package com.habiture;
 import android.util.JsonReader;
 import android.util.Log;
 
+import com.habiture.exceptions.HabitureException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,6 +28,8 @@ public class Group {
     private int do_it_time =-1;
     private int id =-1;
     private int icon =-1;
+
+    private Group(){}
 
     public int getGoal(){return goal;}
     void setGoal(int goal){this.goal =goal;}
@@ -54,7 +58,7 @@ public class Group {
         return id;
     }
 
-    public static List<Group> readGroups(InputStream is) {
+    public static List<Group> readGroups(InputStream is) throws HabitureException {
         trace("readGroups");
         JsonReader reader = null;
         try {
@@ -62,20 +66,20 @@ public class Group {
             reader.beginObject();
 
             if(!"groups".equals(reader.nextName()))
-                throw new UnhandledException("wrong json format");
+                throw new HabitureException("wrong json format");
             List<Group> groups = readGroupArray(reader);
 
             reader.endObject();
             return groups;
         } catch (IOException e) {
             e.printStackTrace();
-            throw new UnhandledException("readGroups unhandled", e);
+            throw new HabitureException("readGroups exception.", e);
         } finally {
             Utils.closeIO(reader);
         }
     }
 
-    private static List<Group> readGroupArray(JsonReader reader) throws IOException {
+    private static List<Group> readGroupArray(JsonReader reader) throws IOException, HabitureException {
         trace("readGroupArray");
         reader.beginArray();
         List<Group> groups = new ArrayList<>();
@@ -86,7 +90,7 @@ public class Group {
         return groups;
     }
 
-    private static Group readGroup(JsonReader reader) throws IOException {
+    private static Group readGroup(JsonReader reader) throws IOException, HabitureException {
         trace("readGroup");
         int goal =-1;
         String url =null;
@@ -120,7 +124,7 @@ public class Group {
         reader.endObject();
 
         if(id == -1 || swear == null) {
-            throw new UnhandledException("wrong json format.");
+            throw new HabitureException("wrong json format.");
         }
 
         Group group = new Group();

@@ -130,10 +130,13 @@ public class HabitureModule {
         try {
             InputStream in = networkInterface.createGetGroupsConnection(uid);
             groups = Group.readGroups(in);
+            return groups;
+        } catch (HabitureException e) {
+            e.printStackTrace();
         } finally {
             networkInterface.closeConnection();
         }
-        return groups;
+        return null;
     }
 
     public List<Habiture> queryHabitures() {

@@ -3,6 +3,7 @@ package com.habiture.tests;
 import android.test.AndroidTestCase;
 
 import com.habiture.Group;
+import com.habiture.exceptions.HabitureException;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -41,5 +42,23 @@ public class GroupTest extends AndroidTestCase {
         assertEquals(0, group.getIcon());
 
         in.close();
+    }
+
+    public void testWrongJsonFormat() throws Exception {
+
+        String packet = "123165469";
+        InputStream in = new ByteArrayInputStream(packet.getBytes());
+
+        try {
+            Group.readGroups(in);
+            fail("wrong flow. It must occur exception.");
+        } catch (HabitureException e) {
+
+        } finally {
+            in.close();
+        }
+
+
+
     }
 }
