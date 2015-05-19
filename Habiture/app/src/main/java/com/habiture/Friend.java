@@ -43,6 +43,8 @@ public class Friend {
             List<Friend> friends = readFriendArray(reader);
 
             reader.endObject();
+
+            trace("readFriends size = " + friends.size());
             return friends;
         } catch (IOException e) {
             throw new HabitureException("readFriends : maybe cause by network exception", e);

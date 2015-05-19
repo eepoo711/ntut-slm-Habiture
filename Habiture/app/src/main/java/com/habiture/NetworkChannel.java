@@ -84,10 +84,11 @@ public class NetworkChannel implements NetworkInterface {
     @Override
     public InputStream createGetFriendsConnection(int uid) {
         trace("createGetFriendsConnection");
-        HttpURLConnection httpUrlConnection = null;
+        httpURLConnection = null;
         try {
-            httpUrlConnection = createHttpURLConnection(URL_QUERY_FRIENDS.concat("uid=" + uid ));
-            return httpUrlConnection.getInputStream();
+            httpURLConnection = createHttpURLConnection(URL_QUERY_FRIENDS.concat("uid=" + uid ));
+            trace("createGetFriendsConnection");
+            return httpURLConnection.getInputStream();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -97,10 +98,10 @@ public class NetworkChannel implements NetworkInterface {
     @Override
     public InputStream createGetGroupsConnection(int uid) {
         trace("createGetGroupsConnection");
-        HttpURLConnection httpUrlConnection = null;
+        httpURLConnection = null;
         try {
-            httpUrlConnection = createHttpURLConnection(URL_QUERY_GROUPS.concat("uid=" + uid ));
-            return httpUrlConnection.getInputStream();
+            httpURLConnection = createHttpURLConnection(URL_QUERY_GROUPS.concat("uid=" + uid ));
+            return httpURLConnection.getInputStream();
         } catch (IOException e) {
             e.printStackTrace();
         }

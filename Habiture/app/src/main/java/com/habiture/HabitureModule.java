@@ -25,7 +25,6 @@ public class HabitureModule {
 
     private String account = null;
     private String password = null;
-    private int uid = -1;
     private String self_url =null;
     private Profile profile =null;
     private Photo profilePhoto = null;
@@ -78,7 +77,7 @@ public class HabitureModule {
     public boolean postDeclaration( String frequency, String declaration, String punishment, String goal,  String do_it_time) {
         trace("postDeclaration >> frequency="+frequency+" declaration="+declaration+" punishment="+punishment+" goal="+goal+" do_it_time="+do_it_time);
         String do_it_time_server_format =do_it_time.substring(3);
-        boolean isDeclared = networkInterface.httpPostDeclaration(uid, frequency, declaration, punishment, goal, do_it_time_server_format);
+        boolean isDeclared = networkInterface.httpPostDeclaration(profile.getId(), frequency, declaration, punishment, goal, do_it_time_server_format);
 
         return isDeclared;
     }
@@ -112,7 +111,7 @@ public class HabitureModule {
     }
 
     public List<Friend> queryFriends() {
-        InputStream in = networkInterface.createGetFriendsConnection(uid);
+        InputStream in = networkInterface.createGetFriendsConnection(profile.getId());
         List<Friend> friends = null;
         try {
             friends = Friend.readFriends(in);
@@ -128,7 +127,7 @@ public class HabitureModule {
     public List<Group> queryGroups() {
         List<Group> groups;
         try {
-            InputStream in = networkInterface.createGetGroupsConnection(uid);
+            InputStream in = networkInterface.createGetGroupsConnection(profile.getId());
             groups = Group.readGroups(in);
             return groups;
         } catch (HabitureException e) {
@@ -140,7 +139,7 @@ public class HabitureModule {
     }
 
     public List<Habiture> queryHabitures() {
-        List<Habiture> habitures = networkInterface.httpGetHabitures(uid);
+        List<Habiture> habitures = networkInterface.httpGetHabitures(profile.getId());
 
         return habitures;
     }
@@ -150,9 +149,9 @@ public class HabitureModule {
     }
 
     public boolean sendSoundToPartner(int to_id, int pid, int sound_id ) {
-        trace("sendSoundToPartner, uid=" + uid + ", to_id=" + to_id + ", pid=" + pid + ", sound_id=" +sound_id);
+        trace("sendSoundToPartner, uid=" + profile.getId() + ", to_id=" + to_id + ", pid=" + pid + ", sound_id=" +sound_id);
         // TODO
-        boolean isSoundSent = networkInterface.httpSendSound(uid,to_id, pid , sound_id);
+        boolean isSoundSent = networkInterface.httpSendSound(profile.getId(),to_id, pid , sound_id);
         //boolean isSoundSent = networkInterface.httpSendSound(uid, to_id, pid , sound_id);
 
         return isSoundSent;
@@ -170,7 +169,7 @@ public class HabitureModule {
         } catch (Exception e) {
             throw new UnhandledException("uploadProofImage failed, " + e );
         }
-        return networkInterface.httpUploadProofImage(uid, pid, "jpg", imageData);
+        return networkInterface.httpUploadProofImage(profile.getId(), pid, "jpg", imageData);
     }
 
     public List<GroupHistory> gueryGroupHistory(int pid) {
@@ -189,7 +188,7 @@ public class HabitureModule {
 
     public boolean sendRegisterIdToServer(String reg_id) {
         trace("sendRegisterIdToServer, reg_id="+reg_id);
-        boolean isRegistered = networkInterface.httpSendRegisterId(uid,reg_id);
+        boolean isRegistered = networkInterface.httpSendRegisterId(profile.getId(),reg_id);
         return isRegistered;
 
     }

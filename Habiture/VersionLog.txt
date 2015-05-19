@@ -1,3 +1,7 @@
+2015/05/19 Brian & Ed & Mars (0.31.20150519)
+1. refactor HabitureModel and NetworkChannel
+2. fix wrong UID cause query nothing
+
 2015/05/18 Gawin (0.30.20150519)
 1. modify poke activity to get current information (model not implemented)
 2. modify poke activity camera invisible in some situation
