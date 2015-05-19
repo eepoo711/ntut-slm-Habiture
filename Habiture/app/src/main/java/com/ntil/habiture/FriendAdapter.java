@@ -64,8 +64,8 @@ public class FriendAdapter extends BaseAdapter{
             holder = (ViewHolder)convertView.getTag();
         }
         Item item = (Item) getItem(position);
-        // 設定群組圖案
-        holder.ivIcon.setImageBitmap(item.friend.getImage());
+        // TODO 設定群組圖案
+//        holder.ivIcon.setImageBitmap(item.friend.getImage());
         // 設定群組名稱
         holder.tvName.setText(item.friend.getName());
 
