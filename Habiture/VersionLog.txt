@@ -1,3 +1,7 @@
+2015/05/20 Gawin (0.32.20150520)
+1. finish outer camera
+2. fix habit page error
+
 2015/05/19 Brian & Ed & Mars (0.31.20150519)
 1. refactor HabitureModel and NetworkChannel
 2. fix wrong UID cause query nothing
