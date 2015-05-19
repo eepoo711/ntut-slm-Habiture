@@ -126,8 +126,13 @@ public class HabitureModule {
     }
 
     public List<Group> queryGroups() {
-        List<Group> groups = networkInterface.httpGetGroups(uid);
-
+        List<Group> groups;
+        try {
+            InputStream in = networkInterface.createGetGroupsConnection(uid);
+            groups = Group.readGroups(in);
+        } finally {
+            networkInterface.closeConnection();
+        }
         return groups;
     }
 

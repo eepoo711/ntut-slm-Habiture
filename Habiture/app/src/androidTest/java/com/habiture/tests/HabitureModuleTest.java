@@ -61,10 +61,15 @@ public class HabitureModuleTest extends AndroidTestCase {
         stubLogin(new StubQueryGroups());
         List<Group> groups = hm.queryGroups();
 
-        Group running = groups.get(0);
+        Group group = groups.get(0);
 
-        assertEquals(1, running.getId());
-        assertEquals("Running", running.getSwear());
+        assertEquals(3, group.getGoal());
+        assertEquals("http://140.124.144.121/Habiture/profile/11145559_786919498044885_2254052047058669334_n.jpg", group.getUrl());
+        assertEquals("running", group.getSwear());
+        assertEquals(7, group.getFrequency());
+        assertEquals(12, group.getDoItTime());
+        assertEquals(189, group.getId());
+        assertEquals(0, group.getIcon());
     }
 //
 //    public void testPostSwearSuccessfully() {

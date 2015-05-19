@@ -56,7 +56,7 @@ public class NetworkChannel implements NetworkInterface {
 
     @Override
     public PhotoInputStream createGetPhotoConnection(String url) {
-        trace("createGetPhotoConnection url="+url);
+        trace("createGetPhotoConnection url=" + url);
         try {
             URL imgUrl = new URL(url);
             httpURLConnection = (HttpURLConnection) imgUrl.openConnection();
@@ -87,6 +87,19 @@ public class NetworkChannel implements NetworkInterface {
         HttpURLConnection httpUrlConnection = null;
         try {
             httpUrlConnection = createHttpURLConnection(URL_QUERY_FRIENDS.concat("uid=" + uid ));
+            return httpUrlConnection.getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public InputStream createGetGroupsConnection(int uid) {
+        trace("createGetGroupsConnection");
+        HttpURLConnection httpUrlConnection = null;
+        try {
+            httpUrlConnection = createHttpURLConnection(URL_QUERY_GROUPS.concat("uid=" + uid ));
             return httpUrlConnection.getInputStream();
         } catch (IOException e) {
             e.printStackTrace();
@@ -174,27 +187,6 @@ public class NetworkChannel implements NetworkInterface {
 //
 //        return null;
 //    }
-
-    @Override
-    public List<Group> httpGetGroups(int uid) {
-        String url = URL_QUERY_GROUPS.concat(
-                "uid=".concat(String.valueOf(uid)));
-
-        HttpURLConnection connection = null;
-
-
-        try {
-            connection = createHttpURLConnection(url);
-            return null;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            closeConnection(connection);
-        }
-
-        return null;
-    }
 
     public List<Habiture> httpGetHabitures(int uid){
         trace("httpGetHabitures");

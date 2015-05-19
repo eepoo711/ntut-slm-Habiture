@@ -31,7 +31,7 @@ public class MockNetworkChannel implements NetworkInterface {
     }
 
     @Override
-    public List<Group> httpGetGroups(int uid) {
+    public InputStream createGetGroupsConnection(int uid) {
         throw new RuntimeException("wrong call");
     }
 
