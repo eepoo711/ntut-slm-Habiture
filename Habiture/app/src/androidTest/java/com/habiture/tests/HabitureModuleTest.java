@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.test.AndroidTestCase;
 
 import com.habiture.Friend;
+import com.habiture.Group;
 import com.habiture.HabitureModule;
 import com.habiture.MockGcmModel;
 import com.habiture.NetworkInterface;
@@ -11,6 +12,7 @@ import com.habiture.StubGcmModelLogin;
 import com.habiture.StubLoginFailed;
 import com.habiture.StubLoginSuccessfully;
 import com.habiture.StubQueryFriends;
+import com.habiture.StubQueryGroups;
 
 import java.util.List;
 
@@ -55,15 +57,15 @@ public class HabitureModuleTest extends AndroidTestCase {
         assertEquals("http://140.124.144.121/Habiture/profile/11145559_786919498044885_2254052047058669334_n.jpg", dewei.getUrl());
     }
 //
-//    public void testQueryGroups() {
-//        stubLogin(new StubQueryGroups());
-//        List<Group> groups = hm.queryGroups();
-//
-//        Group running = groups.get(0);
-//
-//        assertEquals(1, running.getId());
-//        assertEquals("Running", running.getSwear());
-//    }
+    public void testQueryGroups() {
+        stubLogin(new StubQueryGroups());
+        List<Group> groups = hm.queryGroups();
+
+        Group running = groups.get(0);
+
+        assertEquals(1, running.getId());
+        assertEquals("Running", running.getSwear());
+    }
 //
 //    public void testPostSwearSuccessfully() {
 //        stubLogin(new StubPostSwearSuccessfully());

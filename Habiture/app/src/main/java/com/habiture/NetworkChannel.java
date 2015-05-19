@@ -185,7 +185,7 @@ public class NetworkChannel implements NetworkInterface {
 
         try {
             connection = createHttpURLConnection(url);
-            return readGroups(connection.getInputStream());
+            return null;
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -424,86 +424,7 @@ public class NetworkChannel implements NetworkInterface {
         return null;
     }
 
-    private List<Group> readGroups(InputStream is) {
-        trace("readGroups");
-        JsonReader reader = null;
-        try {
-            reader = new JsonReader(new InputStreamReader(is));
-            reader.beginObject();
 
-            if(!"groups".equals(reader.nextName()))
-                throw new UnhandledException("wrong json format");
-            List<Group> groups = readGroupArray(reader);
-
-            reader.endObject();
-            return groups;
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new UnhandledException("readGroups unhandled", e);
-        } finally {
-            Utils.closeIO(reader);
-        }
-    }
-
-    private List<Group> readGroupArray(JsonReader reader) throws IOException {
-        trace("readGroupArray");
-        reader.beginArray();
-        List<Group> groups = new ArrayList<>();
-        while (reader.hasNext()) {
-            groups.add(readGroup(reader));
-        }
-        reader.endArray();
-        return groups;
-    }
-
-    private Group readGroup(JsonReader reader) throws IOException {
-        trace("readGroup");
-        int goal =-1;
-        String url =null;
-        String swear =null;
-        int frequency =-1;
-        int do_it_time =-1;
-        int id =-1;
-        int icon =-1;
-
-        reader.beginObject();
-        while(reader.hasNext()) {
-            String key = reader.nextName();
-            if("swear".equals(key)) {
-                swear = reader.nextString();
-            } else if("goal".equals(key)) {
-                goal = reader.nextInt();
-            } else if("url".equals(key)) {
-                url = reader.nextString();
-            } else if("frequency".equals(key)) {
-                frequency = reader.nextInt();
-            } else if("do_it_time".equals(key)) {
-                do_it_time = reader.nextInt();
-            } else if("id".equals(key)) {
-                id = reader.nextInt();
-            } else if("icon".equals(key)) {
-                icon = reader.nextInt();
-            } else {
-                reader.skipValue();
-            }
-        }
-        reader.endObject();
-
-        if(id == -1 || swear == null) {
-            throw new UnhandledException("wrong json format.");
-        }
-
-        Group group = new Group();
-        group.setSwear(swear);
-        group.setId(id);
-        group.setGoal(goal);
-        group.setUrl(url);
-        group.setFrequency(frequency);
-        group.setDoItTime(do_it_time);
-        group.setIcon(icon);
-
-        return group;
-    }
 
 
     private HttpURLConnection createHttpURLConnection(String url) throws IOException{
