@@ -42,9 +42,11 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# Others
+
 # Android Studio environment files
 Habiture/app/app.iml
 Habiture/.idea/
 Habiture/Habiture.iml
 
-# Others
+
