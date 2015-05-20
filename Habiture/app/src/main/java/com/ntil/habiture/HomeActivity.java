@@ -7,8 +7,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -27,8 +29,22 @@ import utils.exception.ExceptionAlertDialog;
  */
 public class HomeActivity extends Activity implements HomeBottomFragment.Listener,
         ExitAlertDialog.Listener, GroupFragment.Listener, HabitListFragment.Listener,
-        HabitListAdapter.Listener{
+        HabitListAdapter.Listener {
     private HabitureModule mHabitureModule;
+    private Bitmap mBitmapCaputred;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        trace("onActivityResult, requestCode = " + requestCode + ", resultCode = " + resultCode);
+
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            mBitmapCaputred = (Bitmap) data.getExtras().get("data");
+            new UploadProofTask().execute(getIntent().getIntExtra("pid", 0));
+        }
+    }
+
+    private final static int CAMERA_REQUEST = 66 ;
 
     private static final boolean DEBUG = true;
     private void trace(String message) {
@@ -132,6 +148,13 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
         //PokeActivity.startActivity(this, url, "123", "456", pid, 1, 1, 1);
     }
 
+    @Override
+    public void onClickHabitCamera(int pid) {
+        trace("onClickHabitCamera");
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+    }
+
     private class QueryPokePageTask extends AsyncTask<Integer, Void, PokeData> {
         private ProgressDialog progress;
         public static final int POKE_IS_FOUNDER = 1;
@@ -190,7 +213,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
 //                    doItTime = pokeData.getDoItime();
 //                    frequency = pokeData.getFrequency();
 //                    goal = pokeData.getGoal();
-//                    remain = pokeData.getFounderList().get(0).getRemain();
+//                    remain = pokeData.getFounderList().get(0).getRemainFrequency();
 //
 //                    if (url == null || swear == null || punishment == null || remain == -1 ||
 //                            doItTime == -1 || frequency == -1 || goal == -1 || to_id == -1) {
@@ -390,6 +413,46 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
                 //ExceptionAlertDialog.showException(getFragmentManager(), e);
             }
 
+        }
+    }
+
+    private class UploadProofTask extends AsyncTask<Integer, Void, Boolean> {
+        private ProgressDialog progress;
+        @Override
+        protected void onPreExecute() {
+            trace("UploadProofTask onPreExecute");
+            try {
+                progress = ProgressDialog.show(HomeActivity.this,
+                        "習慣成真",
+                        "上傳中...");
+            } catch(Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+
+        }
+
+        @Override
+        protected Boolean doInBackground(Integer... params) {
+            trace("UploadProofTask doInBackground");
+            boolean is_upload = false;
+            try {
+                int pid = params[0];
+
+                is_upload = mHabitureModule.uploadProofImage(pid, mBitmapCaputred);
+            } catch (Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+            return is_upload;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            trace("UploadProofTask onPostExecute");
+            progress.dismiss();
+            Toast.makeText(
+                    HomeActivity.this,
+                    success ? "上傳成功" : "上傳失敗",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 }
