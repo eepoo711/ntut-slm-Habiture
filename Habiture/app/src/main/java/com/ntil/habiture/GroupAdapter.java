@@ -19,6 +19,7 @@ import java.util.List;
 public class GroupAdapter extends BaseAdapter{
     private List<Item> items;
     private LayoutInflater inflater;
+    private Listener listener;
 
     private static final boolean DEBUG = true;
 
@@ -35,6 +36,7 @@ public class GroupAdapter extends BaseAdapter{
             item.group = group;
             items.add(item);
         }
+        listener = (Listener) context;
     }
 
     public class Item {
@@ -74,12 +76,27 @@ public class GroupAdapter extends BaseAdapter{
         Item item = (Item) getItem(position);
         holder.ivIcon.setImageResource(R.drawable.default_icon);
         holder.tvName.setText(item.group.getSwear());
+        holder.tvName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                trace("onClick, pid = " + ((Item) getItem(position)).getGroup().getId());
+                int pid = ((Item) getItem(position)).getGroup().getId();
+                String url = ((Item) getItem(position)).getGroup().getUrl();
+                listener.onClickGroupSingleItem(pid, url);
+            }
+        });
+
+
         return convertView;
     }
 
     private class ViewHolder {
         ImageView ivIcon;
         TextView tvName;
+    }
+
+    public interface Listener {
+        public void onClickGroupSingleItem(int pid, String url);
     }
 
 

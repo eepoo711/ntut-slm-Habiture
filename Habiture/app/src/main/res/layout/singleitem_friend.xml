@@ -14,7 +14,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:id="@+id/ivFriendIcon"
-            android:src="@drawable/moo"
+            android:src="@mipmap/default_icon"
             android:scaleType="centerInside"
             android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp" />

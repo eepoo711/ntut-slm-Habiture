@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="fill_parent"
     android:background="@drawable/wallppaper1">
 
 
@@ -80,14 +80,48 @@
                     android:orientation="horizontal"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:gravity="center_vertical"
+                    android:gravity="center"
                     android:layout_weight="1"
-                    android:layout_marginBottom="10dp">
+                    android:layout_marginLeft="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="fill_parent"
-                        android:text="要持續"
+                        android:text="每週"
+                        android:id="@+id/textView111"
+                        android:gravity="center_vertical"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="15dp" />
+
+                    <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:id="@+id/spFrequency"
+                        android:spinnerMode="dropdown"
+                        android:gravity="center_vertical"
+                        android:layout_gravity="center_vertical" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:text="次"
+                        android:id="@+id/textView9"
+                        android:gravity="center_vertical"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="15dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="center"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:text="持續"
                         android:id="@+id/textView14"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
@@ -98,7 +132,7 @@
 
                         android:inputType="numberDecimal"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="fill_parent"
                         android:id="@+id/etGoal"
                         android:text="3"
                         android:gravity="center_vertical"
@@ -117,30 +151,7 @@
                         android:textSize="15dp" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:gravity="center|center_horizontal"
-                    android:layout_weight="1">
 
-                    <Spinner
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:id="@+id/spFrequency"
-                        android:spinnerMode="dropdown"
-                        android:gravity="center_vertical"
-                        android:layout_gravity="center_vertical" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:text="次/週"
-                        android:id="@+id/textView9"
-                        android:gravity="center_vertical"
-                        android:layout_gravity="center_vertical"
-                        android:textSize="15dp" />
-                </LinearLayout>
 
             </LinearLayout>
 
@@ -149,7 +160,8 @@
                 android:layout_height="fill_parent"
                 android:id="@+id/spDoItTime"
                 android:spinnerMode="dropdown"
-                android:gravity="center_vertical|center" />
+                android:gravity="center_vertical|center"
+                android:layout_marginBottom="10dp" />
 
         </LinearLayout>
 
@@ -164,7 +176,8 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp"
-        android:alpha="0.9">
+        android:alpha="0.9"
+        android:layout_weight="1">
 
         <TextView
             android:layout_width="wrap_content"
@@ -178,7 +191,7 @@
 
         <EditText
             android:layout_width="fill_parent"
-            android:layout_height="100dp"
+            android:layout_height="fill_parent"
             android:id="@+id/etCost"
             android:hint="Ex:我要裸奔校園！！"
             android:gravity="top"
@@ -194,7 +207,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp">
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp">
 
         <Button
             android:background="#bb00e93e"
@@ -204,14 +218,8 @@
             android:textSize="24dp"
             android:id="@+id/btnDeclare"
             android:layout_weight="1"
-            android:textColor="#ffffffff" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_weight="1"></LinearLayout>
+            android:textColor="#ffffffff"
+            android:layout_marginRight="20dp" />
 
         <Button
             android:background="#bddd3838"
@@ -221,7 +229,8 @@
             android:textSize="24dp"
             android:id="@+id/btnCancel"
             android:layout_weight="1"
-            android:textColor="#ffffffff" />
+            android:textColor="#ffffffff"
+            android:layout_marginLeft="20dp" />
     </LinearLayout>
 
 </LinearLayout>

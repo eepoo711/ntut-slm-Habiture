@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.gcm.client.receiver.GcmModel;
 import com.habiture.Group;
 import com.habiture.HabitureModule;
 
@@ -40,9 +39,8 @@ public class MainActivity extends ActionBarActivity implements LoginFragment.Lis
 
         try {
             setContentView(R.layout.activity_main);
-
-            MainApplication.getInstance().createHabitureModel(this);
             mHabitureModule = MainApplication.getInstance().getHabitureModel();
+            mHabitureModule.setActivityAndConstructGcm(this);
 
             if(savedInstanceState == null) {
                 getFragmentManager().beginTransaction()
