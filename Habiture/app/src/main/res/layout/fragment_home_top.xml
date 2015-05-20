@@ -4,7 +4,7 @@
     android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="#0000ff99">
+    android:background="#ffa6fcda">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -18,18 +18,35 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:id="@+id/ivPhoto"
-            android:src="@mipmap/cow"
+            android:src="@mipmap/default_icon"
             android:scaleType="fitCenter" />
 
-        <TextView
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Guest"
-            android:id="@+id/tvName"
-            android:layout_marginLeft="30dp"
-            android:layout_gravity="center_vertical"
-            android:textSize="30dp"
-            android:textColor="#ff17d1a8" />
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Guest"
+                android:id="@+id/tvName"
+                android:layout_marginLeft="30dp"
+                android:layout_gravity="center_vertical"
+                android:textSize="30dp"
+                android:textColor="#ff000000"
+                android:layout_marginRight="30dp" />
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="3dp"
+                android:id="@+id/imageView4"
+                android:background="#ff2d2d29"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp" />
+        </LinearLayout>
 
     </LinearLayout>
 

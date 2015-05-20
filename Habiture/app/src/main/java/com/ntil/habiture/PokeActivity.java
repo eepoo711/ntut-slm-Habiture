@@ -43,19 +43,19 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
 
     private final static int CAMERA_REQUEST = 66 ;
     private HabitureModule mHabitureModule;
+    private int mPid;
+    private String mSwear;
     private Bitmap mBitmapCaputred;
     private static final boolean DEBUG = true;
-    private PokeFragment mPoketFragment;
 
     private void trace(String message) {
         if(DEBUG)
             Log.d("PokeActivity", message);
     }
 
-    public static void startActivity(Context context, boolean isFounder, String url, String swear,
-            String punishment,int pid, int to_id, int frequency, int doItTime, int goal, int remain) {
+    public static void startActivity(Context context, String url, String swear, String punishment,
+            int pid, int frequency, int doItTime, int goal) {
         Intent intent = new Intent(context, PokeActivity.class);
-        intent.putExtra("isFounder", isFounder);
         intent.putExtra("url", url);
         intent.putExtra("swear", swear);
         intent.putExtra("punishment", punishment);
@@ -63,8 +63,6 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         intent.putExtra("frequency", frequency);
         intent.putExtra("doItTime", doItTime);
         intent.putExtra("goal", goal);
-        intent.putExtra("to_id", to_id);
-        intent.putExtra("remain", remain);
         context.startActivity(intent);
     }
 
@@ -74,20 +72,9 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         setContentView(R.layout.activity_poke);
         String name = MainApplication.getInstance().getHabitureModel().getAccount();
         mHabitureModule = MainApplication.getInstance().getHabitureModel();
-
-        if (savedInstanceState == null) {
-            mPoketFragment = PokeFragment.newInstance(getIntent().getBooleanExtra("isFounder", false),
-                    getIntent().getStringExtra("swear"), getIntent().getStringExtra("punishment"),
-                    getIntent().getIntExtra("frequency", 0), getIntent().getIntExtra("doItTime", 0),
-                    getIntent().getIntExtra("goal", 0), getIntent().getIntExtra("remain", 0));
-            getFragmentManager().beginTransaction()
-                    .add(R.id.profileContainer, HomeTopFragment.newInstance(
-                            mHabitureModule.getAccount()
-                            , mHabitureModule.getHeader()))
-                    .add(R.id.pokeContainer, mPoketFragment)
-                    .commit();
-            new QueryOwnerPhoto().execute(getIntent().getStringExtra("url"));
-        }
+        mPid = getIntent().getIntExtra("pid", -1);
+        new QueryOwnerPhoto().execute(getIntent().getStringExtra("url"));
+        trace("pid = " + mPid);
         registerToolBroadReceiver();
     }
 
@@ -113,7 +100,8 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
 
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             mBitmapCaputred = (Bitmap) data.getExtras().get("data");
-            new UploadProofTask().execute(getIntent().getIntExtra("pid", 0));
+            new UploadProofTask().execute(mPid);
+
         }
     }
 
@@ -147,8 +135,8 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         // TODO: to guest now
         int to_id =1;
         Intent broadcastIntent = new Intent(this.getString(R.string.tool_clicck_intent_name));
-        broadcastIntent.putExtra("to_id",getIntent().getIntExtra("to_id", 1));
-        broadcastIntent.putExtra("pid",getIntent().getIntExtra("pid", 154));
+        broadcastIntent.putExtra("to_id",1);
+        broadcastIntent.putExtra("pid",mPid);
         broadcastIntent.putExtra("tool_id",random_tool_id);
         this.sendBroadcast(broadcastIntent);
     }
@@ -306,13 +294,12 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
             trace("QueryOwnerPhoto onPostExecute");
             try {
                 if (bitmap != null) {
-                    mPoketFragment.setImage(bitmap);
-//                    getFragmentManager().beginTransaction()
-//                            .add(R.id.profileContainer, HomeTopFragment.newInstance(
-//                                    mHabitureModule.getAccount()
-//                                    , mHabitureModule.getHeader()))
-//                            .add(R.id.pokeContainer, PokeFragment.newInstance(bitmap, "123", "456", 1, 1, 1))
-//                            .commit();
+                    getFragmentManager().beginTransaction()
+                            .add(R.id.profileContainer, HomeTopFragment.newInstance(
+                                    mHabitureModule.getAccount()
+                                    , mHabitureModule.getHeader()))
+                            .add(R.id.pokeContainer, PokeFragment.newInstance(bitmap, "123", "456", 1, 1, 1))
+                            .commit();
                 } else {
                     Toast.makeText(PokeActivity.this, "載入資料失敗", Toast.LENGTH_SHORT).show();
                 }

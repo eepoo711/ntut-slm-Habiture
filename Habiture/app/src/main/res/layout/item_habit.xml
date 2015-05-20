@@ -6,8 +6,8 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="#48fff78a"
+        android:layout_height="wrap_content"
+        android:background="#7efff2b5"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
         android:layout_marginRight="15dp"
@@ -33,30 +33,22 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="騎腳踏車"
                 android:id="@+id/tvSwear"
-                android:layout_gravity="center_horizontal|left"
+                android:layout_gravity="left|center_horizontal"
                 android:textSize="28dp"
                 android:textStyle="bold"
-                android:layout_weight="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:layout_weight="1" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="本週剩餘 ? 次數"
-                android:layout_gravity="bottom|right"
+                android:text="本週剩 ? 次"
+                android:layout_gravity="bottom"
                 android:id="@+id/tvRemain"
                 android:textSize="20dp"
                 android:layout_marginRight="10dp" />
 
-            <ImageButton
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:id="@+id/imageButton3"
-                android:src="@drawable/setting"
-                android:scaleType="fitCenter"
-                android:background="#0013ff2f"
-                android:layout_gravity="right" />
         </LinearLayout>
 
         <ImageView
@@ -66,13 +58,13 @@
             android:background="#df0d0072" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="做不到就裸奔！！"
             android:id="@+id/tvPunishment"
-            android:textSize="30dp"
-            android:textColor="#ff0b8e37"
+            android:textSize="20dp"
+            android:textColor="#32A664"
             android:layout_margin="10dp" />
 
         <LinearLayout
