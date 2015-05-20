@@ -278,20 +278,12 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
     }
 
     private class QueryOwnerPhoto extends AsyncTask<String, Void, Bitmap> {
-        private ProgressDialog progress;
         private int pid;
         private String url;
 
         @Override
         protected void onPreExecute() {
             trace("QueryOwnerPhoto onPreExecute");
-            try {
-                progress = ProgressDialog.show(PokeActivity.this,
-                        "習慣成真",
-                        "載入中...");
-            } catch (Throwable e) {
-                ExceptionAlertDialog.showException(getFragmentManager(), e);
-            }
         }
 
         @Override
@@ -313,7 +305,6 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         protected void onPostExecute(Bitmap bitmap) {
             trace("QueryOwnerPhoto onPostExecute");
             try {
-                progress.dismiss();
                 if (bitmap != null) {
                     mPoketFragment.setImage(bitmap);
 //                    getFragmentManager().beginTransaction()

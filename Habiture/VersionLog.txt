@@ -1,3 +1,8 @@
+2015/05/20 Gawin (0.34.20150520)
+1. fix camera image
+2. fix onItemClick
+3. fix load image progress in poke activity
+
 2015/05/20 Gawin (0.33.20150520)
 1. fix screen rotate
 
