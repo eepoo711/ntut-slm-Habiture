@@ -1,3 +1,6 @@
+2015/05/20 Gawin (0.33.20150520)
+1. fix screen rotate
+
 2015/05/20 Gawin (0.32.20150520)
 1. finish outer camera
 2. fix habit page error
