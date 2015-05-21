@@ -80,7 +80,7 @@ public class PokeFragment extends Fragment {
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                trace("onClick btnCamera");
+                trace("onClick ibCamera");
                 listener.onClickCamera();
             }
         });

@@ -97,7 +97,7 @@
                 <Button
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/button2"
+                    android:id="@+id/btnPass"
                     android:layout_weight="1"
                     android:layout_marginLeft="2dp"
                     android:layout_marginRight="2dp"

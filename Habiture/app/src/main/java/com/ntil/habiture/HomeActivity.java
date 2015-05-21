@@ -29,7 +29,7 @@ import utils.exception.ExceptionAlertDialog;
  */
 public class HomeActivity extends Activity implements HomeBottomFragment.Listener,
         ExitAlertDialog.Listener, GroupFragment.Listener, HabitListFragment.Listener,
-        HabitListAdapter.Listener {
+        HabitListAdapter.Listener, PassAlertDialog.Listener {
     private HabitureModule mHabitureModule;
     private Bitmap mBitmapCaputred;
 
@@ -130,7 +130,14 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
 
     @Override
     public void onExit() {
+        trace("onExit");
         finish();
+    }
+
+    @Override
+    public void onPass() {
+        trace("onPass");
+        //TODO
     }
 
     @Override
@@ -154,6 +161,14 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
+
+    @Override
+    public void onClickHabitPass(int pid, int passRemain) {
+        trace("onClickHabitPass");
+        DialogFragment newFragment = PassAlertDialog.newInstance(passRemain);
+        newFragment.show(getFragmentManager(), "dialog");
+    }
+
 
     private class QueryPokePageTask extends AsyncTask<Integer, Void, PokeData> {
         private ProgressDialog progress;

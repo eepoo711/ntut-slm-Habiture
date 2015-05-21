@@ -1,3 +1,6 @@
+2015/05/21 Gawin (0.38.20150521)
+1. finish pass but not implement button disable
+
 2015/05/21 Brian (0.37.20150521)
 1. fix crashed - group page cause by Download image.
 2. fix crashed - replace fragment at background
