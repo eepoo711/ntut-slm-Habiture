@@ -179,31 +179,32 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
 
             try {
                 progress.dismiss();
-                String test_url = "http://140.124.144.121/Habiture/profile/1896858_878006565605886_1570385858202168833_n.jpg";
-                PokeActivity.startActivity(HomeActivity.this, isFounder, test_url, "123", "123", 154, 1, 1, 1, 1, 1);
+//                String test_url = "http://140.124.144.121/Habiture/profile/1896858_878006565605886_1570385858202168833_n.jpg";
+//                PokeActivity.startActivity(HomeActivity.this, isFounder, test_url, "123", "123", 154, 1, 1, 1, 1, 1);
 
-//                if (pokeData != null) {
-//                    // TODO: startPokeActivity
-//                    url = pokeData.getFounderList().get(0).getUrl();
-//                    swear = pokeData.getSwear();
-//                    punishment = pokeData.getPunishment();
-//                    doItTime = pokeData.getDoItime();
-//                    frequency = pokeData.getFrequency();
-//                    goal = pokeData.getGoal();
-//                    remain = pokeData.getFounderList().get(0).getRemain();
-//
-//                    if (url == null || swear == null || punishment == null || remain == -1 ||
-//                            doItTime == -1 || frequency == -1 || goal == -1 || to_id == -1) {
-//                        Toast.makeText(HomeActivity.this, "載入失敗", Toast.LENGTH_SHORT).show();
-//                        return ;
-//                    }
+                if (pokeData != null) {
+                    // TODO: startPokeActivity
+                    url = pokeData.getFounderList().get(0).getUrl();
+                    swear = pokeData.getSwear();
+                    punishment = pokeData.getPunishment();
+                    doItTime = pokeData.getDoItime();
+                    frequency = pokeData.getFrequency();
+                    goal = pokeData.getGoal();
+                    remain = pokeData.getFounderList().get(0).getRemain();
+                    to_id = pokeData.getFounderList().get(0).getUid();
+
+                    if (url == null || swear == null || punishment == null || remain == -1 ||
+                            doItTime == -1 || frequency == -1 || goal == -1 || to_id == -1) {
+                        Toast.makeText(HomeActivity.this, "載入失敗", Toast.LENGTH_SHORT).show();
+                        return ;
+                    }
 //                    String test_url = "http://140.124.144.121/Habiture/profile/1896858_878006565605886_1570385858202168833_n.jpg";
 //                    PokeActivity.startActivity(HomeActivity.this, isFounder, test_url, "123", "123", 154, 1, 1, 1, 1);
-////                    PokeActivity.startActivity(HomeActivity.this, isFounder, url, swear, punishment, pid,
-////                            to_id, frequency, doItTime, goal);
-//                } else {
-//                    Toast.makeText(HomeActivity.this, "載入失敗", Toast.LENGTH_SHORT).show();
-//                }
+                    PokeActivity.startActivity(HomeActivity.this, isFounder, url, swear, punishment, pid,
+                            to_id, frequency, doItTime, goal, remain);
+                } else {
+                    Toast.makeText(HomeActivity.this, "載入失敗", Toast.LENGTH_SHORT).show();
+                }
 
 
             } catch(Throwable e) {

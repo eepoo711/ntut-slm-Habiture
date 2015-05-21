@@ -24,7 +24,7 @@ public class GroupAdapter extends BaseAdapter{
 
     private void trace(String message) {
         if(DEBUG)
-            Log.d("PokeActivity", message);
+            Log.d("GroupAdapter", message);
     }
 
     public GroupAdapter(Context context, List<Group> groups){

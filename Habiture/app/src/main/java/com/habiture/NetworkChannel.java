@@ -275,6 +275,124 @@ public class NetworkChannel implements NetworkInterface {
             connection.disconnect();
     }
 
+    private PokeData readPokePage(InputStream is){
+        trace("readPokePage");
+        JsonReader reader = null;
+        List<PokeData.Founder> founders = new ArrayList<>();
+        String post_date = null;
+        String swear = null;
+        int goal = -1;
+        int frequency = -1;
+        int do_it_time = -1;
+        String punishment = null;
+        int icon = -1;
+        try {
+            reader = new JsonReader(new InputStreamReader(is));
+            reader.beginObject();
+            // TODO
+            if(!"posts_page".equals(reader.nextName()))
+                throw new UnhandledException("wrong json format");
+
+            reader.beginObject();
+            while(reader.hasNext()) {
+                String key = reader.nextName();
+                if("post_date".equals(key)) {
+                    post_date = reader.nextString();
+                } else if("swear".equals(key)) {
+                    swear = reader.nextString();
+                } else if("goal".equals(key)) {
+                    goal = reader.nextInt();
+                } else if("frequency".equals(key)) {
+                    frequency = reader.nextInt();
+                } else if("founder".equals(key)) {
+                    founders = readPokeDataFounderArray(reader);
+                } else if("do_it_time".equals(key)) {
+                    do_it_time = reader.nextInt();
+                } else if("punishment".equals(key)) {
+                    punishment = reader.nextString();
+                } else if("icon".equals(key)) {
+                    icon = reader.nextInt();
+                }else {
+                    reader.skipValue();
+                }
+            }
+            reader.endObject();
+            reader.endObject();
+
+            if(post_date == null || frequency == -1 || do_it_time == -1 || punishment == null ) {
+                throw new UnhandledException("wrong json format.");
+            }
+
+            PokeData pokedatas = new PokeData();
+            pokedatas.setPostDate(post_date);
+            pokedatas.setSwear(swear);
+            pokedatas.setGoal(goal);
+            pokedatas.setFrequency(frequency);
+            pokedatas.setFounderList(founders);
+            pokedatas.setDoItTime(do_it_time);
+            pokedatas.setPunishment(punishment);
+            pokedatas.setIcon(icon);
+
+            return pokedatas;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            Utils.closeIO(reader);
+        }
+
+        return null;
+    }
+
+    private List<PokeData.Founder> readPokeDataFounderArray(JsonReader reader) throws IOException {
+        trace("readPokeDataArray");
+        // TODO
+        reader.beginArray();
+        List<PokeData.Founder> founders = new ArrayList<>();
+        while (reader.hasNext()) {
+            founders.add(readPokeDataFounder(reader));
+        }
+        reader.endArray();
+        return founders;
+    }
+
+    private PokeData.Founder readPokeDataFounder(JsonReader reader) throws IOException {
+        trace("readPokeData");
+        // TODO
+        int remain = -1;
+        String url = null;
+        int uid = -1;
+        String name = null;
+
+        reader.beginObject();
+        while(reader.hasNext()) {
+            String key = reader.nextName();
+            if("url".equals(key)) {
+                url = reader.nextString();
+            } else if("remain".equals(key)) {
+                remain = reader.nextInt();
+            } else if("uid".equals(key)) {
+                uid = reader.nextInt();
+            } else if("name".equals(key)) {
+                name = reader.nextString();
+            }else {
+                reader.skipValue();
+            }
+        }
+        reader.endObject();
+
+        if(url == null || remain == -1 || uid == -1 || name == null ) {
+            throw new UnhandledException("wrong json format.");
+        }
+
+        PokeData.Founder founder = new PokeData.Founder();
+        founder.setUrl(url);
+        founder.setRemain(remain);
+        founder.setUid(uid);
+        founder.setName(name);
+
+        return founder;
+    }
+
     private List<Habiture> readHabitures(InputStream is) {
         trace("readHabitures");
 
@@ -530,6 +648,7 @@ public class NetworkChannel implements NetworkInterface {
         group.setFrequency(frequency);
         group.setDoItTime(do_it_time);
         group.setIcon(icon);
+        group.setImage(httpGetBitmapUrl(url));
 
         return group;
     }
@@ -684,7 +803,7 @@ public class NetworkChannel implements NetworkInterface {
         try {
             connection = createHttpURLConnection(url);
             //TODO: resolve json
-            //return readPokePage(connection.getInputStream());
+            return readPokePage(connection.getInputStream());
 
         } catch (IOException e) {
             e.printStackTrace();

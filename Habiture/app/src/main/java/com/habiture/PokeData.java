@@ -67,6 +67,10 @@ public class PokeData {
         founderList.add(founder);
     }
 
+    public void setFounderList(List<Founder> founderList) {
+        this.founderList = founderList;
+    }
+
     public List<Founder> getFounderList() {
         return founderList;
     }
@@ -79,7 +83,7 @@ public class PokeData {
         return this.frequency;
     }
 
-    public class Founder {
+    public static class Founder {
         String url;
         String name;
         int remain;

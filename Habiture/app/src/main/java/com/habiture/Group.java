@@ -1,5 +1,7 @@
 package com.habiture;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by GawinHsu on 4/20/15.
  */
@@ -11,6 +13,14 @@ public class Group {
     private int do_it_time =-1;
     private int id =-1;
     private int icon =-1;
+    private Bitmap image =null;
+
+    public Bitmap getImage() {
+        return image;
+    }
+    void setImage(Bitmap image) {
+        this.image = image;
+    }
 
     public int getGoal(){return goal;}
     void setGoal(int goal){this.goal =goal;}
