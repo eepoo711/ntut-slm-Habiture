@@ -28,7 +28,7 @@ import utils.exception.ExceptionAlertDialog;
  * Created by GawinHsu on 5/6/15.
  */
 public class HomeActivity extends Activity implements HomeBottomFragment.Listener,
-        ExitAlertDialog.Listener, GroupFragment.Listener, HabitListFragment.Listener,
+        ExitAlertDialog.Listener, HabitListFragment.Listener,
         HabitListAdapter.Listener {
     private HabitureModule mHabitureModule;
     private Bitmap mBitmapCaputred;
@@ -133,13 +133,13 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
         finish();
     }
 
-    @Override
-    public void onClickGroupSingleItem(int pid) {
-        trace("onClickGroupSingleItem pid = " + pid);
-        // TODO: QueryPokePageTask
-        new QueryPokePageTask().execute(pid, QueryPokePageTask.POKE_NOT_FOUNDER);
-        //PokeActivity.startActivity(this, url, "123", "456", pid, 1, 1, 1);
-    }
+//    @Override
+//    public void onClickGroupSingleItem(int pid) {
+//        trace("onClickGroupSingleItem pid = " + pid);
+//        // TODO: QueryPokePageTask
+//        new QueryPokePageTask().execute(pid, QueryPokePageTask.POKE_NOT_FOUNDER);
+//        //PokeActivity.startActivity(this, url, "123", "456", pid, 1, 1, 1);
+//    }
 
     @Override
     public void onClickHabitSingleItem(int pid) {
@@ -203,7 +203,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
             try {
                 progress.dismiss();
                 String test_url = "http://140.124.144.121/Habiture/profile/1896858_878006565605886_1570385858202168833_n.jpg";
-                PokeActivity.startActivity(HomeActivity.this, isFounder, test_url, "123", "123", 154, 1, 1, 1, 1, 1);
+//                PokeActivity.startActivity(HomeActivity.this, isFounder, test_url, "123", "123", 154, 1, 1, 1, 1, 1);
 
 //                if (pokeData != null) {
 //                    // TODO: startPokeActivity
