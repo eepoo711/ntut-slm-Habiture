@@ -1,3 +1,6 @@
+2015/05/21 dewei (0.35.20150521)
+1. UI Adjustment
+
 2015/05/20 Gawin (0.34.20150520)
 1. fix camera image
 2. fix onItemClick
