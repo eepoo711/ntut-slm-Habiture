@@ -269,7 +269,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
                 getFragmentManager().beginTransaction()
                         .replace(R.id.middleContainer, GroupFragment.newInstance(groups))
                         .addToBackStack(null)
-                        .commit();
+                        .commitAllowingStateLoss();
 
             } catch(Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
@@ -315,7 +315,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
                 getFragmentManager().beginTransaction()
                         .replace(R.id.middleContainer, FriendFragment.newInstance(friends))
                         .addToBackStack(null)
-                        .commit();
+                        .commitAllowingStateLoss();
 
             } catch (Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
@@ -360,7 +360,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
 
                 getFragmentManager().beginTransaction()
                         .replace(R.id.middleContainer, HabitListFragment.newInstance(habitures))
-                        .commit();
+                        .commitAllowingStateLoss();
 
             } catch (Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);

@@ -149,9 +149,6 @@ public class MainActivity extends ActionBarActivity implements LoginFragment.Lis
                         Toast.LENGTH_SHORT).show();
 
                 if(success){
-//                    getFragmentManager().beginTransaction()
-//                            .replace(R.id.container, HomeMiddleFragment.newInstance(mHabitureModule.getAccount()))
-//                            .commit();
                     startActivity(new Intent(MainActivity.this, HomeActivity.class));
                     finish();
                 }

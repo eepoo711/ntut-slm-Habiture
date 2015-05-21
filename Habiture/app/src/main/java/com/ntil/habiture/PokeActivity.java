@@ -91,17 +91,25 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         registerToolBroadReceiver();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        unregisterReceiver(toolBroadReceiver);
+    }
+
+    private BroadcastReceiver toolBroadReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int to_id =intent.getIntExtra("to_id",1);
+            int pid =intent.getIntExtra("pid",154);
+            int tool_id =intent.getIntExtra("tool_id",1);
+            trace("registerToolBroadReceiver(), to_id="+to_id+" pid="+pid+" tool_id="+tool_id);
+            new SendToolTask().execute(to_id,pid,tool_id);
+        }
+    };
+
     private void registerToolBroadReceiver() {
-        BroadcastReceiver toolBroadReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                int to_id =intent.getIntExtra("to_id",1);
-                int pid =intent.getIntExtra("pid",154);
-                int tool_id =intent.getIntExtra("tool_id",1);
-                trace("registerToolBroadReceiver(), to_id="+to_id+" pid="+pid+" tool_id="+tool_id);
-                new SendToolTask().execute(to_id,pid,tool_id);
-            }
-        };
         registerReceiver(toolBroadReceiver,new IntentFilter(this.getString(R.string.tool_clicck_intent_name)));
     }
 
@@ -305,14 +313,8 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         protected void onPostExecute(Bitmap bitmap) {
             trace("QueryOwnerPhoto onPostExecute");
             try {
-                if (bitmap != null) {
+                if (bitmap != null && !PokeActivity.this.isFinishing()) {
                     mPoketFragment.setImage(bitmap);
-//                    getFragmentManager().beginTransaction()
-//                            .add(R.id.profileContainer, HomeTopFragment.newInstance(
-//                                    mHabitureModule.getAccount()
-//                                    , mHabitureModule.getHeader()))
-//                            .add(R.id.pokeContainer, PokeFragment.newInstance(bitmap, "123", "456", 1, 1, 1))
-//                            .commit();
                 } else {
                     Toast.makeText(PokeActivity.this, "載入資料失敗", Toast.LENGTH_SHORT).show();
                 }

@@ -200,7 +200,7 @@ public class DeclareActivity extends ActionBarActivity implements DeclareFragmen
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container, InviteFriendFragment.newInstance(friends))
                         .addToBackStack(null)
-                        .commit();
+                        .commitAllowingStateLoss();
 
             } catch(Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
