@@ -1,3 +1,7 @@
+2015/05/21 Brian (0.36.20150521)
+1. finish FriendTest
+2. fix project
+
 2015/05/21 dewei (0.35.20150521)
 1. UI Adjustment
 
