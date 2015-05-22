@@ -44,6 +44,7 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
     private final static int CAMERA_REQUEST = 66 ;
     private HabitureModule mHabitureModule;
     private Bitmap mBitmapCaputred;
+    private Bitmap mBitmapPoke;
     private static final boolean DEBUG = true;
     private PokeFragment mPoketFragment;
 
@@ -90,6 +91,8 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         }
         registerToolBroadReceiver();
     }
+
+
 
     @Override
     protected void onDestroy() {
@@ -318,7 +321,8 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
             trace("QueryOwnerPhoto onPostExecute");
             try {
                 if (bitmap != null && !PokeActivity.this.isFinishing()) {
-                    mPoketFragment.setImage(bitmap);
+                    mBitmapPoke = bitmap;
+                    mPoketFragment.setImage(mBitmapPoke);
                 } else {
                     Toast.makeText(PokeActivity.this, "載入資料失敗", Toast.LENGTH_SHORT).show();
                 }

@@ -120,9 +120,13 @@ public class PokeFragment extends Fragment {
         tvRemain = (TextView) getActivity().findViewById(R.id.tvRemain);
         tvGoal = (TextView) getActivity().findViewById(R.id.tvGoal);
         tvFrequency = (TextView) getActivity().findViewById(R.id.tvFrequency);
-        String ampm = getArguments().getInt("doItTime") > 12 ? "PM" : "AM";
+
+        // fix 24 clock to 12
+        String ampm = getArguments().getInt("doItTime") >= 12 ? "P.M." : "A.M.";
         int ampmDoItTime = getArguments().getInt("doItTime") > 12 ? getArguments().getInt("doItTime") - 12
                 :getArguments().getInt("doItTime");
+        if (ampmDoItTime == 0)
+            ampmDoItTime = 12;
 
         tvSwear.setText(getArguments().getString("swear"));
         tvRemain.setText("剩下 " + getArguments().getInt("remain") + " 週");

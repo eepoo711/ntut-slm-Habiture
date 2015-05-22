@@ -1,5 +1,6 @@
 package com.ntil.habiture;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -19,7 +20,7 @@ import java.util.List;
 import utils.exception.ExceptionAlertDialog;
 
 
-public class MainActivity extends ActionBarActivity implements LoginFragment.Listener {
+public class MainActivity extends Activity implements LoginFragment.Listener {
 
     private static final boolean DEBUG = false;
 
