@@ -1,4 +1,4 @@
-﻿package com.ntil.habiture;
+package com.ntil.habiture;
 
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -24,9 +24,6 @@ import java.util.List;
 
 import utils.exception.ExceptionAlertDialog;
 
-/**
- * Created by GawinHsu on 5/6/15.
- */
 public class HomeActivity extends Activity implements HomeBottomFragment.Listener,
         ExitAlertDialog.Listener, GroupFragment.Listener, HabitListFragment.Listener,
         HabitListAdapter.Listener, PassAlertDialog.Listener {
@@ -233,7 +230,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
                         Toast.makeText(HomeActivity.this, "載入失敗", Toast.LENGTH_SHORT).show();
                         return ;
                     }
-                  PokeActivity.startActivity(HomeActivity.this, isFounder, url, swear, punishment, pid,
+                    PokeActivity.startActivity(HomeActivity.this, isFounder, url, swear, punishment, pid,
                             to_id, frequency, doItTime, goal, remain);
                 } else {
                     Toast.makeText(HomeActivity.this, "載入失敗", Toast.LENGTH_SHORT).show();

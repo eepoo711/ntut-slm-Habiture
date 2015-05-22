@@ -29,14 +29,6 @@ public class Group {
     private int do_it_time =-1;
     private int id =-1;
     private int icon =-1;
-    private Bitmap image =null;
-
-    public Bitmap getImage() {
-        return image;
-    }
-    void setImage(Bitmap image) {
-        this.image = image;
-    }
 
     private Group(){}
 
