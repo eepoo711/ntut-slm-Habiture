@@ -11,12 +11,9 @@ import com.habiture.NetworkInterface;
 import com.habiture.StubGcmModelLogin;
 import com.habiture.StubLoginFailed;
 import com.habiture.StubLoginSuccessfully;
-import com.habiture.StubPostSwearFailed;
-import com.habiture.StubPostSwearSuccessfully;
 import com.habiture.StubQueryFriends;
 import com.habiture.StubQueryGroups;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class HabitureModuleTest extends AndroidTestCase {
@@ -31,53 +28,60 @@ public class HabitureModuleTest extends AndroidTestCase {
 
     public void testLoginFailed() {
         assertFalse(stubLogin(new StubLoginFailed()));
+        assertNull(hm.getHeader());
     }
 
-    public void testGetProfileAfterLoginSuccessfully() {
-        stubLogin(new StubLoginSuccessfully());
-
-        assertEquals("testAccount", hm.getAccount());
-        assertEquals("testPassword", hm.getPassword());
-    }
-
-    public void testGetProfileAfterLoginFailed() {
-        stubLogin(new StubLoginFailed());
-
-        assertEquals(null, hm.getAccount());
-        assertEquals(null, hm.getPassword());
-
-    }
-
+//    public void testGetProfileAfterLoginSuccessfully() {
+//        stubLogin(new StubLoginSuccessfully());
+//
+//        assertEquals("testAccount", hm.getAccount());
+//        assertEquals("testPassword", hm.getPassword());
+//    }
+//
+//    public void testGetProfileAfterLoginFailed() {
+//        stubLogin(new StubLoginFailed());
+//
+//        assertEquals(null, hm.getAccount());
+//        assertEquals(null, hm.getPassword());
+//
+//    }
+//
     public void testQueryFriends() {
         stubLogin(new StubQueryFriends());
         List<Friend> friends = hm.queryFriends();
 
-        Friend amanda = friends.get(0);
+        Friend dewei = friends.get(0);
 
-        assertEquals(1, amanda.getId());
-        assertEquals("Amanda", amanda.getName());
+        assertEquals(5, dewei.getId());
+        assertEquals("DeWei", dewei.getName());
+        assertEquals("http://140.124.144.121/Habiture/profile/11145559_786919498044885_2254052047058669334_n.jpg", dewei.getUrl());
     }
-
+//
     public void testQueryGroups() {
         stubLogin(new StubQueryGroups());
         List<Group> groups = hm.queryGroups();
 
-        Group running = groups.get(0);
+        Group group = groups.get(0);
 
-        assertEquals(1, running.getId());
-        assertEquals("Running", running.getSwear());
+        assertEquals(3, group.getGoal());
+        assertEquals("http://140.124.144.121/Habiture/profile/11145559_786919498044885_2254052047058669334_n.jpg", group.getUrl());
+        assertEquals("running", group.getSwear());
+        assertEquals(7, group.getFrequency());
+        assertEquals(12, group.getDoItTime());
+        assertEquals(189, group.getId());
+        assertEquals(0, group.getIcon());
     }
-
-    public void testPostSwearSuccessfully() {
-        stubLogin(new StubPostSwearSuccessfully());
-        assertTrue(hm.postDeclaration("1", "eat something", "hit by anyone", "12", "Pm 11"));
-    }
-
-    public void testPostSwearFailed() {
-        stubLogin(new StubPostSwearFailed());
-        List<Friend> friends = new ArrayList<>();
-        assertFalse(hm.postDeclaration("1", "eat something", "hit by anyone", "12", "Pm 11"));
-    }
+//
+//    public void testPostSwearSuccessfully() {
+//        stubLogin(new StubPostSwearSuccessfully());
+//        assertTrue(hm.postDeclaration("1", "eat something", "hit by anyone", "12", "Pm 11"));
+//    }
+//
+//    public void testPostSwearFailed() {
+//        stubLogin(new StubPostSwearFailed());
+//        List<Friend> friends = new ArrayList<>();
+//        assertFalse(hm.postDeclaration("1", "eat something", "hit by anyone", "12", "Pm 11"));
+//    }
 
     // TODO testQueryHabituresSuccessfully
     // TODO testQueryHabituresFailed

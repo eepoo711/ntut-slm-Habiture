@@ -57,8 +57,9 @@ public class HabitListFragment extends Fragment {
         item_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int pid = ((Habiture)habitListAdapter.getItem(position)).getId();
-                listener.onClickHabitSingleItem(pid);
+                trace("onItemClick");
+                Habiture habiture = ((HabitListAdapter.Item)habitListAdapter.getItem(position)).getHabiture();
+                listener.onClickHabitSingleItem(habiture.getId());
             }
         });
 

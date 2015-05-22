@@ -21,6 +21,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="名稱："
+            android:id="@+id/textView11"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp" />
@@ -28,11 +29,24 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="我想要跑步 / 剩餘3週"
+            android:text="我想要跑步"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/tvSwearAndRemain"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp" />
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="剩餘3週"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/textView17"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:paddingRight="10dp"
+            android:textColor="#F2766B" />
     </LinearLayout>
 
     <LinearLayout
@@ -62,7 +76,8 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/tvPunishment"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp" />
+            android:layout_marginBottom="10dp"
+            android:textColor="#32A664" />
 
     </LinearLayout>
 
@@ -86,16 +101,44 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp" />
 
-        <TextView
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="PM 6:00 / 每週3次 / 持續4週"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/tvTime"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_gravity="center_vertical"
-            android:textSize="20dp" />
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PM 6:00"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/tvTime"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="center_vertical"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" / 每週3次"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/textView7"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="center_vertical"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" / 持續4週"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/textView16"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="center_vertical"
+                android:textSize="20dp" />
+        </LinearLayout>
 
     </LinearLayout>
 

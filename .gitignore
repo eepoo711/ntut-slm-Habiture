@@ -41,9 +41,12 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
-<<<<<<< HEAD
 
 # Others
+
+# Android Studio environment files
 Habiture/app/app.iml
-Habiture/.idea/gradle.xml
+Habiture/.idea/
 Habiture/Habiture.iml
+
+

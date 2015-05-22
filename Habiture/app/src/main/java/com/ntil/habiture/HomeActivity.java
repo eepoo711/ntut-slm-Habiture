@@ -1,4 +1,4 @@
-package com.ntil.habiture;
+﻿package com.ntil.habiture;
 
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -7,8 +7,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -27,8 +29,22 @@ import utils.exception.ExceptionAlertDialog;
  */
 public class HomeActivity extends Activity implements HomeBottomFragment.Listener,
         ExitAlertDialog.Listener, GroupFragment.Listener, HabitListFragment.Listener,
-        HabitListAdapter.Listener{
+        HabitListAdapter.Listener, PassAlertDialog.Listener {
     private HabitureModule mHabitureModule;
+    private Bitmap mBitmapCaputred;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        trace("onActivityResult, requestCode = " + requestCode + ", resultCode = " + resultCode);
+
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            mBitmapCaputred = (Bitmap) data.getExtras().get("data");
+            new UploadProofTask().execute(getIntent().getIntExtra("pid", 0));
+        }
+    }
+
+    private final static int CAMERA_REQUEST = 66 ;
 
     private static final boolean DEBUG = true;
     private void trace(String message) {
@@ -114,7 +130,14 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
 
     @Override
     public void onExit() {
+        trace("onExit");
         finish();
+    }
+
+    @Override
+    public void onPass() {
+        trace("onPass");
+        //TODO
     }
 
     @Override
@@ -131,6 +154,21 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
         new QueryPokePageTask().execute(pid, QueryPokePageTask.POKE_IS_FOUNDER);
         //PokeActivity.startActivity(this, url, "123", "456", pid, 1, 1, 1);
     }
+
+    @Override
+    public void onClickHabitCamera(int pid) {
+        trace("onClickHabitCamera");
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+    }
+
+    @Override
+    public void onClickHabitPass(int pid, int passRemain) {
+        trace("onClickHabitPass");
+        DialogFragment newFragment = PassAlertDialog.newInstance(passRemain);
+        newFragment.show(getFragmentManager(), "dialog");
+    }
+
 
     private class QueryPokePageTask extends AsyncTask<Integer, Void, PokeData> {
         private ProgressDialog progress;
@@ -179,9 +217,6 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
 
             try {
                 progress.dismiss();
-//                String test_url = "http://140.124.144.121/Habiture/profile/1896858_878006565605886_1570385858202168833_n.jpg";
-//                PokeActivity.startActivity(HomeActivity.this, isFounder, test_url, "123", "123", 154, 1, 1, 1, 1, 1);
-
                 if (pokeData != null) {
                     // TODO: startPokeActivity
                     url = pokeData.getFounderList().get(0).getUrl();
@@ -198,9 +233,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
                         Toast.makeText(HomeActivity.this, "載入失敗", Toast.LENGTH_SHORT).show();
                         return ;
                     }
-//                    String test_url = "http://140.124.144.121/Habiture/profile/1896858_878006565605886_1570385858202168833_n.jpg";
-//                    PokeActivity.startActivity(HomeActivity.this, isFounder, test_url, "123", "123", 154, 1, 1, 1, 1);
-                    PokeActivity.startActivity(HomeActivity.this, isFounder, url, swear, punishment, pid,
+                  PokeActivity.startActivity(HomeActivity.this, isFounder, url, swear, punishment, pid,
                             to_id, frequency, doItTime, goal, remain);
                 } else {
                     Toast.makeText(HomeActivity.this, "載入失敗", Toast.LENGTH_SHORT).show();
@@ -247,7 +280,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
                 getFragmentManager().beginTransaction()
                         .replace(R.id.middleContainer, GroupFragment.newInstance(groups))
                         .addToBackStack(null)
-                        .commit();
+                        .commitAllowingStateLoss();
 
             } catch(Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
@@ -293,7 +326,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
                 getFragmentManager().beginTransaction()
                         .replace(R.id.middleContainer, FriendFragment.newInstance(friends))
                         .addToBackStack(null)
-                        .commit();
+                        .commitAllowingStateLoss();
 
             } catch (Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
@@ -338,7 +371,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
 
                 getFragmentManager().beginTransaction()
                         .replace(R.id.middleContainer, HabitListFragment.newInstance(habitures))
-                        .commit();
+                        .commitAllowingStateLoss();
 
             } catch (Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
@@ -391,6 +424,46 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
                 //ExceptionAlertDialog.showException(getFragmentManager(), e);
             }
 
+        }
+    }
+
+    private class UploadProofTask extends AsyncTask<Integer, Void, Boolean> {
+        private ProgressDialog progress;
+        @Override
+        protected void onPreExecute() {
+            trace("UploadProofTask onPreExecute");
+            try {
+                progress = ProgressDialog.show(HomeActivity.this,
+                        "習慣成真",
+                        "上傳中...");
+            } catch(Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+
+        }
+
+        @Override
+        protected Boolean doInBackground(Integer... params) {
+            trace("UploadProofTask doInBackground");
+            boolean is_upload = false;
+            try {
+                int pid = params[0];
+
+                is_upload = mHabitureModule.uploadProofImage(pid, mBitmapCaputred);
+            } catch (Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+            return is_upload;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            trace("UploadProofTask onPostExecute");
+            progress.dismiss();
+            Toast.makeText(
+                    HomeActivity.this,
+                    success ? "上傳成功" : "上傳失敗",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 }

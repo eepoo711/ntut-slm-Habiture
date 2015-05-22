@@ -1,3 +1,34 @@
+2015/05/21 Gawin (0.38.20150521)
+1. finish pass but not implement button disable
+
+2015/05/21 Brian (0.37.20150521)
+1. fix crashed - group page cause by Download image.
+2. fix crashed - replace fragment at background
+3. implement unregister toolReceiver
+
+2015/05/21 Brian (0.36.20150521)
+1. finish FriendTest
+2. fix project
+
+2015/05/21 dewei (0.35.20150521)
+1. UI Adjustment
+
+2015/05/20 Gawin (0.34.20150520)
+1. fix camera image
+2. fix onItemClick
+3. fix load image progress in poke activity
+
+2015/05/20 Gawin (0.33.20150520)
+1. fix screen rotate
+
+2015/05/20 Gawin (0.32.20150520)
+1. finish outer camera
+2. fix habit page error
+
+2015/05/19 Brian & Ed & Mars (0.31.20150519)
+1. refactor HabitureModel and NetworkChannel
+2. fix wrong UID cause query nothing
+
 2015/05/18 Gawin (0.30.20150519)
 1. modify poke activity to get current information (model not implemented)
 2. modify poke activity camera invisible in some situation

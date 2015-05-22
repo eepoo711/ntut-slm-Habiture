@@ -43,17 +43,16 @@
         android:src="@mipmap/friend"
         android:scaleType="center"
         android:background="#00ffffff" />
-
     <ImageButton
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="  more..."
+        android:text="friend list"
         android:id="@+id/btnMore"
         android:layout_weight="1"
         android:src="@mipmap/more"
         android:scaleType="center"
-        android:background="#00ffffff" />
-
+        android:background="#00ffffff"
+        android:visibility="invisible" />
 
 
 </LinearLayout>

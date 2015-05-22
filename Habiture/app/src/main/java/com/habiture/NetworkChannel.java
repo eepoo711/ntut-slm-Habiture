@@ -34,90 +34,76 @@ public class NetworkChannel implements NetworkInterface {
     public static final String URL_QUERY_POKE_PAGE = "http://140.124.144.121/Habiture/posts_page.cgi?";
     public static final String URL_UPDATE_GCM_REGISTER_ID  ="http://140.124.144.121/Habiture/update.cgi?";
 
+    private HttpURLConnection httpURLConnection = null;
+
     private void trace(String message) {
         if(DEBUG)
             Log.d("NetworkChannel", message);
     }
 
     @Override
-    public Profile httpGetLoginResult(String account, String password, String reg_id) {
-        trace("httpGetLoginResult >> account="+account+" password="+password+" reg_id="+reg_id);
-
-
-
+    public InputStream createGetProfileConnection(String account, String password, String gcmRegisterId) {
+        trace("createGetProfileConnection");
         HttpURLConnection httpUrlConnection = null;
         try {
-            httpUrlConnection = createHttpURLConnection(URL_LOGIN.concat("account=" + account + "&password=" + password + "&reg_id=" + reg_id));
-
-            InputStream in = httpUrlConnection.getInputStream();
-
-            Profile profile = new Profile();
-            JsonReader reader = new JsonReader(new InputStreamReader(in));
-            reader.beginObject();
-            while(reader.hasNext()) {
-                String key = reader.nextName();
-                if("url".equals(key)) {
-                    profile.setPhotoUrl(reader.nextString());
-                } else if("id".equals(key)) {
-                    profile.setId(reader.nextInt());
-                } else {
-                    reader.skipValue();
-                }
-            }
-            reader.endObject();
-
-            trace("login info="+ profile.getPhotoUrl());
-
-            return profile;
-
+            httpUrlConnection = createHttpURLConnection(URL_LOGIN.concat("account=" + account + "&password=" + password + "&reg_id=" + gcmRegisterId));
+            return httpUrlConnection.getInputStream();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            closeConnection(httpUrlConnection);
         }
         return null;
     }
 
     @Override
-    public byte[] httpGetPhoto(Profile profile) {
-
-        byte[] img = null;
-        if(profile.getPhotoUrl() != null && profile.getPhotoUrl() != "") {
-            img = getPhoto(profile.getPhotoUrl());
-        }
-
-
-        return img;
-    }
-
-    private byte[] getPhoto(String url) {
-        HttpURLConnection httpURLConnection = null;
+    public PhotoInputStream createGetPhotoConnection(String url) {
+        trace("createGetPhotoConnection url=" + url);
         try {
             URL imgUrl = new URL(url);
             httpURLConnection = (HttpURLConnection) imgUrl.openConnection();
             httpURLConnection.connect();
-            InputStream inputStream = httpURLConnection.getInputStream();
-            int length = (int) httpURLConnection.getContentLength();
-            int tmpLength = 512;
-            int readLen = 0,desPos = 0;
-            byte[] img = new byte[length];
-            byte[] tmp = new byte[tmpLength];
-            if (length != -1) {
-                while ((readLen = inputStream.read(tmp)) > 0) {
-                    System.arraycopy(tmp, 0, img, desPos, readLen);
-                    desPos += readLen;
-                }
-                if(desPos != length){
-                    throw new UnhandledException("Only read" + desPos +"bytes");
-                }
-                return img;
-            }
+
+            InputStream in = httpURLConnection.getInputStream();
+            int length = httpURLConnection.getContentLength();
             trace("get image,length=" + length);
+
+
+            return new PhotoInputStream(in, length);
         }
         catch (IOException e) {
-            Log.e("IOException", e.toString());
-        } finally {
-            httpURLConnection.disconnect();
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void closeConnection() {
+        closeConnection(httpURLConnection);
+        httpURLConnection = null;
+    }
+
+    @Override
+    public InputStream createGetFriendsConnection(int uid) {
+        trace("createGetFriendsConnection");
+        httpURLConnection = null;
+        try {
+            httpURLConnection = createHttpURLConnection(URL_QUERY_FRIENDS.concat("uid=" + uid ));
+            trace("createGetFriendsConnection");
+            return httpURLConnection.getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public InputStream createGetGroupsConnection(int uid) {
+        trace("createGetGroupsConnection");
+        httpURLConnection = null;
+        try {
+            httpURLConnection = createHttpURLConnection(URL_QUERY_GROUPS.concat("uid=" + uid ));
+            return httpURLConnection.getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -178,51 +164,30 @@ public class NetworkChannel implements NetworkInterface {
 
         return new String(dataByte, 0, readLen);
     }
-
-    @Override
-    public List<Friend> httpGetFriends(int uid) {
-        trace("httpGetFriends");
-
-        String parameters =
-                "uid=".concat(String.valueOf(uid));
-        String url = URL_QUERY_FRIENDS.concat(parameters);
-
-        HttpURLConnection connection = null;
-
-
-        try {
-            connection = createHttpURLConnection(url);
-            return readFriends(connection.getInputStream());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            closeConnection(connection);
-        }
-
-        return null;
-    }
-
-    @Override
-    public List<Group> httpGetGroups(int uid) {
-        String url = URL_QUERY_GROUPS.concat(
-                "uid=".concat(String.valueOf(uid)));
-
-        HttpURLConnection connection = null;
-
-
-        try {
-            connection = createHttpURLConnection(url);
-            return readGroups(connection.getInputStream());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            closeConnection(connection);
-        }
-
-        return null;
-    }
+// TODO delete this method
+//    @Override
+//    public List<Friend> httpGetFriends(int uid) {
+//        trace("httpGetFriends");
+//
+//        String parameters =
+//                "uid=".concat(String.valueOf(uid));
+//        String url = URL_QUERY_FRIENDS.concat(parameters);
+//
+//        HttpURLConnection connection = null;
+//
+//
+//        try {
+//            connection = createHttpURLConnection(url);
+//            return readFriends(connection.getInputStream());
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            closeConnection(connection);
+//        }
+//
+//        return null;
+//    }
 
     public List<Habiture> httpGetHabitures(int uid){
         trace("httpGetHabitures");
@@ -270,7 +235,6 @@ public class NetworkChannel implements NetworkInterface {
     }
 
     private void closeConnection(HttpURLConnection connection) {
-        trace("closeConnection");
         if(connection != null)
             connection.disconnect();
     }
@@ -432,15 +396,22 @@ public class NetworkChannel implements NetworkInterface {
         trace("readHabiture");
 
         int id = -1;
-        long remain = -1;
+        int remain_frequency = -1;
+        int remain_pass = -1;
+        int notice_enable = -1;
+
         String swear = null;
         String punishment = null;
 
         reader.beginObject();
         while(reader.hasNext()) {
             String key = reader.nextName();
-            if("remain".equals(key)) {
-                remain = reader.nextLong();
+            if("remain_frequency".equals(key)) {
+                remain_frequency = reader.nextInt();
+            } else if("remain_pass".equals(key)) {
+                remain_pass = reader.nextInt();
+            } else if("notice_enable".equals(key)) {
+                notice_enable = reader.nextInt();
             } else if("swear".equals(key)) {
                 swear = reader.nextString();
             } else if("id".equals(key)) {
@@ -453,15 +424,21 @@ public class NetworkChannel implements NetworkInterface {
         }
         reader.endObject();
 
-        if(id == -1 || punishment == null ||remain == -1 || swear == null ) {
+        if(id == -1 || punishment == null || swear == null || notice_enable == -1 ||
+                remain_frequency == -1 || remain_pass == -1) {
             throw new UnhandledException("wrong json format.");
         }
 
         Habiture habiture = new Habiture();
-        habiture.setgetPunishment(punishment);
+        habiture.setPunishment(punishment);
         habiture.setSwear(swear);
-        habiture.setRemain(remain);
+        habiture.setRemainFrequency(remain_frequency);
+        habiture.setRemainPass(remain_pass);
         habiture.setId(id);
+        if (notice_enable == 1)
+            habiture.setNoticeEnable(true);
+        else
+            habiture.setNoticeEnable(false);
 
         return habiture;
     }
@@ -571,156 +548,6 @@ public class NetworkChannel implements NetworkInterface {
         return null;
     }
 
-    private List<Group> readGroups(InputStream is) {
-        trace("readGroups");
-        JsonReader reader = null;
-        try {
-            reader = new JsonReader(new InputStreamReader(is));
-            reader.beginObject();
-
-            if(!"groups".equals(reader.nextName()))
-                throw new UnhandledException("wrong json format");
-            List<Group> groups = readGroupArray(reader);
-
-            reader.endObject();
-            return groups;
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new UnhandledException("readGroups unhandled", e);
-        } finally {
-            Utils.closeIO(reader);
-        }
-    }
-
-    private List<Group> readGroupArray(JsonReader reader) throws IOException {
-        trace("readGroupArray");
-        reader.beginArray();
-        List<Group> groups = new ArrayList<>();
-        while (reader.hasNext()) {
-            groups.add(readGroup(reader));
-        }
-        reader.endArray();
-        return groups;
-    }
-
-    private Group readGroup(JsonReader reader) throws IOException {
-        trace("readGroup");
-        int goal =-1;
-        String url =null;
-        String swear =null;
-        int frequency =-1;
-        int do_it_time =-1;
-        int id =-1;
-        int icon =-1;
-
-        reader.beginObject();
-        while(reader.hasNext()) {
-            String key = reader.nextName();
-            if("swear".equals(key)) {
-                swear = reader.nextString();
-            } else if("goal".equals(key)) {
-                goal = reader.nextInt();
-            } else if("url".equals(key)) {
-                url = reader.nextString();
-            } else if("frequency".equals(key)) {
-                frequency = reader.nextInt();
-            } else if("do_it_time".equals(key)) {
-                do_it_time = reader.nextInt();
-            } else if("id".equals(key)) {
-                id = reader.nextInt();
-            } else if("icon".equals(key)) {
-                icon = reader.nextInt();
-            } else {
-                reader.skipValue();
-            }
-        }
-        reader.endObject();
-
-        if(id == -1 || swear == null) {
-            throw new UnhandledException("wrong json format.");
-        }
-
-        Group group = new Group();
-        group.setSwear(swear);
-        group.setId(id);
-        group.setGoal(goal);
-        group.setUrl(url);
-        group.setFrequency(frequency);
-        group.setDoItTime(do_it_time);
-        group.setIcon(icon);
-        group.setImage(httpGetBitmapUrl(url));
-
-        return group;
-    }
-
-    private List<Friend> readFriends(InputStream is) {
-        trace("readFriends");
-
-        JsonReader reader = null;
-        try {
-            reader = new JsonReader(new InputStreamReader(is));
-            reader.beginObject();
-
-            if(!"friends".equals(reader.nextName()))
-                throw new UnhandledException("wrong json format");
-            List<Friend> friends = readFriendArray(reader);
-
-            reader.endObject();
-            return friends;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            Utils.closeIO(reader);
-        }
-
-        return null;
-    }
-
-    private List<Friend> readFriendArray(JsonReader reader) throws IOException {
-        trace("readFriendArray");
-        reader.beginArray();
-        List<Friend> friends = new ArrayList<>();
-        while (reader.hasNext()) {
-            friends.add(readFriend(reader));
-        }
-        reader.endArray();
-        return friends;
-    }
-
-    private Friend readFriend(JsonReader reader) throws IOException {
-        trace("readFriend");
-
-        long id = -1;
-        String name = null;
-        String url =null;
-
-        reader.beginObject();
-        while(reader.hasNext()) {
-            String key = reader.nextName();
-            if("name".equals(key)) {
-                name = reader.nextString();
-            } else if("id".equals(key)) {
-                id = reader.nextLong();
-            } else if("url".equals(key)) {
-                url = reader.nextString();
-            } else {
-                reader.skipValue();
-            }
-        }
-        reader.endObject();
-
-        if(id == -1 || url == null || url.length() == 0) {
-            throw new UnhandledException("wrong json format.");
-        }
-
-        Friend friend = new Friend();
-        friend.setName(name);
-        friend.setId(id);
-        friend.setUrl(url);
-        friend.setImage(httpGetBitmapUrl(url));
-
-        return friend;
-    }
     private HttpURLConnection createHttpURLConnection(String url) throws IOException{
         trace("createHttpURLConnection");
         return (HttpURLConnection) new URL(url).openConnection();
