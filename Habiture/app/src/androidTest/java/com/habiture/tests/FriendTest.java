@@ -9,11 +9,14 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
 
+import utils.Utils;
+
 /**
  * Created by Yeh on 2015/5/21.
  */
 public class FriendTest extends AndroidTestCase {
-    public void testJsonToFriends() {
+
+    public void testJsonToFriends() throws Exception {
         String packet = "{\n" +
                 "  \"friends\": [\n" +
                 "    {\n" +
@@ -48,45 +51,62 @@ public class FriendTest extends AndroidTestCase {
                 "    }\n" +
                 "  ]\n" +
                 "}";
-        InputStream in = new ByteArrayInputStream(packet.getBytes());
 
 
-        try {
-            List<Friend> friends = Friend.readFriends(in);
-            Friend friend = friends.get(0);
+        List<Friend> friends = newFriends(packet);
+        Friend friend = friends.get(0);
 
-            assertEquals("http://140.124.144.121/Habiture/profile/11145559_786919498044885_2254052047058669334_n.jpg", friend.getUrl());
-            assertEquals(5, friend.getId());
-            assertEquals("DeWei", friend.getName());
+        assertEquals("http://140.124.144.121/Habiture/profile/11145559_786919498044885_2254052047058669334_n.jpg", friend.getUrl());
+        assertEquals(5, friend.getId());
+        assertEquals("DeWei", friend.getName());
 
-            friend = friends.get(1);
-            assertEquals("http://140.124.144.121/Habiture/profile/11082535_843422602390024_8037527638892459652_n.jpg", friend.getUrl());
-            assertEquals(6, friend.getId());
-            assertEquals("Codus", friend.getName());
+        friend = friends.get(1);
+        assertEquals("http://140.124.144.121/Habiture/profile/11082535_843422602390024_8037527638892459652_n.jpg", friend.getUrl());
+        assertEquals(6, friend.getId());
+        assertEquals("Codus", friend.getName());
 
-            friend = friends.get(2);
-            assertEquals("http://140.124.144.121/Habiture/profile/10404224_975453265799538_6586362784399805967_n.jpg", friend.getUrl());
-            assertEquals(7, friend.getId());
-            assertEquals("Brian", friend.getName());
+        friend = friends.get(2);
+        assertEquals("http://140.124.144.121/Habiture/profile/10404224_975453265799538_6586362784399805967_n.jpg", friend.getUrl());
+        assertEquals(7, friend.getId());
+        assertEquals("Brian", friend.getName());
 
-            friend = friends.get(3);
-            assertEquals("http://140.124.144.121/Habiture/profile/1896858_878006565605886_1570385858202168833_n.jpg", friend.getUrl());
-            assertEquals(8, friend.getId());
-            assertEquals("Gawin", friend.getName());
+        friend = friends.get(3);
+        assertEquals("http://140.124.144.121/Habiture/profile/1896858_878006565605886_1570385858202168833_n.jpg", friend.getUrl());
+        assertEquals(8, friend.getId());
+        assertEquals("Gawin", friend.getName());
 
-            friend = friends.get(4);
-            assertEquals("http://140.124.144.121/Habiture/profile/1451619_704091289610074_49147637_n.jpg", friend.getUrl());
-            assertEquals(9, friend.getId());
-            assertEquals("Ed", friend.getName());
+        friend = friends.get(4);
+        assertEquals("http://140.124.144.121/Habiture/profile/1451619_704091289610074_49147637_n.jpg", friend.getUrl());
+        assertEquals(9, friend.getId());
+        assertEquals("Ed", friend.getName());
 
-            friend = friends.get(5);
-            assertEquals("http://140.124.144.121/Habiture/profile/10176068_726992954019352_539454252837054186_n.jpg", friend.getUrl());
-            assertEquals(10, friend.getId());
-            assertEquals("Mars", friend.getName());
-        } catch (HabitureException e) {
-            e.printStackTrace();
-        }
-
+        friend = friends.get(5);
+        assertEquals("http://140.124.144.121/Habiture/profile/10176068_726992954019352_539454252837054186_n.jpg", friend.getUrl());
+        assertEquals(10, friend.getId());
+        assertEquals("Mars", friend.getName());
 
     }
+
+
+    public void testWrongJsonFormat() {
+        String packet = "1234567890";
+        try {
+            List<Friend> friends = newFriends(packet);
+            fail();
+        } catch (HabitureException e) {
+            // must be here
+        }
+    }
+
+    private List<Friend> newFriends(String packet) throws HabitureException {
+        InputStream in = null;
+        try {
+            in = new ByteArrayInputStream(packet.getBytes());
+        } finally {
+            Utils.closeIO(in);
+        }
+        return Friend.readFriends(in);
+    }
+
+
 }
