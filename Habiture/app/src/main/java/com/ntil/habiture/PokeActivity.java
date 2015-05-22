@@ -192,10 +192,14 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         protected void onPostExecute(List<GroupHistory> groupHistories) {
             trace("GroupHistoryTask onPostExecute");
             progress.dismiss();
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.pokeContainer, HistoryFragment.newInstance(groupHistories))
-                    .addToBackStack(null)
-                    .commit();
+            if (groupHistories != null) {
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.pokeContainer, HistoryFragment.newInstance(groupHistories))
+                        .addToBackStack(null)
+                        .commit();
+            } else {
+                Toast.makeText(PokeActivity.this, "載入資料失敗", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
