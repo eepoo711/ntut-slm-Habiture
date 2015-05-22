@@ -17,6 +17,7 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,6 +32,7 @@ import com.ntil.habiture.InviteFriendFragment;
 import com.ntil.habiture.MainApplication;
 import com.ntil.habiture.R;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import utils.exception.ExceptionAlertDialog;
@@ -86,8 +88,8 @@ public class GcmIntentService extends IntentService {
                 }*/
                 Log.i(TAG, "Completed work @ " + SystemClock.elapsedRealtime());
                 // Post notification of received message.
-                sendNotification(extras);
                 Log.i(TAG, "Received: " + extras.toString());
+                sendNotification(extras);
 
                 PlaySound(Integer.parseInt(extras.getString("tool")));
 
@@ -109,16 +111,29 @@ public class GcmIntentService extends IntentService {
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, HomeActivity.class), 0);
 
+
+
+        String base64_in_string =extras.getString("swear");
+        byte[] base64_byte =Base64.decode(base64_in_string,Base64.DEFAULT);
+        String swear = new String (base64_byte);
+
+        String base64_in_string_name =extras.getString("user");
+        byte[] base64_byte_name =Base64.decode(base64_in_string_name,Base64.DEFAULT);
+        String name = new String (base64_byte_name);
+
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_stat_name)
-                        .setContentTitle("habiture")
+                        .setContentTitle(swear)
                         .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(extras.getString("user")))
-                        .setContentText(extras.getString("swear"));
+                                /*.bigText(extras.getString("user"))*/)
+                        .setContentText(name);
+        //    String BitmapString = Base64.encodeToString(bytes,Base64.DEFAULT);
+
+
 
         mBuilder.setContentIntent(contentIntent);
-        mNotificationManager.notify(getNotificationIdInPreference(), mBuilder.build());
+        mNotificationManager.notify(extras.getInt("uid"), mBuilder.build());
     }
 
     private int getNotificationIdInPreference() {
