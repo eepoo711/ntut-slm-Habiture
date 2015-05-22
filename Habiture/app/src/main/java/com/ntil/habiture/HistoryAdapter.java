@@ -28,21 +28,6 @@ public class HistoryAdapter extends BaseAdapter{
         inflater = LayoutInflater.from(context);
         this.groupHistories = new ArrayList<GroupHistory>(groupHistories);
         // 取得外部儲存裝置路徑
-
-        try {
-            String path = Environment.getExternalStorageDirectory().toString ();
-            // 開啟檔案
-            File file = new File( path, "Image.png");
-            // 開啟檔案串流
-            FileOutputStream out = new FileOutputStream(file );
-            // 將 Bitmap壓縮成指定格式的圖片並寫入檔案串流
-            this.groupHistories.get(0).getImage().compress ( Bitmap. CompressFormat.JPEG , 90 , out);
-            // 刷新並關閉檔案串流
-            out.flush ();
-            out.close ();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

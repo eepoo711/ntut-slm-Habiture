@@ -1,5 +1,6 @@
 package com.ntil.habiture;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -20,7 +21,7 @@ import utils.exception.ExceptionAlertDialog;
 import utils.exception.UnhandledException;
 
 
-public class DeclareActivity extends ActionBarActivity implements DeclareFragment.Listener, InviteFriendFragment.Listener {
+public class DeclareActivity extends Activity implements DeclareFragment.Listener, InviteFriendFragment.Listener {
 
     private static final boolean DEBUG = true;
 

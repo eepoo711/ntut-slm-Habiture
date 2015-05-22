@@ -135,7 +135,7 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
     @Override
     public void onClickRecords() {
         trace("onClickRecords");
-        new GroupHistoryTask().execute(154);
+        new GroupHistoryTask().execute(getIntent().getIntExtra("pid", 0));
     }
 
     @Override

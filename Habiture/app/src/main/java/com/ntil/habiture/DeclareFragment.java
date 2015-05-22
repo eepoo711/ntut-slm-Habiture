@@ -1,6 +1,7 @@
 package com.ntil.habiture;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -19,7 +20,7 @@ import utils.exception.UnhandledException;
 
 public class DeclareFragment extends Fragment {
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     private Listener mListener;
 
@@ -81,7 +82,7 @@ public class DeclareFragment extends Fragment {
         spFrequency.setAdapter(frequencyList);
 
         // initial spinner items of do it time
-        String[] do_it_time = getActivity().getResources().getStringArray(R.array.declare_do_it_time);
+        final String[] do_it_time = getActivity().getResources().getStringArray(R.array.declare_do_it_time);
         ArrayAdapter do_it_time_list = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, do_it_time);
         spDoItTime.setAdapter(do_it_time_list);
 
@@ -90,12 +91,27 @@ public class DeclareFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 trace("onClick btnDeclare");
-                mListener.onDeclareClicked(
-                        etDeclaration.getText().toString(),
-                        etCost.getText().toString(),
-                        spFrequency.getSelectedItem().toString(),
-                        spDoItTime.getSelectedItem().toString(),
-                        etGoal.getText().toString());
+
+
+                String declare = etDeclaration.getText().toString();
+                String cost = etCost.getText().toString();
+                String frequency = spFrequency.getSelectedItem().toString();
+                String doItTime = spDoItTime.getSelectedItem().toString();
+                String goal = etGoal.getText().toString();
+
+                trace("declare = " + declare.length());
+                trace("cost = " + cost.length());
+                trace("frequency = " + frequency);
+                trace("doItTime = " + doItTime);
+                trace("goal = " + goal);
+
+                if (declare.length() == 0 || cost.length() == 0) {
+                    DialogFragment fragment = new ArgumentAlertDialog();
+                    fragment.show(getFragmentManager(), "dialog");
+                    return ;
+                }
+
+                mListener.onDeclareClicked(declare, cost, frequency, doItTime, goal);
             }
         });
 

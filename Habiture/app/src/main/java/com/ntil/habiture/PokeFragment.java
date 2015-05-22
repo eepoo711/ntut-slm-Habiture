@@ -13,10 +13,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by GawinHsu on 5/7/15.
@@ -26,9 +27,12 @@ public class PokeFragment extends Fragment {
     public Listener listener;
     private static final boolean DEBUG = true;
     private ImageView ivPoke;
-    private TextView tvSwearAndRemain;
+    private TextView tvSwear;
     private TextView tvPunishment;
     private TextView tvTime;
+    private TextView tvRemain;
+    private TextView tvGoal;
+    private TextView tvFrequency;
     private ImageButton btnCamera;
     private Bitmap bmpDrawing;
     private Bitmap bmpTool;
@@ -110,15 +114,22 @@ public class PokeFragment extends Fragment {
         });
 
         ivPoke = (ImageView) getActivity().findViewById(R.id.ivPoke);
-        tvSwearAndRemain = (TextView) getActivity().findViewById(R.id.tvSwearAndRemain);
+        tvSwear = (TextView) getActivity().findViewById(R.id.tvSwear);
         tvPunishment = (TextView) getActivity().findViewById(R.id.tvPunishment);
         tvTime = (TextView) getActivity().findViewById(R.id.tvTime);
+        tvRemain = (TextView) getActivity().findViewById(R.id.tvRemain);
+        tvGoal = (TextView) getActivity().findViewById(R.id.tvGoal);
+        tvFrequency = (TextView) getActivity().findViewById(R.id.tvFrequency);
+        String ampm = getArguments().getInt("doItTime") > 12 ? "PM" : "AM";
+        int ampmDoItTime = getArguments().getInt("doItTime") > 12 ? getArguments().getInt("doItTime") - 12
+                :getArguments().getInt("doItTime");
 
-        tvSwearAndRemain.setText(getArguments().getString("swear") + " / 剩餘 " +
-                getArguments().getInt("remain") + " 週");
+        tvSwear.setText(getArguments().getString("swear"));
+        tvRemain.setText("剩下 " + getArguments().getInt("remain") + " 週");
         tvPunishment.setText(getArguments().getString("punishment"));
-        tvTime.setText("每週 " + getArguments().getInt("doItTime") + " 次 / 持續 " +
-                getArguments().getInt("frequency") + " 週");
+        tvTime.setText(ampm + " " + ampmDoItTime + ":00");
+        tvFrequency.setText(" / 每週 " + getArguments().getInt("frequency") + " 次");
+        tvGoal.setText(" / 持續 " + getArguments().getInt("goal") + " 週");
 
         if (!getArguments().getBoolean("isFounder")) {
             btnCamera.setVisibility(View.INVISIBLE);
