@@ -3,6 +3,7 @@ package com.habiture;
 
 import android.graphics.Bitmap;
 import android.util.JsonReader;
+import android.util.Log;
 
 import com.habiture.exceptions.HabitureException;
 
@@ -14,6 +15,7 @@ import utils.Utils;
 
 public class Profile {
 
+    private static final boolean DEBUG = true;
     private String photoUrl = null;
     private int id = -1;
 
@@ -40,6 +42,8 @@ public class Profile {
             }
             reader.endObject();
 
+            trace("id = " + id + " url = " + photoUri);
+
             if(id <= 0 || photoUri == null || photoUri.length() <= 0)
                 throw new HabitureException("wrong account or password.");
 
@@ -54,16 +58,13 @@ public class Profile {
         }
     }
 
+    private void trace(String message) {
+        if(DEBUG)
+            Log.d("Profile", message);
+    }
+
     public String getPhotoUrl() {
         return photoUrl;
-    }
-
-    void setPhotoUrl(String url) {
-        this.photoUrl = url;
-    }
-
-    void setId(int id) {
-        this.id = id;
     }
 
     public int getId() {
