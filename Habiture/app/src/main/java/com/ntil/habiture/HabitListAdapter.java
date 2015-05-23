@@ -85,34 +85,38 @@ public class HabitListAdapter extends BaseAdapter {
         else {
             holder = (ViewHolder)convertView.getTag();
         }
-        Item item = (Item) getItem(position);
+
+        final Item item = (Item) getItem(position);
+
         holder.tvSwear.setText(item.habiture.getSwear());
         holder.tvPunishment.setText("做不到的話就 " + item.habiture.getPunishment());
         holder.tvRemain.setText("本週剩餘 " + item.habiture.getRemainFrequency() + " 次數");
 
+        final Habiture habiture = item.getHabiture();
         holder.btnMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                trace("onClick, pid = " + ((Item) getItem(position)).getHabiture().getId());
-                int pid = ((Item) getItem(position)).getHabiture().getId();
+                trace("onClick, pid = " + habiture.getId());
+                int pid = habiture.getId();
                 listener.onClickHabitSingleItem(pid);
             }
         });
         holder.ibCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                trace("onClick, pid = " + ((Item) getItem(position)).getHabiture().getId());
-                listener.onClickHabitCamera(((Item) getItem(position)).getHabiture().getId());
+                trace("onClick, pid = " + habiture.getId());
+                listener.onClickHabitCamera(habiture.getId());
             }
         });
 
         holder.btnPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                trace("onClick, pid = " + ((Item) getItem(position)).getHabiture().getId() + ", remain pass = " +
-                        ((Item) getItem(position)).getHabiture().getRemainPass());
-                listener.onClickHabitPass(((Item) getItem(position)).getHabiture().getId(),
-                        ((Item) getItem(position)).getHabiture().getRemainPass());
+                trace("onClick, pid = " + habiture.getId() + ", remain pass = " +
+                        habiture.getRemainPass());
+                listener.onClickHabitPass(
+                        habiture.getId(),
+                        habiture.getRemainPass());
             }
         });
 
