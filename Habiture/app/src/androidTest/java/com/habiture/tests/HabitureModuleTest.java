@@ -5,12 +5,14 @@ import android.test.AndroidTestCase;
 
 import com.habiture.Friend;
 import com.habiture.Group;
+import com.habiture.Habiture;
 import com.habiture.HabitureModule;
 import com.habiture.MockGcmModel;
 import com.habiture.NetworkInterface;
 import com.habiture.StubGcmModelLogin;
 import com.habiture.StubLoginFailed;
 import com.habiture.StubLoginSuccessfully;
+import com.habiture.StubPassSuccessfully;
 import com.habiture.StubQueryFriends;
 import com.habiture.StubQueryGroups;
 
@@ -71,6 +73,15 @@ public class HabitureModuleTest extends AndroidTestCase {
         assertEquals(189, group.getId());
         assertEquals(0, group.getIcon());
     }
+
+    public void testPassSuccessfully() throws Exception {
+        Habiture habit = new Habiture();
+        habit.setId(123);
+
+        stubLogin(new StubPassSuccessfully());
+        assertTrue(hm.passHabitToday(habit));
+    }
+
 //
 //    public void testPostSwearSuccessfully() {
 //        stubLogin(new StubPostSwearSuccessfully());

@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class StubQueryFriends extends StubLoginSuccessfully /* implements NetworkInterface */ {
     @Override
-    public InputStream createGetFriendsConnection(int uid) {
+    public InputStream openGetFriendsConnection(int uid) {
         String packet = "{\n" +
                 "  \"friends\": [\n" +
                 "    {\n" +

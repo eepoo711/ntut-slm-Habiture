@@ -11,12 +11,12 @@ import java.util.List;
 public class MockNetworkChannel implements NetworkInterface {
 
     @Override
-    public InputStream createGetProfileConnection(String account, String password, String gcmRegisterId) {
+    public InputStream openGetProfileConnection(String account, String password, String gcmRegisterId) {
         throw new RuntimeException("wrong call");
     }
 
     @Override
-    public PhotoInputStream createGetPhotoConnection(String url) {
+    public PhotoInputStream openGetPhotoConnection(String url) {
         throw new RuntimeException("wrong call");
     }
 
@@ -26,12 +26,17 @@ public class MockNetworkChannel implements NetworkInterface {
     }
 
     @Override
-    public InputStream createGetFriendsConnection(int uid) {
+    public InputStream openGetFriendsConnection(int uid) {
         throw new RuntimeException("wrong call");
     }
 
     @Override
-    public InputStream createGetGroupsConnection(int uid) {
+    public InputStream openGetGroupsConnection(int uid) {
+        throw new RuntimeException("wrong call");
+    }
+
+    @Override
+    public boolean postPass(String json) {
         throw new RuntimeException("wrong call");
     }
 

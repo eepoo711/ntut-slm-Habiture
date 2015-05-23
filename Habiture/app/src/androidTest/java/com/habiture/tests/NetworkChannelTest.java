@@ -3,12 +3,9 @@ package com.habiture.tests;
 
 import android.test.AndroidTestCase;
 
-import com.habiture.Friend;
-import com.habiture.Group;
-import com.habiture.Profile;
 import com.habiture.NetworkChannel;
 
-import java.util.List;
+import java.io.InputStream;
 
 public class NetworkChannelTest extends AndroidTestCase {
 //
@@ -62,5 +59,18 @@ public class NetworkChannelTest extends AndroidTestCase {
 //        List<Group> groups = networkChannel.httpGetGroups(profile.getId());
 //        assertNotNull(groups);
 //    }
+
+    public void testPass() {
+
+        // login
+        NetworkChannel networkChannel = new NetworkChannel();
+        InputStream in = networkChannel.openGetProfileConnection("Brian", "Brian", "123");
+        assertNotNull(in);
+        networkChannel.closeConnection();
+
+        // pass
+        boolean success = networkChannel.postPass("{\"uid\":7,\"pid\":190 }");
+        assertTrue(success);
+    }
 
 }

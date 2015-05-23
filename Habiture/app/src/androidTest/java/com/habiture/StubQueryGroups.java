@@ -11,7 +11,7 @@ import java.util.List;
 public class StubQueryGroups extends StubLoginSuccessfully {
 
     @Override
-    public InputStream createGetGroupsConnection(int uid) {
+    public InputStream openGetGroupsConnection(int uid) {
         String packet = "{\n" +
                 "  \"groups\": [\n" +
                 "    {\n" +

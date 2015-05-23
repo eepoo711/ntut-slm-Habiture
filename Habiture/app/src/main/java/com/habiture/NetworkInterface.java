@@ -8,15 +8,17 @@ import java.util.List;
 public interface NetworkInterface {
 
 
-    InputStream createGetProfileConnection(String account, String password, String gcmRegisterId);
+    InputStream openGetProfileConnection(String account, String password, String gcmRegisterId);
 
-    PhotoInputStream createGetPhotoConnection(String url);
+    PhotoInputStream openGetPhotoConnection(String url);
 
     void closeConnection();
 
-    InputStream createGetFriendsConnection(int uid);
+    InputStream openGetFriendsConnection(int uid);
 
-    InputStream createGetGroupsConnection(int uid);
+    InputStream openGetGroupsConnection(int uid);
+
+    boolean postPass(String json);
 
     public List<Habiture> httpGetHabitures(int uid);
 

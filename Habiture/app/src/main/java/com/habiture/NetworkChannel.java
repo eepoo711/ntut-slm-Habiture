@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class NetworkChannel implements NetworkInterface {
     public static final String URL_QUERY_GROUP_HISTORIES = "http://140.124.144.121/Habiture/history.cgi?";
     public static final String URL_QUERY_POKE_PAGE = "http://140.124.144.121/Habiture/posts_page.cgi?";
     public static final String URL_UPDATE_GCM_REGISTER_ID  ="http://140.124.144.121/Habiture/update.cgi?";
+    private static final String URL_PASS = "http://140.124.144.121/Habiture/tests/habiture/record/record.cgi";
 
     private HttpURLConnection httpURLConnection = null;
 
@@ -42,8 +44,8 @@ public class NetworkChannel implements NetworkInterface {
     }
 
     @Override
-    public InputStream createGetProfileConnection(String account, String password, String gcmRegisterId) {
-        trace("createGetProfileConnection");
+    public InputStream openGetProfileConnection(String account, String password, String gcmRegisterId) {
+        trace("openGetProfileConnection");
         HttpURLConnection httpUrlConnection = null;
         try {
             httpUrlConnection = createHttpURLConnection(URL_LOGIN.concat("account=" + account + "&password=" + password + "&reg_id=" + gcmRegisterId));
@@ -55,8 +57,8 @@ public class NetworkChannel implements NetworkInterface {
     }
 
     @Override
-    public PhotoInputStream createGetPhotoConnection(String url) {
-        trace("createGetPhotoConnection url=" + url);
+    public PhotoInputStream openGetPhotoConnection(String url) {
+        trace("openGetPhotoConnection url=" + url);
         try {
             URL imgUrl = new URL(url);
             httpURLConnection = (HttpURLConnection) imgUrl.openConnection();
@@ -82,12 +84,12 @@ public class NetworkChannel implements NetworkInterface {
     }
 
     @Override
-    public InputStream createGetFriendsConnection(int uid) {
-        trace("createGetFriendsConnection");
+    public InputStream openGetFriendsConnection(int uid) {
+        trace("openGetFriendsConnection");
         httpURLConnection = null;
         try {
             httpURLConnection = createHttpURLConnection(URL_QUERY_FRIENDS.concat("uid=" + uid ));
-            trace("createGetFriendsConnection");
+            trace("openGetFriendsConnection");
             return httpURLConnection.getInputStream();
         } catch (IOException e) {
             e.printStackTrace();
@@ -96,12 +98,47 @@ public class NetworkChannel implements NetworkInterface {
     }
 
     @Override
-    public InputStream createGetGroupsConnection(int uid) {
-        trace("createGetGroupsConnection");
+    public InputStream openGetGroupsConnection(int uid) {
+        trace("openGetGroupsConnection");
         httpURLConnection = null;
         try {
             httpURLConnection = createHttpURLConnection(URL_QUERY_GROUPS.concat("uid=" + uid ));
             return httpURLConnection.getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public boolean postPass(String json) {
+        trace("postPass json = " + json);
+        HttpURLConnection httpURLConnection = null;
+        try {
+
+            httpURLConnection = createPostJsonConnection(URL_PASS);
+            httpURLConnection.getOutputStream().write(json.getBytes());
+
+            return readBoolean(httpURLConnection.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection(httpURLConnection);
+        }
+        return false;
+    }
+
+    private HttpURLConnection createPostJsonConnection(String urlString) {
+
+        try {
+            URL url = new URL(urlString);
+            HttpURLConnection httpUrlConnection = (HttpURLConnection)url.openConnection();
+            httpUrlConnection.setDoOutput(true);
+            httpUrlConnection.setChunkedStreamingMode(0);
+            httpUrlConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            return httpUrlConnection;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -140,13 +177,7 @@ public class NetworkChannel implements NetworkInterface {
             writer.endObject();
             writer.close();
 
-            String result = readText(httpUrlConnection.getInputStream());
-            trace(result);
-
-            int code = Integer.valueOf(result.split("\n")[0]);
-
-            boolean isPosted = false;
-            isPosted = code == 1 ? true : false;
+            boolean isPosted = readBoolean(httpUrlConnection.getInputStream());
             return isPosted;
         } catch (IOException e) {
             e.printStackTrace();
@@ -155,6 +186,15 @@ public class NetworkChannel implements NetworkInterface {
             closeConnection(httpUrlConnection);
             Utils.closeIO(writer);
         }
+    }
+
+    private boolean readBoolean(InputStream in) throws IOException {
+        String result = readText(in);
+        trace(result);
+
+        int code = Integer.valueOf(result.split("\n")[0]);
+
+        return code == 1 ? true : false;
     }
 
     private String readText(InputStream in) throws IOException {

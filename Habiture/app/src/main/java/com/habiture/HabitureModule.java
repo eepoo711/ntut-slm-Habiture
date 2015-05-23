@@ -54,7 +54,7 @@ public class HabitureModule {
     private Photo getPhotoFromNetwork(String photoUrl) throws HabitureException {
         Photo photo = null;
         try {
-            PhotoInputStream pis = networkInterface.createGetPhotoConnection(photoUrl);
+            PhotoInputStream pis = networkInterface.openGetPhotoConnection(photoUrl);
             photo = new Photo(pis);
         } finally {
             networkInterface.closeConnection();
@@ -65,7 +65,7 @@ public class HabitureModule {
     private Profile getProfileFromNetwork(String account, String password) throws HabitureException {
         Profile profile;
         try {
-            InputStream in = networkInterface.createGetProfileConnection(account, password, gcmModel.getRegistrationId());
+            InputStream in = networkInterface.openGetProfileConnection(account, password, gcmModel.getRegistrationId());
             profile = new Profile(in);
         } finally {
             networkInterface.closeConnection();
@@ -111,7 +111,7 @@ public class HabitureModule {
     }
 
     public List<Friend> queryFriends() {
-        InputStream in = networkInterface.createGetFriendsConnection(profile.getId());
+        InputStream in = networkInterface.openGetFriendsConnection(profile.getId());
         List<Friend> friends = null;
         try {
             friends = Friend.readFriends(in);
@@ -127,7 +127,7 @@ public class HabitureModule {
     public List<Group> queryGroups() {
         List<Group> groups;
         try {
-            InputStream in = networkInterface.createGetGroupsConnection(profile.getId());
+            InputStream in = networkInterface.openGetGroupsConnection(profile.getId());
             groups = Group.readGroups(in);
             return groups;
         } catch (HabitureException e) {
@@ -149,7 +149,7 @@ public class HabitureModule {
     }
 
     public boolean sendSoundToPartner(int to_id, int pid, int sound_id ) {
-        trace("sendSoundToPartner, uid=" + profile.getId() + ", to_id=" + to_id + ", pid=" + pid + ", sound_id=" +sound_id);
+        trace("sendSoundToPartner, uid=" + profile.getId() + ", to_id=" + to_id + ", pid=" + pid + ", sound_id=" + sound_id);
         // TODO
         boolean isSoundSent = networkInterface.httpSendSound(profile.getId(),to_id, pid , sound_id);
         //boolean isSoundSent = networkInterface.httpSendSound(uid, to_id, pid , sound_id);
@@ -198,4 +198,13 @@ public class HabitureModule {
             Log.d("HabitureModule", log);
     }
 
+    public boolean passHabitToday(Habiture habit) {
+        try {
+            Pass pass = new Pass(profile.getId(), habit.getId());
+            return networkInterface.postPass(pass.getJsonString());
+        } catch (HabitureException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

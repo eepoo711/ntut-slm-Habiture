@@ -112,7 +112,7 @@ public class HabitListAdapter extends BaseAdapter {
         holder.btnPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                trace("onClick, pid = " + habiture.getId() + ", remain pass = " +
+                trace("onClick, pid = " + habiture.getId() + ", remain passHabitToday = " +
                         habiture.getRemainPass());
                 listener.onClickHabitPass(
                         habiture.getId(),

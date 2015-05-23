@@ -13,14 +13,14 @@ public class StubLoginSuccessfully extends MockNetworkChannel {
     InputStream in;
 
     @Override
-    public InputStream createGetProfileConnection(String account, String password, String gcmRegisterId) {
+    public InputStream openGetProfileConnection(String account, String password, String gcmRegisterId) {
         String packet = makeFackPacket();
         in = new ByteArrayInputStream(packet.getBytes());
         return in;
     }
 
     @Override
-    public PhotoInputStream createGetPhotoConnection(String url) {
+    public PhotoInputStream openGetPhotoConnection(String url) {
         String packet = "12345";
         in = new ByteArrayInputStream(packet.getBytes());
         PhotoInputStream photoInputStream = new PhotoInputStream(in, packet.length());
