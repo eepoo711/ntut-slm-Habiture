@@ -64,12 +64,12 @@ public class NetworkChannelTest extends AndroidTestCase {
 
         // login
         NetworkChannel networkChannel = new NetworkChannel();
-        InputStream in = networkChannel.openGetProfileConnection("Brian", "Brian", "123");
+        InputStream in = networkChannel.openGetProfileConnection("guest", "guest", "123");
         assertNotNull(in);
         networkChannel.closeConnection();
 
         // pass
-        boolean success = networkChannel.postPass("{\"uid\":7,\"pid\":190 }");
+        boolean success = networkChannel.postPass("{\"uid\":1,\"pid\":172 }");
         assertTrue(success);
     }
 
