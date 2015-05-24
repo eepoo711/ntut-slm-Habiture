@@ -1,3 +1,7 @@
+2015/05/24 Gawin (0.39.20150524)
+1. implement pass task
+2. fix pass disable
+
 2015/05/21 Gawin (0.38.20150521)
 1. finish pass but not implement button disable
 

@@ -70,6 +70,10 @@ public class HabitListFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_habiture, container, false);
     }
 
+    public void setPassDisable(int position) {
+        habitListAdapter.setPassDisable(position);
+    }
+
     public interface Listener {
         public void onClickHabitSingleItem(int pid);
     }

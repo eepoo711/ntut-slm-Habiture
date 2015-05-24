@@ -44,7 +44,7 @@ public class Habiture {
         return remainPass;
     }
 
-    void setNoticeEnable(boolean noticeEnable) {
+    public void setNoticeEnable(boolean noticeEnable) {
         this.noticeEnable = noticeEnable;
     }
     public boolean getNoticeEnable() {

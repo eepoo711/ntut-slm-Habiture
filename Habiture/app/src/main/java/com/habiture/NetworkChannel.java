@@ -469,6 +469,8 @@ public class NetworkChannel implements NetworkInterface {
             throw new UnhandledException("wrong json format.");
         }
 
+        trace("notice = " + notice_enable);
+
         Habiture habiture = new Habiture();
         habiture.setPunishment(punishment);
         habiture.setSwear(swear);

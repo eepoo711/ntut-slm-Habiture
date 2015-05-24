@@ -9,10 +9,13 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.habiture.Habiture;
+
 public class PassAlertDialog extends DialogFragment {
 
     private static final boolean DEBUG = false;
     Listener listener;
+    private static Habiture mHabiture = null;
 
 
     private static void trace(String message) {
@@ -21,16 +24,18 @@ public class PassAlertDialog extends DialogFragment {
         }
     }
 
-    public static PassAlertDialog newInstance(int passRemain) {
+    public static PassAlertDialog newInstance(Habiture habiture, int position ,int passRemain) {
         PassAlertDialog passAlertDialog = new PassAlertDialog();
         Bundle args = new Bundle();
         args.putInt("passRemain", passRemain);
+        mHabiture = habiture;
+        args.putInt("position", position);
         passAlertDialog.setArguments(args);
         return passAlertDialog;
     }
 
     public interface Listener {
-        public void onPass();
+        public void onPass(Habiture habiture, int position);
     }
 
     @Override
@@ -54,7 +59,8 @@ public class PassAlertDialog extends DialogFragment {
                 .setPositiveButton(confirm,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                listener.onPass();
+                                listener.onPass(mHabiture,
+                                        getArguments().getInt("position"));
                             }
                         }
                 )

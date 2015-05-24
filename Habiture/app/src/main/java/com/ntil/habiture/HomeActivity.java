@@ -23,12 +23,14 @@ import com.habiture.PokeData;
 import java.util.List;
 
 import utils.exception.ExceptionAlertDialog;
+import utils.exception.UnhandledException;
 
 public class HomeActivity extends Activity implements HomeBottomFragment.Listener,
         ExitAlertDialog.Listener, GroupFragment.Listener, HabitListFragment.Listener,
         HabitListAdapter.Listener, PassAlertDialog.Listener {
     private HabitureModule mHabitureModule;
     private Bitmap mBitmapCaputred;
+    private HabitListFragment habitListFragment = null;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -132,9 +134,10 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
     }
 
     @Override
-    public void onPass() {
-        trace("onPass");
-        //TODO
+    public void onPass(Habiture habiture, int position) {
+        trace("onPass " + ", position = " + position);
+        habiture.setNoticeEnable(false);
+        new PassTask(habiture, position).execute();
     }
 
     @Override
@@ -160,11 +163,56 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
     }
 
     @Override
-    public void onClickHabitPass(int pid, int passRemain) {
+    public void onClickHabitPass(Habiture habiture, int position, int passRemain) {
         trace("onClickHabitPass");
-        DialogFragment newFragment = PassAlertDialog.newInstance(passRemain);
+        DialogFragment newFragment = PassAlertDialog.newInstance(habiture, position, passRemain);
         newFragment.show(getFragmentManager(), "dialog");
     }
+
+    private class PassTask extends AsyncTask<Integer, Void, Boolean> {
+        private final int position;
+        private ProgressDialog progress;
+        private final Habiture habiture;
+
+        public PassTask(Habiture habiture, int position) {
+            this.habiture = habiture;
+            this.position = position;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            trace("PassTask onPreExecute");
+
+            try {
+                progress = ProgressDialog.show(HomeActivity.this,
+                        HomeActivity.this.getString(R.string.progress_title),
+                        "載入中...");
+            } catch(Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+        }
+
+        @Override
+        protected Boolean doInBackground(Integer... params) {
+            trace("PassTask doInBackground");
+
+            return mHabitureModule.passHabitToday(habiture);
+        }
+
+
+        @Override
+        protected void onPostExecute(Boolean isPass) {
+            trace("PassTask onPostExecute");
+            progress.dismiss();
+            if (isPass)
+                habitListFragment.setPassDisable(position);
+            else
+                throw new UnhandledException("pass failed" );
+        }
+
+
+    }
+
 
 
     private class QueryPokePageTask extends AsyncTask<Integer, Void, PokeData> {
@@ -366,8 +414,10 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
                     return;
                 }
 
+                habitListFragment = HabitListFragment.newInstance(habitures);
+
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.middleContainer, HabitListFragment.newInstance(habitures))
+                        .replace(R.id.middleContainer, habitListFragment)
                         .commitAllowingStateLoss();
 
             } catch (Throwable e) {

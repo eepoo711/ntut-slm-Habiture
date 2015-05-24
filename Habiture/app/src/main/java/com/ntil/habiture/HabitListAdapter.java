@@ -45,8 +45,17 @@ public class HabitListAdapter extends BaseAdapter {
         listener = (Listener) context;
     }
 
+    public void setPassDisable(int position) {
+        Item item = (Item) getItem(position);
+        trace("setPassDisable");
+        item.isPassDisable = true;
+        notifyDataSetChanged();
+
+    }
+
     public class Item {
         Habiture habiture;
+        boolean isPassDisable = false;
 
         public Habiture getHabiture() {
             return habiture;
@@ -91,6 +100,17 @@ public class HabitListAdapter extends BaseAdapter {
         holder.tvSwear.setText(item.habiture.getSwear());
         holder.tvPunishment.setText("做不到的話就 " + item.habiture.getPunishment());
         holder.tvRemain.setText("本週剩餘 " + item.habiture.getRemainFrequency() + " 次數");
+        trace("notice = " + item.getHabiture().getNoticeEnable());
+        trace("isPassDisable = " + item.isPassDisable);
+        if (item.isPassDisable) {
+            holder.btnPass.setEnabled(false);
+        } else {
+            if (!item.getHabiture().getNoticeEnable()) {
+                holder.btnPass.setEnabled(false);
+            } else {
+                holder.btnPass.setEnabled(true);
+            }
+        }
 
         final Habiture habiture = item.getHabiture();
         holder.btnMore.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +135,8 @@ public class HabitListAdapter extends BaseAdapter {
                 trace("onClick, pid = " + habiture.getId() + ", remain passHabitToday = " +
                         habiture.getRemainPass());
                 listener.onClickHabitPass(
-                        habiture.getId(),
+                        habiture,
+                        position,
                         habiture.getRemainPass());
             }
         });
@@ -135,6 +156,6 @@ public class HabitListAdapter extends BaseAdapter {
     public interface Listener {
         public void onClickHabitSingleItem(int pid);
         public void onClickHabitCamera(int pid);
-        public void onClickHabitPass(int pid, int passRemain);
+        public void onClickHabitPass(Habiture habiture, int position, int passRemain);
     }
 }
