@@ -20,13 +20,13 @@ public class NetworkChannelTest extends AndroidTestCase {
 
         networkChannel = new NetworkChannel();
 
-        Thread.sleep(200);
+        Thread.sleep(500);
     }
 
     public void testGetProfile() throws Exception {
         Profile profile = getProfile();
         assertEquals(1, profile.getId());
-        assertEquals("http://140.124.144.121/Habiture/profile/10176068_726992954019352_539454252837054186_n.jpg", profile.getPhotoUrl());
+        assertEquals("http://140.124.144.121/Habiture/profile/10176068_726992954019352_539454252837054186_n_s.jpg", profile.getPhotoUrl());
     }
 
     private Profile getProfile() throws HabitureException {
@@ -65,7 +65,7 @@ public class NetworkChannelTest extends AndroidTestCase {
 //        assertEquals("Codus", codus.getName());
 //        assertEquals(6, codus.getId());
 //    }
-////
+//
 //    public void testPostSwear() {
 //
 //        List<Friend> friends = networkChannel.httpGetFriends("guest", "guest");
