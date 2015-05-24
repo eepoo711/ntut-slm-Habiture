@@ -9,9 +9,9 @@ public class Photo {
 
     private byte[] imageData;
 
-    public Photo(PhotoInputStream pis) throws HabitureException {
+    public Photo(InputStream in, int length) throws HabitureException {
         try {
-            byte[] img = readImage(pis.getInputStream(), pis.getImageBytes());
+            byte[] img = readImage(in, length);
 
             if(img == null)
                 throw new HabitureException("read image failed, maybe network problem.");

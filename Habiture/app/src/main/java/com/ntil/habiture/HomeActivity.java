@@ -73,20 +73,29 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
         registerRegisterIDBroadReceiver();
         mHabitureModule.registerGCM();
 
-
     }
-    private void registerRegisterIDBroadReceiver() {
-        BroadcastReceiver toolBroadReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String reg_id =intent.getStringExtra("reg_id");
-                trace("registerRegisterIDBroadReceiver(), reg_id="+reg_id);
-                if(reg_id!="") {
-                    new send_register_id_to_server().execute(reg_id);
-                }
+
+    private BroadcastReceiver toolBroadReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String reg_id =intent.getStringExtra("reg_id");
+            trace("registerRegisterIDBroadReceiver(), reg_id="+reg_id);
+            if(reg_id!="") {
+                new send_register_id_to_server().execute(reg_id);
             }
-        };
+        }
+    };
+
+    private void registerRegisterIDBroadReceiver() {
         registerReceiver(toolBroadReceiver, new IntentFilter(this.getString(R.string.return_register_id)));
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        this.unregisterReceiver(toolBroadReceiver);
     }
 
     @Override

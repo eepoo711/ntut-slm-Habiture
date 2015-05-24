@@ -66,10 +66,9 @@ public class HabitureModule {
         NetworkConnection connection = null;
         try {
             connection = networkInterface.openGetPhotoConnection(photoUrl);
-            PhotoInputStream pis = new PhotoInputStream(
+            Photo photo = new Photo(
                     connection.getInputStream(),
                     connection.getContentLength());
-            Photo photo = new Photo(pis);
             return photo;
         } finally {
             if(connection != null)
