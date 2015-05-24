@@ -10,7 +10,7 @@ public class PhotoInputStream {
     private InputStream inputStream = null;
     private int imageBytes = 0;
 
-    PhotoInputStream(InputStream in, int imageBytes) {
+    public PhotoInputStream(InputStream in, int imageBytes) {
         this.inputStream = in;
         this.imageBytes = imageBytes;
     }

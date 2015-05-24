@@ -10,6 +10,7 @@ import com.gcm.client.receiver.GcmModel;
 import com.habiture.exceptions.HabitureException;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -53,22 +54,30 @@ public class HabitureModule {
 
     private Photo getPhotoFromNetwork(String photoUrl) throws HabitureException {
         Photo photo = null;
+        NetworkConnection connection = null;
         try {
-            PhotoInputStream pis = networkInterface.openGetPhotoConnection(photoUrl);
+            connection = networkInterface.openGetPhotoConnection(photoUrl);
+            PhotoInputStream pis = new PhotoInputStream(
+                    connection.getInputStream(),
+                    connection.getContentLength());
             photo = new Photo(pis);
+            return photo;
         } finally {
-            networkInterface.closeConnection();
+            if(connection != null)
+                connection.close();
         }
-        return photo;
     }
 
     private Profile getProfileFromNetwork(String account, String password) throws HabitureException {
         Profile profile;
+        NetworkConnection connection = null;
         try {
-            InputStream in = networkInterface.openGetProfileConnection(account, password, gcmModel.getRegistrationId());
+            connection = networkInterface.openGetProfileConnection(account, password, gcmModel.getRegistrationId());
+            InputStream in = connection.getInputStream();
             profile = new Profile(in);
         } finally {
-            networkInterface.closeConnection();
+            if(connection != null)
+                connection.close();
         }
         return profile;
     }
@@ -111,29 +120,34 @@ public class HabitureModule {
     }
 
     public List<Friend> queryFriends() {
-        InputStream in = networkInterface.openGetFriendsConnection(profile.getId());
+        NetworkConnection connection = null;
         List<Friend> friends = null;
+
         try {
-            friends = Friend.readFriends(in);
+            connection = networkInterface.openGetFriendsConnection(profile.getId());
+            friends = Friend.readFriends(connection.getInputStream());
             return friends;
         } catch (HabitureException e) {
             e.printStackTrace();
         }finally {
-            networkInterface.closeConnection();
+            if(connection != null)
+                connection.close();
         }
         return null;
     }
 
     public List<Group> queryGroups() {
+        NetworkConnection connection = null;
         List<Group> groups;
         try {
-            InputStream in = networkInterface.openGetGroupsConnection(profile.getId());
-            groups = Group.readGroups(in);
+             connection = networkInterface.openGetGroupsConnection(profile.getId());
+            groups = Group.readGroups(connection.getInputStream());
             return groups;
         } catch (HabitureException e) {
             e.printStackTrace();
         } finally {
-            networkInterface.closeConnection();
+            if(connection != null)
+                connection.close();
         }
         return null;
     }
@@ -199,12 +213,33 @@ public class HabitureModule {
     }
 
     public boolean passHabitToday(Habiture habit) {
+        NetworkConnection connection = null;
         try {
             Pass pass = new Pass(profile.getId(), habit.getId());
-            return networkInterface.postPass(pass.getJsonString());
+            connection = networkInterface.openPostPassConnection();
+            connection.getOutputStream().write(pass.getJsonString().getBytes());
+            return readBoolean(connection.getInputStream());
         } catch (HabitureException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(connection != null)
+                connection.close();
         }
         return false;
+    }
+
+    private boolean readBoolean(InputStream in) throws IOException {
+        trace("readBoolean");
+
+        byte[] buffer = new byte[10];
+        int length = in.read(buffer);
+        String result = new String(buffer, 0, length);
+        trace(result);
+
+        int code = Integer.valueOf(result.split("\n")[0]);
+
+        return code == 1 ? true : false;
     }
 }

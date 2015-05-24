@@ -2,7 +2,6 @@ package com.habiture;
 
 import android.graphics.Bitmap;
 
-import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -11,32 +10,27 @@ import java.util.List;
 public class MockNetworkChannel implements NetworkInterface {
 
     @Override
-    public InputStream openGetProfileConnection(String account, String password, String gcmRegisterId) {
+    public NetworkConnection openGetProfileConnection(String account, String password, String gcmRegisterId) {
         throw new RuntimeException("wrong call");
     }
 
     @Override
-    public PhotoInputStream openGetPhotoConnection(String url) {
+    public NetworkConnection openGetPhotoConnection(String photoUrl) {
         throw new RuntimeException("wrong call");
     }
 
     @Override
-    public void closeConnection() {
+    public NetworkConnection openGetFriendsConnection(int uid) {
         throw new RuntimeException("wrong call");
     }
 
     @Override
-    public InputStream openGetFriendsConnection(int uid) {
+    public NetworkConnection openGetGroupsConnection(int uid) {
         throw new RuntimeException("wrong call");
     }
 
     @Override
-    public InputStream openGetGroupsConnection(int uid) {
-        throw new RuntimeException("wrong call");
-    }
-
-    @Override
-    public boolean postPass(String json) {
+    public NetworkConnection openPostPassConnection() {
         throw new RuntimeException("wrong call");
     }
 

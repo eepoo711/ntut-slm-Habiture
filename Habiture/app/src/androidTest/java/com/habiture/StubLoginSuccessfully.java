@@ -10,31 +10,55 @@ import utils.Utils;
  */
 public class StubLoginSuccessfully extends MockNetworkChannel {
 
-    InputStream in;
+
+    private class StubGetProfileConnection extends MockNetworkConnection {
+
+        InputStream in = null;
+
+        @Override
+        public InputStream getInputStream() {
+            String packet = "{\"url\": \"http://140.124.144.121/Habiture/profile/10176068_726992954019352_539454252837054186_n.jpg\", \"id\": 1}";
+            in = new ByteArrayInputStream(packet.getBytes());
+            return in;
+        }
+
+        @Override
+        public void close() {
+            Utils.closeIO(in);
+        }
+    }
+
+    private class StubGetPhotoConnection extends MockNetworkConnection {
+
+        InputStream in = null;
+        byte[] fakeImageData = null;
+
+        @Override
+        public InputStream getInputStream() {
+            fakeImageData = "123457567_Fack_Image_Data".getBytes();
+            in = new ByteArrayInputStream(fakeImageData);
+            return in;
+        }
+
+        @Override
+        public int getContentLength() {
+            return fakeImageData.length;
+        }
+
+        @Override
+        public void close() {
+            Utils.closeIO(in);
+        }
+    }
+
 
     @Override
-    public InputStream openGetProfileConnection(String account, String password, String gcmRegisterId) {
-        String packet = makeFackPacket();
-        in = new ByteArrayInputStream(packet.getBytes());
-        return in;
+    public NetworkConnection openGetProfileConnection(String account, String password, String gcmRegisterId) {
+        return new StubGetProfileConnection();
     }
 
     @Override
-    public PhotoInputStream openGetPhotoConnection(String url) {
-        String packet = "12345";
-        in = new ByteArrayInputStream(packet.getBytes());
-        PhotoInputStream photoInputStream = new PhotoInputStream(in, packet.length());
-        return photoInputStream;
+    public NetworkConnection openGetPhotoConnection(String photoUrl) {
+        return new StubGetPhotoConnection();
     }
-
-    @Override
-    public void closeConnection() {
-        Utils.closeIO(in);
-    }
-
-    protected String makeFackPacket() {
-        return "{\"url\": \"http://140.124.144.121/Habiture/profile/10176068_726992954019352_539454252837054186_n.jpg\", \"id\": 1}";
-    }
-
-
 }
