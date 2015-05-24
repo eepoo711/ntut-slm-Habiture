@@ -45,7 +45,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
 
     private final static int CAMERA_REQUEST = 66 ;
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private void trace(String message) {
         if(DEBUG)
             Log.d("HomeActivity", message);
@@ -64,7 +64,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
 
             String name = mHabitureModule.getAccount();
             getFragmentManager().beginTransaction()
-                    .add(R.id.topContainer, HomeTopFragment.newInstance(name,mHabitureModule.getHeader()))
+                    .add(R.id.topContainer, HomeTopFragment.newInstance(name, mHabitureModule.getHeader()))
                     .add(R.id.middleContainer, new HomeMiddleFragment())
                     .add(R.id.bottomContainer, new HomeBottomFragment())
                     .commit();

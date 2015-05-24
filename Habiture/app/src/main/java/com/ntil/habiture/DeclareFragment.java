@@ -20,7 +20,7 @@ import utils.exception.UnhandledException;
 
 public class DeclareFragment extends Fragment {
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private Listener mListener;
 

@@ -20,7 +20,7 @@ public class GroupAdapter extends BaseAdapter{
     private List<Item> items;
     private LayoutInflater inflater;
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private void trace(String message) {
         if(DEBUG)

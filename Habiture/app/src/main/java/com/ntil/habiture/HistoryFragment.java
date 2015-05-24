@@ -17,7 +17,7 @@ import java.util.List;
  * Created by GawinHsu on 5/12/15.
  */
 public class HistoryFragment extends Fragment {
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private ListView lvHistory;
     private static List<GroupHistory> groupHistories;
     private HistoryAdapter historyAdapter;

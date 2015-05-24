@@ -18,7 +18,7 @@ public class HomeTopFragment extends Fragment {
     private static final String ARGS_NAME = "name";
     private static Bitmap mHeader =null;
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private static void trace(String message) {
         if(DEBUG)
             Log.d("HomeTopFragment", message);

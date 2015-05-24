@@ -23,7 +23,7 @@ import utils.exception.UnhandledException;
 
 public class DeclareActivity extends Activity implements DeclareFragment.Listener, InviteFriendFragment.Listener {
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private HabitureModule mHabitureModule;
     private int mPeriod = -1;

@@ -25,7 +25,7 @@ import java.util.concurrent.TimeoutException;
 public class PokeFragment extends Fragment {
 
     public Listener listener;
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private ImageView ivPoke;
     private TextView tvSwear;
     private TextView tvPunishment;

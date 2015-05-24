@@ -16,7 +16,7 @@ import java.util.List;
 
 public class GroupFragment extends Fragment {
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private ListView item_list;
 

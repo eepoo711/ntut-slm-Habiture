@@ -31,7 +31,7 @@ public class HabitListFragment extends Fragment {
     private static List<Habiture> habitures;
     private HabitListAdapter habitListAdapter;
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private void trace(String message) {
         if(DEBUG)
             Log.d("HabitListFragment", message);

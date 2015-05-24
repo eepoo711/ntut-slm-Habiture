@@ -22,7 +22,7 @@ import utils.exception.UnhandledException;
 
 public class NetworkChannel implements NetworkInterface {
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     public static final String URL_LOGIN =  "http://140.124.144.121/Habiture/login.cgi?";
     public static final String URL_QUERY_FRIENDS = "http://140.124.144.121/Habiture/friends.cgi?";

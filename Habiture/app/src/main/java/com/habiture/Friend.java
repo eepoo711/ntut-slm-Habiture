@@ -18,7 +18,7 @@ import utils.exception.UnhandledException;
 
 public class Friend {
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private String name = null;
     private long id = -1;
     private String url =null;

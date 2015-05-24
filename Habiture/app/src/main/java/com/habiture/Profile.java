@@ -15,7 +15,7 @@ import utils.Utils;
 
 public class Profile {
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private String photoUrl = null;
     private int id = -1;
 

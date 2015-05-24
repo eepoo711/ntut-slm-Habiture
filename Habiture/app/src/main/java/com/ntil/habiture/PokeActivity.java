@@ -45,7 +45,7 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
     private HabitureModule mHabitureModule;
     private Bitmap mBitmapCaputred;
     private Bitmap mBitmapPoke;
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private PokeFragment mPoketFragment;
 
     private void trace(String message) {

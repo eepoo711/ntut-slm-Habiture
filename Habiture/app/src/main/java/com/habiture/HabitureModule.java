@@ -19,7 +19,7 @@ import utils.exception.UnhandledException;
 
 public class HabitureModule {
 
-    private final boolean DEBUG = true;
+    private final boolean DEBUG = false;
     private NetworkInterface networkInterface = null;
     private GcmModel gcmModel =null;
     private Activity mActivity =null;
@@ -39,6 +39,9 @@ public class HabitureModule {
 
     public boolean login(String account, String password) {
         trace("login");
+
+        recycleProfileBitmap();
+
         try {
             this.profile = getProfileFromNetwork(account, password);
             this.profilePhoto = getPhotoFromNetwork(profile.getPhotoUrl());
@@ -52,15 +55,21 @@ public class HabitureModule {
         return false;
     }
 
+    private void recycleProfileBitmap() {
+        if(profileBitmap != null) {
+            profileBitmap.recycle();
+            profileBitmap = null;
+        }
+    }
+
     private Photo getPhotoFromNetwork(String photoUrl) throws HabitureException {
-        Photo photo = null;
         NetworkConnection connection = null;
         try {
             connection = networkInterface.openGetPhotoConnection(photoUrl);
             PhotoInputStream pis = new PhotoInputStream(
                     connection.getInputStream(),
                     connection.getContentLength());
-            photo = new Photo(pis);
+            Photo photo = new Photo(pis);
             return photo;
         } finally {
             if(connection != null)
@@ -85,7 +94,7 @@ public class HabitureModule {
 
     public boolean postDeclaration( String frequency, String declaration, String punishment, String goal,  String do_it_time) {
         trace("postDeclaration >> frequency="+frequency+" declaration="+declaration+" punishment="+punishment+" goal="+goal+" do_it_time="+do_it_time);
-        String do_it_time_server_format =do_it_time.substring(3);
+        String do_it_time_server_format = do_it_time.substring(3);
         boolean isDeclared = networkInterface.httpPostDeclaration(profile.getId(), frequency, declaration, punishment, goal, do_it_time_server_format);
 
         return isDeclared;
@@ -111,7 +120,7 @@ public class HabitureModule {
 
     public Bitmap getHeader() {
 
-        if(profileBitmap == null && profilePhoto != null) {
+        if(profileBitmap == null) {
             byte[] image = profilePhoto.getImageData();
             profileBitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
         }

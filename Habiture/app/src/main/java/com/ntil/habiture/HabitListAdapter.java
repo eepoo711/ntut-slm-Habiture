@@ -28,7 +28,7 @@ public class HabitListAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private Listener listener;
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private void trace(String message) {
         if(DEBUG)
             Log.d("HabitListFragment", message);
