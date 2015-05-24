@@ -4,6 +4,7 @@ package com.habiture.tests;
 import android.test.AndroidTestCase;
 
 import com.habiture.NetworkChannel;
+import com.habiture.NetworkConnection;
 import com.habiture.PhotoInputStream;
 import com.habiture.Profile;
 import com.habiture.exceptions.HabitureException;
@@ -30,25 +31,35 @@ public class NetworkChannelTest extends AndroidTestCase {
     }
 
     private Profile getProfile() throws HabitureException {
+        NetworkConnection connection = null;
         try {
-            InputStream in = networkChannel.openGetProfileConnection("guest", "guest", "123");
+            connection = networkChannel.openGetProfileConnection("guest", "guest", "123");
+            InputStream in = connection.getInputStream();
             return new Profile(in);
-
         } finally {
-            networkChannel.closeConnection();
+            if(connection != null)
+                connection.close();
         }
     }
 
     public void testGetProfilePhoto() throws Exception{
+        NetworkConnection connection = null;
         try {
             Profile profile = getProfile();
-            PhotoInputStream imageStream = networkChannel.openGetPhotoConnection(profile.getPhotoUrl());
-            boolean hasImage = imageStream.getImageBytes() > 0;
 
-            assertNotNull(imageStream);
+            connection = networkChannel.openGetPhotoConnection(profile.getPhotoUrl());
+
+            boolean hasImage = connection.getContentLength() > 0;
             assertTrue(hasImage);
+
+            PhotoInputStream photoInputStream = new PhotoInputStream(
+                    connection.getInputStream(),
+                    connection.getContentLength());
+            assertNotNull(photoInputStream);
+
         } finally {
-            networkChannel.closeConnection();
+            if(connection != null)
+                connection.close();
         }
     }
 //
@@ -96,12 +107,25 @@ public class NetworkChannelTest extends AndroidTestCase {
         return true;
     }
 
-    private boolean pass() throws HabitureException {
+    private boolean pass() throws Exception {
 
         assertTrue(login());
 
-        // pass
-        return networkChannel.postPass("{\"uid\":1,\"pid\":172 }");
+        NetworkConnection connection = null;
+        try {
+            connection = networkChannel.openPostPassConnection();
+            connection.getOutputStream().write("{\"uid\":1,\"pid\":172 }".getBytes());
+
+            byte[] buffer = new byte[10];
+            connection.getInputStream().read(buffer);
+
+            String codes = new String(buffer);
+            int code = Integer.valueOf(codes.split("\n")[0]);
+            return code == 1 ? true : false;
+        } finally {
+            if(connection != null)
+                connection.close();
+        }
     }
 
 }

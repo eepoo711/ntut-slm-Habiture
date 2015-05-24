@@ -36,40 +36,66 @@ public class NetworkChannel implements NetworkInterface {
     public static final String URL_UPDATE_GCM_REGISTER_ID  ="http://140.124.144.121/Habiture/update.cgi?";
     private static final String URL_PASS = "http://140.124.144.121/Habiture/tests/habiture/record/record.cgi";
 
-    private HttpURLConnection httpURLConnection = null;
-
     private void trace(String message) {
         if(DEBUG)
             Log.d("NetworkChannel", message);
     }
 
     @Override
-    public InputStream openGetProfileConnection(String account, String password, String gcmRegisterId) {
+    public NetworkConnection openGetProfileConnection(String account, String password, String gcmRegisterId) {
         trace("openGetProfileConnection");
         HttpURLConnection httpUrlConnection = null;
         try {
             httpUrlConnection = createHttpURLConnection(URL_LOGIN.concat("account=" + account + "&password=" + password + "&reg_id=" + gcmRegisterId));
-            return httpUrlConnection.getInputStream();
+            return newConnection(httpUrlConnection);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new NetworkException(e);
         }
-        return null;
+    }
+
+    private NetworkConnection newConnection(final HttpURLConnection httpConnection) {
+        return new NetworkConnection() {
+            @Override
+            public InputStream getInputStream() {
+                try {
+                    InputStream in = httpConnection.getInputStream();
+                    return in;
+                } catch (IOException e) {
+                    throw new NetworkException(e);
+                }
+            }
+
+            @Override
+            public OutputStream getOutputStream() {
+                try {
+                    OutputStream out = httpConnection.getOutputStream();
+                    return out;
+                } catch(IOException e) {
+                    throw new NetworkException(e);
+                }
+            }
+
+            @Override
+            public int getContentLength() {
+                return httpConnection.getContentLength();
+            }
+
+            @Override
+            public void close() {
+                if(httpConnection != null)
+                    httpConnection.disconnect();
+            }
+        };
     }
 
     @Override
-    public PhotoInputStream openGetPhotoConnection(String url) {
-        trace("openGetPhotoConnection url=" + url);
+    public NetworkConnection openGetPhotoConnection(String photoUrl) {
+        trace("openGetPhotoConnection url=" + photoUrl);
         try {
-            URL imgUrl = new URL(url);
-            httpURLConnection = (HttpURLConnection) imgUrl.openConnection();
+            URL imgUrl = new URL(photoUrl);
+            final HttpURLConnection httpURLConnection = (HttpURLConnection) imgUrl.openConnection();
             httpURLConnection.connect();
-
-            InputStream in = httpURLConnection.getInputStream();
-            int length = httpURLConnection.getContentLength();
-            trace("get image,length=" + length);
-
-
-            return new PhotoInputStream(in, length);
+            return newConnection(httpURLConnection);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -78,19 +104,13 @@ public class NetworkChannel implements NetworkInterface {
     }
 
     @Override
-    public void closeConnection() {
-        closeConnection(httpURLConnection);
-        httpURLConnection = null;
-    }
-
-    @Override
-    public InputStream openGetFriendsConnection(int uid) {
+    public NetworkConnection openGetFriendsConnection(int uid) {
         trace("openGetFriendsConnection");
-        httpURLConnection = null;
+        HttpURLConnection httpURLConnection = null;
         try {
             httpURLConnection = createHttpURLConnection(URL_QUERY_FRIENDS.concat("uid=" + uid ));
             trace("openGetFriendsConnection");
-            return httpURLConnection.getInputStream();
+            return newConnection(httpURLConnection);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -98,34 +118,24 @@ public class NetworkChannel implements NetworkInterface {
     }
 
     @Override
-    public InputStream openGetGroupsConnection(int uid) {
+    public NetworkConnection openGetGroupsConnection(int uid) {
         trace("openGetGroupsConnection");
-        httpURLConnection = null;
-        try {
-            httpURLConnection = createHttpURLConnection(URL_QUERY_GROUPS.concat("uid=" + uid ));
-            return httpURLConnection.getInputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public boolean postPass(String json) {
-        trace("postPass json = " + json);
         HttpURLConnection httpURLConnection = null;
         try {
-
-            httpURLConnection = createPostJsonConnection(URL_PASS);
-            httpURLConnection.getOutputStream().write(json.getBytes());
-
-            return readBoolean(httpURLConnection.getInputStream());
+            httpURLConnection = createHttpURLConnection(URL_QUERY_GROUPS.concat("uid=" + uid ));
+            return newConnection(httpURLConnection);
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            closeConnection(httpURLConnection);
         }
-        return false;
+        return null;
+    }
+
+    @Override
+    public NetworkConnection openPostPassConnection() {
+        trace("openPostPassConnection");
+        HttpURLConnection httpURLConnection = null;
+        httpURLConnection = createPostJsonConnection(URL_PASS);
+        return newConnection(httpURLConnection);
     }
 
     private HttpURLConnection createPostJsonConnection(String urlString) {
