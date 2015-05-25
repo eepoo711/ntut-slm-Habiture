@@ -17,49 +17,60 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="200dp"></LinearLayout>
+            android:layout_height="fill_parent"
+            android:layout_weight="1"></LinearLayout>
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:background="@drawable/retangle2_drawable"
-            android:hint="@string/enter_account"
-            android:id="@+id/etAccount"
-            android:singleLine="true"
-            android:ems="15"
-            android:layout_marginBottom="3dp"
-            android:maxLength="30"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1">
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:background="@drawable/retangle2_drawable"
-            android:hint="@string/enter_password"
-            android:id="@+id/etPassword"
-            android:singleLine="true"
-            android:ems="15"
-            android:layout_marginTop="3dp"
-            android:maxLength="30"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"/>
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:background="@drawable/retangle2_drawable"
+                android:hint="@string/enter_account"
+                android:id="@+id/etAccount"
+                android:singleLine="true"
+                android:ems="15"
+                android:layout_marginBottom="3dp"
+                android:maxLength="30"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/retangle_drawable"
-            android:text="@string/login"
-            android:id="@+id/btnLogin"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:textColor="#ffffffff"
-            android:singleLine="true" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:background="@drawable/retangle2_drawable"
+                android:hint="@string/enter_password"
+                android:id="@+id/etPassword"
+                android:singleLine="true"
+                android:ems="15"
+                android:layout_marginTop="3dp"
+                android:maxLength="30"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_green"
+                android:text="@string/login"
+                android:id="@+id/btnLogin"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#ffffffff"
+                android:singleLine="true"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout

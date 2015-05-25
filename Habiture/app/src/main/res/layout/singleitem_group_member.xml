@@ -17,19 +17,29 @@
         <com.widget.CircleImageView
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:id="@+id/ivFriendIcon"
+            android:id="@+id/ivMemberIcon"
             android:src="@mipmap/default_icon"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
-            android:id="@+id/tvFriendName"
+            android:text="Guest"
+            android:id="@+id/tvMemberName"
             android:gravity="center_vertical"
             android:textIsSelectable="true"
-            android:layout_marginLeft="15dp"
-            android:textSize="30dp" />
+            android:textSize="30dp"
+            android:layout_weight="1"
+            android:paddingLeft="15dp" />
+
+        <com.widget.CircleImageView
+            android:layout_width="35dp"
+            android:layout_height="fill_parent"
+            android:id="@+id/ivFounderIcon"
+            android:cropToPadding="false"
+            android:src="#bddd3838"
+            android:layout_marginRight="15dp" />
+
 
     </LinearLayout>
 </LinearLayout>

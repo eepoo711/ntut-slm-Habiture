@@ -6,21 +6,29 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="80dp">
+
+        <com.widget.CircleImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/ivFriendIcon"
+            android:src="@mipmap/default_icon"/>
 
         <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="48dp"
-            android:text="Friend"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Large Text"
             android:id="@+id/tvFriendsName"
-            android:layout_weight="1"
-            android:textSize="32sp"
             android:gravity="center_vertical"
-            android:paddingLeft="15dp" />
+            android:textIsSelectable="true"
+            android:layout_marginLeft="15dp"
+            android:textSize="30dp"
+            android:layout_weight="1" />
 
         <ImageView
             android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_height="fill_parent"
             android:id="@+id/ivSelected"
             android:src="@drawable/ic_action_accept"
             android:visibility="invisible"

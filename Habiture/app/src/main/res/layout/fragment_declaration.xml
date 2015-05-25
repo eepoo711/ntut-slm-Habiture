@@ -96,9 +96,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="fill_parent"
                         android:id="@+id/spFrequency"
-                        android:spinnerMode="dropdown"
                         android:gravity="center"
-                        android:layout_gravity="center_vertical" />
+                        android:spinnerMode="dropdown"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -106,7 +105,6 @@
                         android:text="次"
                         android:id="@+id/textView9"
                         android:gravity="center"
-                        android:layout_gravity="center_vertical"
                         android:textSize="15dp" />
                 </LinearLayout>
 
@@ -125,7 +123,7 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:textSize="15dp"
-                        android:gravity="center_vertical" />
+                        android:gravity="center" />
 
                     <EditText
 
@@ -134,8 +132,7 @@
                         android:layout_height="fill_parent"
                         android:id="@+id/etGoal"
                         android:text="3"
-                        android:gravity="center_vertical"
-                        android:layout_gravity="right"
+                        android:gravity="center"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp" />
 
@@ -146,7 +143,7 @@
                         android:id="@+id/textView15"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
-                        android:gravity="center_vertical|right"
+                        android:gravity="center"
                         android:textSize="15dp" />
                 </LinearLayout>
 
@@ -158,7 +155,7 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="5dp">
+                android:layout_marginBottom="10dp">
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -168,10 +165,12 @@
                     android:gravity="center">
 
                     <Spinner
+                        android:layout_width="110dp"
                         android:layout_height="fill_parent"
                         android:id="@+id/spDoItTime"
                         android:spinnerMode="dropdown"
-                        android:layout_marginBottom="10dp" />
+                        android:gravity="center" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -229,18 +228,7 @@
         android:layout_marginBottom="20dp">
 
         <Button
-            android:background="#bb00e93e"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="發布"
-            android:textSize="24dp"
-            android:id="@+id/btnDeclare"
-            android:layout_weight="1"
-            android:textColor="#ffffffff"
-            android:layout_marginRight="20dp" />
-
-        <Button
-            android:background="#bddd3838"
+            android:background="@drawable/shape_red"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="取消"
@@ -248,7 +236,19 @@
             android:id="@+id/btnCancel"
             android:layout_weight="1"
             android:textColor="#ffffffff"
+            android:layout_marginRight="20dp" />
+
+        <Button
+            android:background="@drawable/shape_green"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="發布"
+            android:textSize="24dp"
+            android:id="@+id/btnDeclare"
+            android:layout_weight="1"
+            android:textColor="#ffffffff"
             android:layout_marginLeft="20dp" />
+
     </LinearLayout>
 
 </LinearLayout>

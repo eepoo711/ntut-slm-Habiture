@@ -1,6 +1,13 @@
+2015/05/26 Dewei (0.42.20150525)
+1. change lunch icon.
+2. add layout group member xml.
+3. update layout invite friends xml.
+4. change login page button color.
+5. change post page button to shape button.
+
 2015/05/25 Dewei (0.41.20150525)
 1. add default icon to poke page.
-2. adjust ui habit and poke page
+2. adjust ui habit and poke page.
 
 2015/05/25 Dewei (0.40.20150525)
 1. UI Adjustment
