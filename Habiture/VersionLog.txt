@@ -1,3 +1,7 @@
+2015/05/25 Dewei (0.41.20150525)
+1. add default icon to poke page.
+2. adjust ui habit and poke page
+
 2015/05/25 Dewei (0.40.20150525)
 1. UI Adjustment
 2. fix do_it_time text.

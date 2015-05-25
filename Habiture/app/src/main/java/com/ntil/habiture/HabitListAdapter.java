@@ -99,7 +99,7 @@ public class HabitListAdapter extends BaseAdapter {
 
         holder.tvSwear.setText(item.habiture.getSwear());
         holder.tvPunishment.setText(item.habiture.getPunishment());
-        holder.tvRemain.setText("本週剩 " + item.habiture.getRemainFrequency() + " 數");
+        holder.tvRemain.setText("本週剩 " + item.habiture.getRemainFrequency() + " 次");
         trace("notice = " + item.getHabiture().getNoticeEnable());
         trace("isPassDisable = " + item.isPassDisable);
         if (item.isPassDisable) {
