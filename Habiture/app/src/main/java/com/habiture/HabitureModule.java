@@ -119,9 +119,11 @@ public class HabitureModule {
 
     public Bitmap getHeader() {
 
-        if(profileBitmap == null) {
-            byte[] image = profilePhoto.getImageData();
-            profileBitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+        if(profile != null) {
+            if(profileBitmap == null) {
+                byte[] image = profilePhoto.getImageData();
+                profileBitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+            }
         }
 
         return profileBitmap;
