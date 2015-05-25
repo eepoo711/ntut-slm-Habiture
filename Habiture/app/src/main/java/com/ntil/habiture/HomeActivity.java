@@ -442,6 +442,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
 
     private class send_register_id_to_server extends AsyncTask<String, Void, Boolean> {
         private ProgressDialog progress;
+        private String register_id =null;
 
         @Override
         protected void onPreExecute() {
@@ -451,11 +452,11 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
         @Override
         protected Boolean doInBackground(String... params) {
             trace("doInBackground");
+            register_id =params[0];
 
             boolean is_registered_sent = false;
             try {
-                String reg_id = params[0];
-                is_registered_sent =mHabitureModule.sendRegisterIdToServer(reg_id);
+                is_registered_sent =mHabitureModule.sendRegisterIdToServer(register_id);
             } catch (Throwable e) {
                 //ExceptionAlertDialog.showException(getFragmentManager(), e);
                 Toast.makeText(
@@ -471,11 +472,28 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
             trace("onPostExecute");
 
             try {
-                Toast.makeText(
-                        HomeActivity.this,
-                        success ? "GCM register done" : "GCM register failed",
-                        Toast.LENGTH_SHORT).show();
-
+                if(success) {
+                    Toast.makeText(
+                            HomeActivity.this,
+                            "GCM register done ",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    // wait 2 seconds then try again
+                    new AsyncTask<String, Void, Boolean>() {
+                        @Override
+                        protected Boolean doInBackground(String... params) {
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException e) {
+                            }
+                            return true;
+                        }
+                        @Override
+                        protected void onPostExecute(Boolean success) {
+                            retry_register_gcm(register_id);
+                        }
+                    }.execute(register_id, null, null);
+                }
             } catch(Throwable e) {
                 //ExceptionAlertDialog.showException(getFragmentManager(), e);
             }
@@ -483,6 +501,13 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
         }
     }
 
+    private void retry_register_gcm(String reg_id) {
+        trace("retry_register_gcm()"+reg_id);
+
+        Intent broadcastIntent = new Intent(this.getString(R.string.return_register_id));
+        broadcastIntent.putExtra("reg_id",reg_id);
+        sendBroadcast(broadcastIntent);
+    }
     private class UploadProofTask extends AsyncTask<Integer, Void, Boolean> {
         private ProgressDialog progress;
         @Override
