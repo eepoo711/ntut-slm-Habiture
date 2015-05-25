@@ -18,18 +18,19 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="名稱："
             android:id="@+id/textView11"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:textSize="16dp" />
+            android:textSize="16dp"
+            android:layout_gravity="center_vertical" />
 
         <TextView
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:text="我想要跑步"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/tvSwear"
@@ -37,11 +38,12 @@
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
             android:textStyle="bold"
-            android:textSize="16dp" />
+            android:textSize="16dp"
+            android:layout_gravity="center_vertical" />
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:text="剩餘3週"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/tvRemain"
@@ -49,7 +51,8 @@
             android:layout_marginBottom="10dp"
             android:paddingRight="10dp"
             android:textColor="#F2766B"
-            android:textSize="16dp" />
+            android:textSize="16dp"
+            android:layout_gravity="center_vertical" />
     </LinearLayout>
 
     <LinearLayout
@@ -64,25 +67,29 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="處罰："
             android:id="@+id/textView10"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:textSize="16dp" />
+            android:textSize="16dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical" />
 
         <TextView
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:text="一次沒做就裸奔"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/tvPunishment"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:textColor="#32A664"
-            android:textSize="16dp" />
+            android:textSize="16dp"
+            android:layout_gravity="center_vertical"
+            android:singleLine="true" />
 
     </LinearLayout>
 
@@ -105,7 +112,8 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:textSize="16dp" />
+            android:textSize="16dp"
+            android:layout_gravity="center_vertical" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -114,18 +122,19 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:text="PM 6:00"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:id="@+id/tvTime"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_gravity="center_vertical"
-                android:textSize="16dp" />
+                android:textSize="16dp"
+                android:gravity="center_vertical" />
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:text="/"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:id="@+id/textView4"
@@ -134,22 +143,24 @@
                 android:layout_gravity="center_vertical"
                 android:textSize="16dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp" />
+                android:layout_marginRight="5dp"
+                android:gravity="center_vertical" />
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:text="每週3次"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:id="@+id/tvFrequency"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_gravity="center_vertical"
-                android:textSize="16dp" />
+                android:textSize="16dp"
+                android:gravity="center_vertical" />
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:text="/"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:id="@+id/textView7"
@@ -158,18 +169,20 @@
                 android:layout_gravity="center_vertical"
                 android:textSize="16dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp" />
+                android:layout_marginRight="5dp"
+                android:gravity="center_vertical" />
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:text="持續4週"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:id="@+id/tvGoal"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_gravity="center_vertical"
-                android:textSize="16dp" />
+                android:textSize="16dp"
+                android:gravity="center_vertical" />
         </LinearLayout>
 
     </LinearLayout>
@@ -244,7 +257,8 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/ivPoke"
-            android:scaleType="fitCenter" />
+            android:scaleType="fitCenter"
+            android:src="@mipmap/default_icon" />
     </LinearLayout>
 
 </LinearLayout>

@@ -162,13 +162,14 @@
                 android:layout_marginBottom="5dp">
 
                 <Spinner
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
                     android:id="@+id/spDoItTime"
                     android:spinnerMode="dropdown"
                     android:gravity="center_vertical|center"
                     android:layout_marginBottom="10dp"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:layout_gravity="center_horizontal" />
 
                 <LinearLayout
                     android:orientation="horizontal"
