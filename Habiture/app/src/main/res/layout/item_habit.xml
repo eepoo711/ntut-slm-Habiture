@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="fill_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:orientation="vertical"
@@ -74,57 +74,46 @@
             android:descendantFocusability="blocksDescendants">
 
             <Button
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:text="more..."
                 android:id="@+id/btnMore"
                 android:layout_weight="1"
                 android:background="#00ffffff"
-                android:textSize="12dp"
+                android:textSize="16dp"
                 android:clickable="true"
                 android:gravity="fill_vertical"
                 android:paddingLeft="20dp"
                 android:textColor="#ff65666b"/>
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="fill_parent"
+            <Button
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1">
+                android:id="@+id/btnPass"
+                android:clickable="true"
+                android:text="PASS"
+                android:background="#00ffffff"
+                android:layout_gravity="right"
+                android:layout_marginRight="2dp" />
 
-                <Button
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/btnPass"
-                    android:clickable="true"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginRight="2dp"
-                    android:text="PASS"
-                    android:background="#00ffffff"/>
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:id="@+id/btnCamera"
+                android:src="@mipmap/camera"
+                android:scaleType="fitCenter"
+                android:background="#00ffffff"
+                android:focusable="false"
+                android:layout_gravity="right" />
 
-                <ImageButton
-                    android:layout_width="fill_parent"
-                    android:layout_height="50dp"
-                    android:id="@+id/btnCamera"
-                    android:layout_weight="1"
-                    android:src="@mipmap/camera"
-                    android:scaleType="fitCenter"
-                    android:background="#00ffffff"
-                    android:focusable="false"/>
-
-                <ImageButton
-                    android:layout_width="fill_parent"
-                    android:layout_height="50dp"
-                    android:id="@+id/imageButton2"
-                    android:layout_weight="1"
-                    android:src="@mipmap/invite"
-                    android:scaleType="fitCenter"
-                    android:background="#00ffffff" />
-
-            </LinearLayout>
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:id="@+id/imageButton2"
+                android:src="@mipmap/invite"
+                android:scaleType="fitCenter"
+                android:background="#00ffffff"
+                android:layout_gravity="right" />
 
         </LinearLayout>
 

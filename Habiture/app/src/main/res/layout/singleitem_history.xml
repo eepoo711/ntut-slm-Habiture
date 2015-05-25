@@ -13,12 +13,11 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
-            <ImageView
+            <com.widget.CircleImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:id="@+id/imageView2"
                 android:src="@mipmap/default_icon"
-                android:scaleType="fitCenter"
                 android:layout_margin="2dp" />
 
             <TextView
@@ -49,7 +48,8 @@
             android:layout_height="300dp"
             android:id="@+id/ivPicture"
             android:baselineAlignBottom="false"
-            android:src="@drawable/moo" />
+            android:src="@drawable/moo"
+            />
 
     </LinearLayout>
 </LinearLayout>

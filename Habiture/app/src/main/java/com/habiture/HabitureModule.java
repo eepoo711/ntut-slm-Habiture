@@ -93,8 +93,7 @@ public class HabitureModule {
 
     public boolean postDeclaration( String frequency, String declaration, String punishment, String goal,  String do_it_time) {
         trace("postDeclaration >> frequency="+frequency+" declaration="+declaration+" punishment="+punishment+" goal="+goal+" do_it_time="+do_it_time);
-        String do_it_time_server_format = do_it_time.substring(3);
-        boolean isDeclared = networkInterface.httpPostDeclaration(profile.getId(), frequency, declaration, punishment, goal, do_it_time_server_format);
+        boolean isDeclared = networkInterface.httpPostDeclaration(profile.getId(), frequency, declaration, punishment, goal, do_it_time);
 
         return isDeclared;
     }

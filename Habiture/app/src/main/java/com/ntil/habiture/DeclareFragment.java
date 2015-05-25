@@ -96,7 +96,7 @@ public class DeclareFragment extends Fragment {
                 String declare = etDeclaration.getText().toString();
                 String cost = etCost.getText().toString();
                 String frequency = spFrequency.getSelectedItem().toString();
-                String doItTime = spDoItTime.getSelectedItem().toString();
+                String doItTime = spDoItTime.getSelectedItemPosition()+"";
                 String goal = etGoal.getText().toString();
 
                 trace("declare = " + declare.length());

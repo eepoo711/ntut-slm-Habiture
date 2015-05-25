@@ -1,3 +1,8 @@
+2015/05/25 Dewei (0.40.20150525)
+1. UI Adjustment
+2. fix do_it_time text.
+3. add circle image view for profile icon.
+
 2015/05/24 Gawin (0.39.20150524)
 1. implement pass task
 2. fix pass disable

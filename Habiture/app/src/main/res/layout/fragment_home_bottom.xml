@@ -2,55 +2,55 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="80dp">
 
     <ImageButton
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:text="habiture list"
         android:id="@+id/btnHabitList"
         android:layout_weight="1"
         android:src="@mipmap/note"
-        android:scaleType="center"
+        android:scaleType="fitCenter"
         android:background="#00ffffff" />
 
     <ImageButton
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:text="poke list"
         android:id="@+id/btnPokeList"
         android:layout_weight="1"
         android:src="@mipmap/cow"
-        android:scaleType="center"
+        android:scaleType="fitCenter"
         android:background="#00ffffff" />
 
     <ImageButton
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:text="declare"
         android:id="@+id/btnDeclare"
         android:layout_weight="1"
         android:src="@mipmap/pen"
-        android:scaleType="center"
+        android:scaleType="fitCenter"
         android:background="#00ffffff" />
 
     <ImageButton
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:text="friend list"
         android:id="@+id/btnFriendList"
         android:layout_weight="1"
         android:src="@mipmap/friend"
-        android:scaleType="center"
+        android:scaleType="fitCenter"
         android:background="#00ffffff" />
     <ImageButton
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:text="friend list"
         android:id="@+id/btnMore"
         android:layout_weight="1"
         android:src="@mipmap/more"
-        android:scaleType="center"
+        android:scaleType="fitCenter"
         android:background="#00ffffff"
         android:visibility="invisible" />
 

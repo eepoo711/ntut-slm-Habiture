@@ -35,30 +35,30 @@
         <item>7</item>
     </string-array>
     <string-array name="declare_do_it_time" >
-        <item>Am 12</item>
-        <item>Am 1</item>
-        <item>Am 2</item>
-        <item>Am 3</item>
-        <item>Am 4</item>
-        <item>Am 5</item>
-        <item>Am 6</item>
-        <item>Am 7</item>
-        <item>Am 8</item>
-        <item>Am 9</item>
-        <item>Am 10</item>
-        <item>Am 11</item>
-        <item>Pm 12</item>
-        <item>Pm 1</item>
-        <item>Pm 2</item>
-        <item>Pm 3</item>
-        <item>Pm 4</item>
-        <item>Pm 5</item>
-        <item>Pm 6</item>
-        <item>Pm 7</item>
-        <item>Pm 8</item>
-        <item>Pm 9</item>
-        <item>Pm 10</item>
-        <item>Pm 11</item>
+        <item>AM 12:00</item>
+        <item>AM 1:00</item>
+        <item>AM 2:00</item>
+        <item>AM 3:00</item>
+        <item>AM 4:00</item>
+        <item>AM 5:00</item>
+        <item>AM 6:00</item>
+        <item>AM 7:00</item>
+        <item>AM 8:00</item>
+        <item>AM 9:00</item>
+        <item>AM 10:00</item>
+        <item>AM 11:00</item>
+        <item>PM 12:00</item>
+        <item>PM 1:00</item>
+        <item>PM 2:00</item>
+        <item>PM 3:00</item>
+        <item>PM 4:00</item>
+        <item>PM 5:00</item>
+        <item>PM 6:00</item>
+        <item>PM 7:00</item>
+        <item>PM 8:00</item>
+        <item>PM 9:00</item>
+        <item>PM 10:00</item>
+        <item>PM 11:00</item>
     </string-array>
     <string name="confirm">確定</string>
     <string name="cancel">取消</string>
