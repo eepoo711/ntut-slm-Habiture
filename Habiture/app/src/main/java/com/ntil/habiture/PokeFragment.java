@@ -63,6 +63,13 @@ public class PokeFragment extends Fragment {
         return fragment;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setRetainInstance(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -149,6 +156,17 @@ public class PokeFragment extends Fragment {
             setPokeEnabled();
 
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        trace("onDestroy");
+
+
+        if(bmpOwnerPhoto != null) bmpOwnerPhoto.recycle();
+        if(bmpTool != null) bmpTool.recycle();
+        if(bmpDrawing != null) bmpDrawing.recycle();
     }
 
     private void drawSampleTool(float x, float y) {
