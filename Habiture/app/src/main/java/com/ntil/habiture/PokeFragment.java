@@ -24,8 +24,10 @@ import java.util.concurrent.TimeoutException;
  */
 public class PokeFragment extends Fragment {
 
-    public Listener listener;
     private static final boolean DEBUG = false;
+
+    public Listener listener;
+    
     private ImageView ivPoke;
     private TextView tvSwear;
     private TextView tvPunishment;
@@ -64,6 +66,7 @@ public class PokeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        trace("onCreateView");
         return inflater.inflate(R.layout.fragment_poke, container, false);
     }
 
@@ -73,10 +76,12 @@ public class PokeFragment extends Fragment {
         listener = (Listener) activity;
     }
 
+
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Bundle args = this.getArguments();
+
         trace("onActivityCreated");
 
         btnCamera = (ImageButton) getActivity().findViewById(R.id.btnCamera);
@@ -139,6 +144,11 @@ public class PokeFragment extends Fragment {
             btnCamera.setVisibility(View.INVISIBLE);
         }
 
+
+        if(bmpDrawing != null)
+            setPokeEnabled();
+
+
     }
 
     private void drawSampleTool(float x, float y) {
@@ -152,6 +162,10 @@ public class PokeFragment extends Fragment {
         bmpOwnerPhoto = image;
         bmpDrawing = Bitmap.createScaledBitmap(bmpOwnerPhoto, ivPoke.getWidth(), ivPoke.getHeight(), false);
         bmpTool = BitmapFactory.decodeResource(getResources(), R.drawable.sample_tool).copy(Bitmap.Config.ARGB_8888, true);
+        setPokeEnabled();
+    }
+
+    private void setPokeEnabled() {
         ivPoke.setImageBitmap(bmpDrawing);
         ivPoke.setOnTouchListener(new View.OnTouchListener() {
             @Override
