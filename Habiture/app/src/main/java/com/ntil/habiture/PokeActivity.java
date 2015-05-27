@@ -160,8 +160,12 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         Intent broadcastIntent = new Intent(this.getString(R.string.tool_clicck_intent_name));
         broadcastIntent.putExtra("to_id",getIntent().getIntExtra("to_id", 1));
         broadcastIntent.putExtra("pid",getIntent().getIntExtra("pid", 154));
-        broadcastIntent.putExtra("tool_id",random_tool_id);
+        broadcastIntent.putExtra("tool_id", random_tool_id);
         this.sendBroadcast(broadcastIntent);
+
+        Intent broadcastIntent_client_playsound = new Intent(getApplicationContext().getString(R.string.play_tool_sound));
+        broadcastIntent.putExtra("tool_id",random_tool_id);
+        sendBroadcast(broadcastIntent_client_playsound);
     }
 
     private class GroupHistoryTask extends AsyncTask<Integer, Void, List<GroupHistory>> {
