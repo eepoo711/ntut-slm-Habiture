@@ -306,8 +306,9 @@ public class NetworkChannel implements NetworkInterface {
             // TODO
             if(!"posts_page".equals(reader.nextName()))
                 throw new UnhandledException("wrong json format");
-
+            trace("1");
             reader.beginObject();
+            trace("2");
             while(reader.hasNext()) {
                 String key = reader.nextName();
                 if("post_date".equals(key)) {

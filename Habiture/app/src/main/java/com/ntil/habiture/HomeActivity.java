@@ -35,7 +35,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
     private final static int DECLARE_ACTIVITY_RESULT = 101;
     private final static int POKE_ACTIVITY_RESULT = 102;
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private void trace(String message) {
         if(DEBUG)
             Log.d("HomeActivity", message);
@@ -57,7 +57,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
                     .add(R.id.topContainer, HomeTopFragment.newInstance(name, mHabitureModule.getHeader()))
                     .add(R.id.middleContainer, new HomeMiddleFragment())
                     .add(R.id.bottomContainer, new HomeBottomFragment())
-                    .commit();
+                    .commitAllowingStateLoss();
             new QueryHabituresTask().execute();
         }
 
@@ -434,6 +434,9 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
                             HomeActivity.this,
                             R.string.no_habiture,
                             Toast.LENGTH_SHORT).show();
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.middleContainer, new HomeMiddleFragment())
+                            .commitAllowingStateLoss();
                     return;
                 }
 
