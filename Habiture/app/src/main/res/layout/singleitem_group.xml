@@ -54,7 +54,7 @@
                     android:layout_height="fill_parent"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="每週5次"
-                    android:id="@+id/textView6"
+                    android:id="@+id/tvGroupFrequency"
                     android:gravity="center_vertical"
                     android:textSize="16dp"
                     android:textColor="#F2766B" />
@@ -76,7 +76,7 @@
                     android:layout_height="fill_parent"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="PM 7:00"
-                    android:id="@+id/textView5"
+                    android:id="@+id/tvGroupTime"
                     android:gravity="center_vertical"
                     android:textSize="16dp"
                     android:textColor="#F2766B" />

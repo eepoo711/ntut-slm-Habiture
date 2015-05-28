@@ -79,7 +79,7 @@ public class HabitListAdapter extends BaseAdapter {
         ViewHolder holder;
 
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_habit, parent, false);
+            convertView = inflater.inflate(R.layout.singleitem_habit, parent, false);
             holder = new ViewHolder();
             holder.tvSwear = (TextView) convertView.findViewById(R.id.tvSwear);
             holder.tvPunishment = (TextView) convertView.findViewById(R.id.tvPunishment);

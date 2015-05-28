@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -65,7 +64,9 @@ public class GroupAdapter extends BaseAdapter{
             convertView = inflater.inflate(R.layout.singleitem_group, parent, false);
             holder = new ViewHolder();
             holder.ivIcon = (ImageView) convertView.findViewById(R.id.ivGroupIcon);
-            holder.tvName = (TextView) convertView.findViewById(R.id.tvGroupName);
+            holder.tvSwear = (TextView) convertView.findViewById(R.id.tvGroupName);
+            holder.tvTime = (TextView) convertView.findViewById(R.id.tvGroupTime);
+            holder.tvFrequency = (TextView) convertView.findViewById(R.id.tvGroupFrequency);
             convertView.setTag(holder);
         }
         else {
@@ -73,13 +74,23 @@ public class GroupAdapter extends BaseAdapter{
         }
         Item item = (Item) getItem(position);
         holder.ivIcon.setImageResource(R.drawable.default_icon);
-        holder.tvName.setText(item.group.getSwear());
+        holder.tvSwear.setText(item.group.getSwear());
+        holder.tvFrequency.setText("每週 " + item.getGroup().getFrequency() + " 次");
+        // fix 24 clock to 12
+        String ampm = item.getGroup().getDoItTime() >= 12 ? "PM " : "AM ";
+        int ampmDoItTime = item.getGroup().getDoItTime() > 12 ? item.getGroup().getDoItTime() - 12
+                :item.getGroup().getDoItTime();
+        if (ampmDoItTime == 0)
+            ampmDoItTime = 12;
+        holder.tvTime.setText(ampm + ampmDoItTime + ":00");
         return convertView;
     }
 
     private class ViewHolder {
         ImageView ivIcon;
-        TextView tvName;
+        TextView tvSwear;
+        TextView tvTime;
+        TextView tvFrequency;
     }
 
 
