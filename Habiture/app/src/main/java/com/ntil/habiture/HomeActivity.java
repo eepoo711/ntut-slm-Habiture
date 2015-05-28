@@ -52,7 +52,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
 
         if(savedInstanceState == null) {
 
-            String name = mHabitureModule.getAccount();
+            String name = mHabitureModule.getName();
             getFragmentManager().beginTransaction()
                     .add(R.id.topContainer, HomeTopFragment.newInstance(name, mHabitureModule.getHeader()))
                     .add(R.id.middleContainer, new HomeMiddleFragment())

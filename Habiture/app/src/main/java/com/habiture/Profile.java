@@ -18,6 +18,7 @@ public class Profile {
     private static final boolean DEBUG = false;
     private String photoUrl = null;
     private int id = -1;
+    private String name = null;
 
     public Profile(InputStream in) throws HabitureException {
         JsonReader reader = new JsonReader(new InputStreamReader(in));
@@ -28,6 +29,7 @@ public class Profile {
 
             String photoUri = null;
             int id = -1;
+            String name = null;
 
             reader.beginObject();
             while(reader.hasNext()) {
@@ -36,6 +38,8 @@ public class Profile {
                     photoUri = reader.nextString();
                 } else if("id".equals(key)) {
                     id = reader.nextInt();
+                } else if("name".equals(key)) {
+                    name = reader.nextString();
                 } else {
                     reader.skipValue();
                 }
@@ -44,11 +48,12 @@ public class Profile {
 
             trace("id = " + id + " url = " + photoUri);
 
-            if(id <= 0 || photoUri == null || photoUri.length() <= 0)
+            if(id <= 0 || photoUri == null || photoUri.length() <= 0 || name == null)
                 throw new HabitureException("wrong account or password.");
 
             this.id = id;
             this.photoUrl = photoUri;
+            this.name = name;
 
 
         } catch (IOException e) {
@@ -70,5 +75,7 @@ public class Profile {
     public int getId() {
         return id;
     }
+
+    public String getName() { return name;}
 
 }

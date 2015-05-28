@@ -26,6 +26,7 @@ public class HabitureModule {
 
     private String account = null;
     private String password = null;
+    private String name = null;
     private String self_url =null;
     private Profile profile =null;
     private Photo profilePhoto = null;
@@ -46,6 +47,7 @@ public class HabitureModule {
             this.profile = getProfileFromNetwork(account, password);
             this.profilePhoto = getPhotoFromNetwork(profile.getPhotoUrl());
 
+            this.name = this.profile.getName();
             this.account = account;
             this.password = password;
             return true;
@@ -104,6 +106,15 @@ public class HabitureModule {
     public String getAccount() {
         trace("getAccount");
         return account;
+    }
+
+    /**
+     * Get the User Name.
+     * @return name or null when not login the system.
+     */
+    public String getName() {
+        trace("getName");
+        return name;
     }
 
 
