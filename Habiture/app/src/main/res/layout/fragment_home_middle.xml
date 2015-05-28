@@ -6,22 +6,4 @@
     >
 
 
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="群組"
-        android:id="@+id/btnGroup"
-        android:layout_gravity="bottom"
-        android:textSize="30sp" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="畫布"
-        android:id="@+id/btnPaint"
-        android:layout_gravity="bottom"
-        android:textSize="30sp" />
-
-
 </LinearLayout>

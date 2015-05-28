@@ -31,21 +31,11 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
     private HabitureModule mHabitureModule;
     private Bitmap mBitmapCaputred;
     private HabitListFragment habitListFragment = null;
+    private final static int CAMERA_REQUEST = 100 ;
+    private final static int DECLARE_ACTIVITY_RESULT = 101;
+    private final static int POKE_ACTIVITY_RESULT = 102;
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        trace("onActivityResult, requestCode = " + requestCode + ", resultCode = " + resultCode);
-
-        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            mBitmapCaputred = (Bitmap) data.getExtras().get("data");
-            new UploadProofTask().execute(getIntent().getIntExtra("pid", 0));
-        }
-    }
-
-    private final static int CAMERA_REQUEST = 66 ;
-
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     private void trace(String message) {
         if(DEBUG)
             Log.d("HomeActivity", message);
@@ -68,12 +58,36 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
                     .add(R.id.middleContainer, new HomeMiddleFragment())
                     .add(R.id.bottomContainer, new HomeBottomFragment())
                     .commit();
+            new QueryHabituresTask().execute();
         }
 
         registerRegisterIDBroadReceiver();
         mHabitureModule.registerGCM();
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        trace("onActivityResult, requestCode = " + requestCode + ", resultCode = " + resultCode);
+
+        switch (requestCode) {
+            case CAMERA_REQUEST:
+                if (resultCode == RESULT_OK) {
+                    mBitmapCaputred = (Bitmap) data.getExtras().get("data");
+                    new UploadProofTask().execute(getIntent().getIntExtra("pid", 0));
+                }
+                break;
+            case DECLARE_ACTIVITY_RESULT:
+                if (resultCode == RESULT_OK) {
+                    new QueryHabituresTask().execute();
+                }
+                break;
+            case POKE_ACTIVITY_RESULT:
+                break;
+        }
+    }
+
 
     private BroadcastReceiver toolBroadReceiver = new BroadcastReceiver() {
         @Override
@@ -121,7 +135,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
     @Override
     public void onTabDeclare() {
         trace("onTabDeclare");
-        startActivity(new Intent(this, DeclareActivity.class));
+        startActivityForResult(new Intent(this, DeclareActivity.class), DECLARE_ACTIVITY_RESULT);
     }
 
     @Override

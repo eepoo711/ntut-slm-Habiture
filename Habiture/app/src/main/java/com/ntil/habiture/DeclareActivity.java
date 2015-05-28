@@ -159,6 +159,7 @@ public class DeclareActivity extends Activity implements DeclareFragment.Listene
                 if(success){
                     //new QueryFriendsTask().execute();
                     Toast.makeText(DeclareActivity.this,getApplicationContext().getString(R.string.declare_successfully),Toast.LENGTH_SHORT).show();
+                    DeclareActivity.this.setResult(RESULT_OK);
                     finish();
                 }
 
