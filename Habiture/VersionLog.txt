@@ -1,3 +1,7 @@
+2015/05/26 Dewei&Codus (0.43.20150528)
+1. change app name : moo.
+2. fix gcm uid format from int to string.
+
 2015/05/26 Dewei (0.42.20150525)
 1. change lunch icon.
 2. add layout group member xml.

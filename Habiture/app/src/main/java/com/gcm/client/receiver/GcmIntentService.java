@@ -133,7 +133,7 @@ public class GcmIntentService extends IntentService {
 
 
         mBuilder.setContentIntent(contentIntent);
-        mNotificationManager.notify(extras.getInt("uid"), mBuilder.build());
+        mNotificationManager.notify(Integer.parseInt(extras.getString("uid")), mBuilder.build());
     }
 
     private int getNotificationIdInPreference() {
