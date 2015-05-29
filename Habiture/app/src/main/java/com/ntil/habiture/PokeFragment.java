@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -29,6 +30,7 @@ public class PokeFragment extends Fragment {
     public Listener listener;
     
     private ImageView ivPoke;
+    private ImageView ivAlert;
     private TextView tvSwear;
     private TextView tvPunishment;
     private TextView tvTime;
@@ -126,6 +128,7 @@ public class PokeFragment extends Fragment {
         });
 
         ivPoke = (ImageView) getActivity().findViewById(R.id.ivPoke);
+        ivAlert = (ImageView) getActivity().findViewById(R.id.ivAlert);
         tvSwear = (TextView) getActivity().findViewById(R.id.tvSwear);
         tvPunishment = (TextView) getActivity().findViewById(R.id.tvPunishment);
         tvTime = (TextView) getActivity().findViewById(R.id.tvTime);
@@ -134,11 +137,17 @@ public class PokeFragment extends Fragment {
         tvFrequency = (TextView) getActivity().findViewById(R.id.tvFrequency);
 
         // fix 24 clock to 12
-        String ampm = getArguments().getInt("doItTime") >= 12 ? "PM " : "AM ";
-        int ampmDoItTime = getArguments().getInt("doItTime") > 12 ? getArguments().getInt("doItTime") - 12
+        int doItTime =  getArguments().getInt("doItTime");
+        String ampm = doItTime >= 12 ? "PM " : "AM ";
+        int ampmDoItTime = doItTime > 12 ? getArguments().getInt("doItTime") - 12
                 :getArguments().getInt("doItTime");
         if (ampmDoItTime == 0)
             ampmDoItTime = 12;
+
+        Time t=new Time(); // or Time t=new Time("GMT+8"); 加上Time Zone資料。
+        t.setToNow(); // 取得系統時間。
+        int alertId = t.hour >= doItTime ? R.mipmap.notice_enable : R.mipmap.notice_disable ;
+        ivAlert.setImageResource(alertId);
 
         tvSwear.setText(getArguments().getString("swear"));
         tvRemain.setText("剩下 " + getArguments().getInt("remain") + " 週");

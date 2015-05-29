@@ -1,3 +1,7 @@
+2015/05/29 Dewei (0.44.20150529)
+1. add two alert icon and update icon for poking on poke page.
+2. hide useless icon
+
 2015/05/26 Dewei&Codus (0.43.20150528)
 1. change app name : moo.
 2. fix gcm uid format from int to string.

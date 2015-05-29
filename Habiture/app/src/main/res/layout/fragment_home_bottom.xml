@@ -52,7 +52,7 @@
         android:src="@mipmap/more"
         android:scaleType="fitCenter"
         android:background="#00ffffff"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
 
 </LinearLayout>

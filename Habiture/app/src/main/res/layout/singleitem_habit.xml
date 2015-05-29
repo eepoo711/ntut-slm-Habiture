@@ -113,7 +113,8 @@
                 android:src="@mipmap/invite"
                 android:scaleType="fitCenter"
                 android:background="#00ffffff"
-                android:layout_gravity="right" />
+                android:layout_gravity="right"
+                android:visibility="gone" />
 
         </LinearLayout>
 
