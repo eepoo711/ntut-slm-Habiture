@@ -111,8 +111,6 @@ public class GcmIntentService extends IntentService {
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, HomeActivity.class), 0);
 
-
-
         String base64_in_string =extras.getString("swear");
         byte[] base64_byte =Base64.decode(base64_in_string,Base64.DEFAULT);
         String swear = new String (base64_byte);
@@ -128,12 +126,17 @@ public class GcmIntentService extends IntentService {
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 /*.bigText(extras.getString("user"))*/)
                         .setContentText(name);
-        //    String BitmapString = Base64.encodeToString(bytes,Base64.DEFAULT);
-
-
 
         mBuilder.setContentIntent(contentIntent);
-        mNotificationManager.notify(Integer.parseInt(extras.getString("uid")), mBuilder.build());
+        mNotificationManager.notify(notificationID(extras), mBuilder.build());
+    }
+
+    private int notificationID(Bundle extras){
+        int notificationID=0;
+        int uid=Integer.parseInt(extras.getString("uid"));
+        int pid=Integer.parseInt(extras.getString("pid"));
+        notificationID=pid*1000+uid;
+        return notificationID;
     }
 
     private int getNotificationIdInPreference() {

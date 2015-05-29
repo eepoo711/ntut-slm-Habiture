@@ -184,10 +184,8 @@ public class HabitureModule {
 
     public boolean sendSoundToPartner(int to_id, int pid, int sound_id ) {
         trace("sendSoundToPartner, uid=" + profile.getId() + ", to_id=" + to_id + ", pid=" + pid + ", sound_id=" + sound_id);
-        // TODO
+        //TODO: ed chen must modify
         boolean isSoundSent = networkInterface.httpSendSound(profile.getId(),to_id, pid , sound_id);
-        //boolean isSoundSent = networkInterface.httpSendSound(uid, to_id, pid , sound_id);
-
         return isSoundSent;
     }
 
@@ -261,5 +259,10 @@ public class HabitureModule {
         int code = Integer.valueOf(result.split("\n")[0]);
 
         return code == 1 ? true : false;
+    }
+
+    public void stopRegisterGCM() {
+        trace("release");
+        gcmModel.stopRegisterGCM();
     }
 }

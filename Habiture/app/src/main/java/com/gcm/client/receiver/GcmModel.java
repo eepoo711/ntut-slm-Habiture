@@ -24,6 +24,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class GcmModel{
 
+    private static final boolean DEBUG = true;
+
+    private boolean isRegisterGCMThreadRunning =true;
     public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
@@ -37,17 +40,37 @@ public class GcmModel{
     AtomicInteger msgId = new AtomicInteger();
     SharedPreferences prefs;
 
-    Activity happtureActivity;
+    Context happtureActivity;
 
     public String regid;
 
-    public GcmModel(Activity activity) {
+    public GcmModel(Context activity) {
         Log.i(TAG, "GcmModel.");
         happtureActivity =activity;
     }
 
     public void registerGcm() {
         Log.i(TAG, "registerGcm.");
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (isRegisterGCMThreadRunning) {
+                    try {
+                        while (getGcmRegisterid() == false) {
+                            Thread.sleep(3000);
+                        }
+                        isRegisterGCMThreadRunning = false;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+    }
+
+    private boolean getGcmRegisterid() {
+
         if (checkPlayServices()) {
             gcm = GoogleCloudMessaging.getInstance(happtureActivity);
             regid = getRegistrationId();
@@ -61,19 +84,22 @@ public class GcmModel{
             }
         } else {
             Log.i(TAG, "No valid Google Play Services APK found.");
+            return false;
         }
+        return true;
     }
+
 
     private boolean checkPlayServices() {
         Log.i(TAG, "checkPlayServices.");
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(happtureActivity);
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode,happtureActivity,
-                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+                return false;
+                /*GooglePlayServicesUtil.getErrorDialog(resultCode,happtureActivity,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();*/
             } else {
                 Log.i(TAG, "This device is not supported.");
-                //finish();
             }
             return false;
         }
@@ -222,9 +248,19 @@ public class GcmModel{
     }
 
     private void returnHabitModelRegisterID(String reg_id) {
-
+        System.out.println("GcmModel returnHabitModelRegisterID");
         Intent broadcastIntent = new Intent(happtureActivity.getString(R.string.return_register_id));
         broadcastIntent.putExtra("reg_id",reg_id);
         happtureActivity.sendBroadcast(broadcastIntent);
+    }
+    public void stopRegisterGCM() {
+        trace("release");
+        isRegisterGCMThreadRunning =false;
+    }
+
+    private void trace(String message) {
+        if(DEBUG) {
+            Log.i("GcmModel", message);
+        }
     }
 }

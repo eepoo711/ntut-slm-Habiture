@@ -1,15 +1,18 @@
 package com.habiture;
 
 import android.app.Activity;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Vibrator;
 import android.util.Log;
 
 import com.gcm.client.receiver.GcmModel;
+import com.ntil.habiture.MainApplication;
 import com.ntil.habiture.R;
 
 import java.util.List;
@@ -19,6 +22,7 @@ public class ToolModel {
 
     private final boolean DEBUG = false;
     private Context mContext =null;
+    private Vibrator mVibrator=null;
 
     static final String TAG = "ToolModel";
 
@@ -38,6 +42,7 @@ public class ToolModel {
     private void initToolModel() {
         initSoundPool();
         registerReceiveToolBroadcast();
+        mVibrator = (Vibrator) MainApplication.getInstance().getSystemService(Service.VIBRATOR_SERVICE);
     }
 
     private void initSoundPool() {
@@ -116,6 +121,7 @@ public class ToolModel {
                     soundPool6.play(1,1, 1, 0, 0, 1);}
                 break;
         }
+        mVibrator.vibrate(350);
     }
 
 
