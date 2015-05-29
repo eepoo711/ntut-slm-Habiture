@@ -1,3 +1,8 @@
+2015/05/29 Dewei (0.45.20150529)
+1. change default role icon.
+2. add some group icons.
+3. change launch app icon
+
 2015/05/29 Dewei (0.44.20150529)
 1. add two alert icon and update icon for poking on poke page.
 2. hide useless icon

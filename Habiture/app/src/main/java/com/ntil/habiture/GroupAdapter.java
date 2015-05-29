@@ -73,7 +73,7 @@ public class GroupAdapter extends BaseAdapter{
             holder = (ViewHolder)convertView.getTag();
         }
         Item item = (Item) getItem(position);
-        holder.ivIcon.setImageResource(R.drawable.default_icon);
+        holder.ivIcon.setImageResource(R.mipmap.default_group_icon);
         holder.tvSwear.setText(item.group.getSwear());
         holder.tvFrequency.setText("每週 " + item.getGroup().getFrequency() + " 次");
         // fix 24 clock to 12
