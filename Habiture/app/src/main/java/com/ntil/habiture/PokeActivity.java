@@ -83,7 +83,7 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
                     getIntent().getIntExtra("goal", 0), getIntent().getIntExtra("remain", 0));
             getFragmentManager().beginTransaction()
                     .add(R.id.profileContainer, HomeTopFragment.newInstance(
-                            mHabitureModule.getAccount()
+                            mHabitureModule.getName()
                             , mHabitureModule.getHeader()))
                     .add(R.id.pokeContainer, mPoketFragment)
                     .commit();
