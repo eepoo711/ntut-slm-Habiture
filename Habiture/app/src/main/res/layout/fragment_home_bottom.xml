@@ -2,57 +2,57 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="fill_parent"
-    android:layout_height="80dp">
+    android:layout_height="wrap_content"
+    android:padding="5dp">
 
     <ImageButton
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
         android:text="habiture list"
         android:id="@+id/btnHabitList"
-        android:layout_weight="1"
-        android:src="@mipmap/note"
-        android:scaleType="fitCenter"
-        android:background="#00ffffff" />
-
-    <ImageButton
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:text="poke list"
-        android:id="@+id/btnPokeList"
-        android:layout_weight="1"
-        android:src="@mipmap/cow"
-        android:scaleType="fitCenter"
-        android:background="#00ffffff" />
-
-    <ImageButton
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:text="declare"
-        android:id="@+id/btnDeclare"
-        android:layout_weight="1"
-        android:src="@mipmap/pen"
-        android:scaleType="fitCenter"
-        android:background="#00ffffff" />
-
-    <ImageButton
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:text="friend list"
-        android:id="@+id/btnFriendList"
-        android:layout_weight="1"
-        android:src="@mipmap/friend"
-        android:scaleType="fitCenter"
-        android:background="#00ffffff" />
-    <ImageButton
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:text="friend list"
-        android:id="@+id/btnMore"
-        android:layout_weight="1"
-        android:src="@mipmap/more"
+        android:src="@drawable/button_note"
         android:scaleType="fitCenter"
         android:background="#00ffffff"
-        android:visibility="invisible" />
+        android:layout_weight="1" />
+
+    <ImageButton
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:text="poke list"
+        android:id="@+id/btnPokeList"
+        android:src="@drawable/button_attack"
+        android:scaleType="fitCenter"
+        android:background="#00ffffff"
+        android:layout_weight="1" />
+
+    <ImageButton
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:text="declare"
+        android:id="@+id/btnDeclare"
+        android:src="@drawable/button_add"
+        android:scaleType="fitCenter"
+        android:background="#00ffffff"
+        android:layout_weight="1" />
+
+    <ImageButton
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:text="friend list"
+        android:id="@+id/btnFriendList"
+        android:src="@drawable/button_friends_list"
+        android:scaleType="fitCenter"
+        android:background="#00ffffff"
+        android:layout_weight="1" />
+    <ImageButton
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:text="friend list"
+        android:id="@+id/btnMore"
+        android:src="@drawable/button_more"
+        android:scaleType="fitCenter"
+        android:background="#00ffffff"
+        android:layout_weight="1" />
 
 
 </LinearLayout>

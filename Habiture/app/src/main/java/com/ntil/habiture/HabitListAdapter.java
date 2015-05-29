@@ -84,9 +84,9 @@ public class HabitListAdapter extends BaseAdapter {
             holder.tvSwear = (TextView) convertView.findViewById(R.id.tvSwear);
             holder.tvPunishment = (TextView) convertView.findViewById(R.id.tvPunishment);
             holder.tvRemain = (TextView) convertView.findViewById(R.id.tvRemain);
-            holder.btnMore = (Button) convertView.findViewById(R.id.btnMore);
+            holder.btnMore = (ImageButton) convertView.findViewById(R.id.btnMore);
             holder.ibCamera = (ImageButton) convertView.findViewById(R.id.btnCamera);
-            holder.btnPass = (Button) convertView.findViewById(R.id.btnPass);
+            holder.btnPass = (ImageButton) convertView.findViewById(R.id.btnPass);
 
 
             convertView.setTag(holder);
@@ -104,11 +104,14 @@ public class HabitListAdapter extends BaseAdapter {
         trace("isPassDisable = " + item.isPassDisable);
         if (item.isPassDisable) {
             holder.btnPass.setEnabled(false);
+            holder.btnPass.getDrawable().setAlpha(128);
         } else {
             if (!item.getHabiture().getNoticeEnable()) {
                 holder.btnPass.setEnabled(false);
+                holder.btnPass.getDrawable().setAlpha(128);
             } else {
                 holder.btnPass.setEnabled(true);
+                holder.btnPass.getDrawable().setAlpha(255);
             }
         }
 
@@ -148,9 +151,9 @@ public class HabitListAdapter extends BaseAdapter {
         TextView tvSwear;
         TextView tvPunishment;
         TextView tvRemain;
-        Button btnMore;
+        ImageButton btnMore;
         ImageButton ibCamera;
-        Button btnPass;
+        ImageButton btnPass;
     }
 
     public interface Listener {
