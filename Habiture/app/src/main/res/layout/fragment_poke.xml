@@ -33,7 +33,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:textSize="16dp"
+                android:textSize="18dp"
                 android:layout_gravity="center_vertical" />
 
             <TextView
@@ -46,7 +46,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:textStyle="bold"
-                android:textSize="16dp"
+                android:textSize="18dp"
                 android:layout_gravity="center_vertical" />
 
             <TextView
@@ -59,7 +59,7 @@
                 android:layout_marginBottom="10dp"
                 android:paddingRight="10dp"
                 android:textColor="#F2766B"
-                android:textSize="16dp"
+                android:textSize="18dp"
                 android:layout_gravity="center_vertical" />
         </LinearLayout>
 
@@ -79,7 +79,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:textSize="16dp"
+                android:textSize="18dp"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical" />
 
@@ -92,9 +92,10 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:textColor="#32A664"
-                android:textSize="16dp"
+                android:textSize="18dp"
                 android:layout_gravity="center_vertical"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:layout_marginRight="20dp" />
 
         </LinearLayout>
 
@@ -106,17 +107,6 @@
             android:alpha="0.9"
             android:layout_marginBottom="8dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="時間："
-                android:id="@+id/textView12"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:textSize="16dp"
-                android:layout_gravity="center_vertical"/>
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -140,7 +130,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_gravity="center_vertical"
-                    android:textSize="16dp"
+                    android:textSize="18dp"
                     android:gravity="center_vertical" />
 
                 <TextView
@@ -152,7 +142,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_gravity="center_vertical"
-                    android:textSize="16dp"
+                    android:textSize="18dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical" />
@@ -166,7 +156,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_gravity="center_vertical"
-                    android:textSize="16dp"
+                    android:textSize="18dp"
                     android:gravity="center_vertical" />
 
                 <TextView
@@ -178,7 +168,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_gravity="center_vertical"
-                    android:textSize="16dp"
+                    android:textSize="18dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:gravity="center_vertical" />
@@ -192,7 +182,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_gravity="center_vertical"
-                    android:textSize="16dp"
+                    android:textSize="18dp"
                     android:gravity="center_vertical" />
             </LinearLayout>
 
@@ -267,7 +257,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/ivPoke"
-            android:src="@mipmap/default_icon" />
+            android:src="@drawable/default_role" />
     </LinearLayout>
 
     </LinearLayout>

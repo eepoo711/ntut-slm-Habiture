@@ -239,8 +239,8 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
             progress.dismiss();
             if (isPass)
                 habitListFragment.setPassDisable(position);
-            else
-                throw new UnhandledException("pass failed" );
+            //else
+                //throw new UnhandledException("pass failed" );
         }
 
 

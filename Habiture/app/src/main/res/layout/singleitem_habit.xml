@@ -65,23 +65,59 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:layout_width="90dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="做不到就 "
+                    android:text="做"
                     android:textSize="20dp"
                     android:textColor="#32A664"
-                    android:layout_marginLeft="16dp" />
+                    android:layout_marginLeft="16dp"
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/textView00" />
 
                 <TextView
-                    android:layout_width="112dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="不"
+                    android:textSize="23dp"
+                    android:textColor="#32A664"
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/textView17" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="到"
+                    android:textSize="27dp"
+                    android:textColor="#32A664"
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/textView6" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="就"
+                    android:textSize="30dp"
+                    android:textColor="#32A664"
+                    android:id="@+id/textView5"
+                    android:textIsSelectable="false"
+                    android:layout_gravity="center_vertical" />
+
+                <TextView
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="裸奔！！"
                     android:id="@+id/tvPunishment"
                     android:textSize="20dp"
                     android:textColor="#32A664"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:layout_marginRight="46dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="8dp" />
 
             </LinearLayout>
 
