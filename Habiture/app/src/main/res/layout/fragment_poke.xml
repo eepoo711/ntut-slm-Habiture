@@ -3,247 +3,243 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/posts_page"
-    android:background="#3f00fdff">
+    android:background="@drawable/background2">
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/shape"
-        android:alpha="0.9">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="名稱："
-            android:id="@+id/textView11"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:textSize="16dp"
-            android:layout_gravity="center_vertical" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:text="我想要跑步"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/tvSwear"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="1"
-            android:textStyle="bold"
-            android:textSize="16dp"
-            android:layout_gravity="center_vertical" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:text="剩餘3週"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/tvRemain"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:paddingRight="10dp"
-            android:textColor="#F2766B"
-            android:textSize="16dp"
-            android:layout_gravity="center_vertical" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/shape"
-        android:alpha="0.9">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="處罰："
-            android:id="@+id/textView10"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:textSize="16dp"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:text="一次沒做就裸奔"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/tvPunishment"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:textColor="#32A664"
-            android:textSize="16dp"
-            android:layout_gravity="center_vertical"
-            android:singleLine="true" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/shape"
-        android:alpha="0.9">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="時間："
-            android:id="@+id/textView12"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:textSize="16dp"
-            android:layout_gravity="center_vertical" />
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:background="#E8CA86"
+        android:paddingTop="5dp">
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="45dp"
+            android:background="@drawable/underlay2"
+            android:layout_marginBottom="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:text="PM 6:00"
+                android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/tvTime"
+                android:text="名稱："
+                android:id="@+id/textView11"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_gravity="center_vertical"
                 android:textSize="16dp"
-                android:gravity="center_vertical" />
+                android:layout_gravity="center_vertical" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="我想要跑步"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/tvSwear"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                android:layout_gravity="center_vertical" />
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:text="/"
+                android:layout_height="wrap_content"
+                android:text="剩餘3週"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/textView4"
+                android:id="@+id/tvRemain"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_gravity="center_vertical"
+                android:paddingRight="10dp"
+                android:textColor="#F2766B"
                 android:textSize="16dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:gravity="center_vertical" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:text="每週3次"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/tvFrequency"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_gravity="center_vertical"
-                android:textSize="16dp"
-                android:gravity="center_vertical" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:text="/"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/textView7"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_gravity="center_vertical"
-                android:textSize="16dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:gravity="center_vertical" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:text="持續4週"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/tvGoal"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_gravity="center_vertical"
-                android:textSize="16dp"
-                android:gravity="center_vertical" />
+                android:layout_gravity="center_vertical" />
         </LinearLayout>
 
-    </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/underlay2"
+            android:layout_marginBottom="8dp">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="處罰："
+                android:id="@+id/textView10"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="16dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="一次沒做就裸奔"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/tvPunishment"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textColor="#32A664"
+                android:textSize="16dp"
+                android:layout_gravity="center_vertical"
+                android:singleLine="true" />
+
+        </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"></LinearLayout>
+            android:layout_height="45dp"
+            android:background="@drawable/underlay2"
+            android:alpha="0.9"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="時間："
+                android:id="@+id/textView12"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="16dp"
+                android:layout_gravity="center_vertical" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:text="PM 6:00"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:id="@+id/tvTime"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="16dp"
+                    android:gravity="center_vertical" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:text="/"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:id="@+id/textView4"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="16dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:gravity="center_vertical" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:text="每週3次"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:id="@+id/tvFrequency"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="16dp"
+                    android:gravity="center_vertical" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:text="/"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:id="@+id/textView7"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="16dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:gravity="center_vertical" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:text="持續4週"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:id="@+id/tvGoal"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="16dp"
+                    android:gravity="center_vertical" />
+            </LinearLayout>
+
+        </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1" />
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:layout_marginBottom="5dp"
+            android:gravity="right">
 
-        <ImageButton
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:id="@+id/btnCamera"
-            android:src="@mipmap/camera"
-            android:layout_weight="1"
-            android:scaleType="fitCenter"
-            android:background="#00ffffff" />
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/btnCamera"
+                android:src="@drawable/camera"
+                android:scaleType="fitCenter"
+                android:background="#00ffffff"
+                android:paddingBottom="10dp"
+                android:padding="5dp" />
 
-        <ImageButton
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:id="@+id/btnFriends"
-            android:src="@mipmap/group_member"
-            android:layout_weight="1"
-            android:scaleType="fitCenter"
-            android:background="#00ffffff" />
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/btnFriends"
+                android:src="@drawable/friend"
+                android:scaleType="fitCenter"
+                android:background="#00ffffff"
+                android:paddingBottom="10dp"
+                android:padding="5dp" />
 
-        <ImageButton
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:id="@+id/btnRecords"
-            android:src="@mipmap/histroy"
-            android:layout_weight="1"
-            android:scaleType="fitCenter"
-            android:background="#00ffffff" />
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/btnRecords"
+                android:src="@drawable/albums"
+                android:scaleType="fitCenter"
+                android:background="#00ffffff"
+                android:paddingBottom="10dp"
+                android:padding="5dp" />
 
-        <ImageButton
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:text="tool"
-            android:id="@+id/btnTool"
-            android:src="@mipmap/tool1"
-            android:scaleType="fitCenter"
-            android:layout_weight="1"
-            android:background="#00ffffff" />
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="tool"
+                android:id="@+id/btnTool"
+                android:src="@drawable/tools"
+                android:scaleType="fitCenter"
+                android:background="#00ffffff"
+                android:paddingBottom="10dp"
+                android:padding="5dp" />
 
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -251,14 +247,21 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="center">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:padding="20dp">
 
 
-        <ImageView
+        <com.widget.CircleImageView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/ivPoke"
-            android:scaleType="fitCenter"
             android:src="@mipmap/default_icon" />
+    </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

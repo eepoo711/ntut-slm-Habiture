@@ -79,7 +79,7 @@ public class HomeBottomFragment extends Fragment {
         getActivity().findViewById(R.id.btnMore).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                trace("onClick btnMore");
+                trace("onClick ibMore");
                 listener.onTabMore();
             }
         });

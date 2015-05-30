@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -31,7 +30,7 @@ public class HabitListAdapter extends BaseAdapter {
     private static final boolean DEBUG = false;
     private void trace(String message) {
         if(DEBUG)
-            Log.d("HabitListFragment", message);
+            Log.d("HabitListAdapter", message);
     }
 
     public HabitListAdapter(Context context, List<Habiture> habitures){
@@ -76,7 +75,7 @@ public class HabitListAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+        final ViewHolder holder;
 
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.singleitem_habit, parent, false);
@@ -84,9 +83,9 @@ public class HabitListAdapter extends BaseAdapter {
             holder.tvSwear = (TextView) convertView.findViewById(R.id.tvSwear);
             holder.tvPunishment = (TextView) convertView.findViewById(R.id.tvPunishment);
             holder.tvRemain = (TextView) convertView.findViewById(R.id.tvRemain);
-            holder.btnMore = (ImageButton) convertView.findViewById(R.id.btnMore);
+            holder.ibMore = (ImageButton) convertView.findViewById(R.id.btnMore);
             holder.ibCamera = (ImageButton) convertView.findViewById(R.id.btnCamera);
-            holder.btnPass = (ImageButton) convertView.findViewById(R.id.btnPass);
+            holder.ibPass = (ImageButton) convertView.findViewById(R.id.btnPass);
 
 
             convertView.setTag(holder);
@@ -103,25 +102,27 @@ public class HabitListAdapter extends BaseAdapter {
         trace("notice = " + item.getHabiture().getNoticeEnable());
         trace("isPassDisable = " + item.isPassDisable);
         if (item.isPassDisable) {
-            holder.btnPass.setEnabled(false);
-            holder.btnPass.getDrawable().setAlpha(128);
+            holder.ibPass.setEnabled(false);
+            holder.ibPass.getDrawable().setAlpha(128);
         } else {
             if (!item.getHabiture().getNoticeEnable()) {
-                holder.btnPass.setEnabled(false);
-                holder.btnPass.getDrawable().setAlpha(128);
+                holder.ibPass.setEnabled(false);
+                holder.ibPass.getDrawable().setAlpha(128);
             } else {
-                holder.btnPass.setEnabled(true);
-                holder.btnPass.getDrawable().setAlpha(255);
+                holder.ibPass.setEnabled(true);
+                holder.ibPass.getDrawable().setAlpha(255);
             }
         }
 
         final Habiture habiture = item.getHabiture();
-        holder.btnMore.setOnClickListener(new View.OnClickListener() {
+        holder.tvPunishment.setSingleLine(true);
+        holder.ibMore.setVisibility(View.VISIBLE);
+        holder.ibMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 trace("onClick, pid = " + habiture.getId());
-                int pid = habiture.getId();
-                listener.onClickHabitSingleItem(pid);
+                holder.tvPunishment.setSingleLine(false);
+                holder.ibMore.setVisibility(View.INVISIBLE);
             }
         });
         holder.ibCamera.setOnClickListener(new View.OnClickListener() {
@@ -132,7 +133,7 @@ public class HabitListAdapter extends BaseAdapter {
             }
         });
 
-        holder.btnPass.setOnClickListener(new View.OnClickListener() {
+        holder.ibPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 trace("onClick, pid = " + habiture.getId() + ", remain passHabitToday = " +
@@ -151,9 +152,9 @@ public class HabitListAdapter extends BaseAdapter {
         TextView tvSwear;
         TextView tvPunishment;
         TextView tvRemain;
-        ImageButton btnMore;
+        ImageButton ibMore;
         ImageButton ibCamera;
-        ImageButton btnPass;
+        ImageButton ibPass;
     }
 
     public interface Listener {
