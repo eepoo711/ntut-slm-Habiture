@@ -1,6 +1,7 @@
 package com.ntil.habiture;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -147,11 +148,15 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
     @Override
     public void onClickGroupFriend() {
         trace("onClickGroupFriend");
+        DialogFragment newFragment = new NoImplementDialog();
+        newFragment.show(getFragmentManager(), "dialog");
     }
 
     @Override
     public void onClickTool() {
         trace("onClickTool");
+        DialogFragment newFragment = new NoImplementDialog();
+        newFragment.show(getFragmentManager(), "dialog");
     }
 
     @Override

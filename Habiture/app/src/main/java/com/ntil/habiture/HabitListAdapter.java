@@ -86,6 +86,8 @@ public class HabitListAdapter extends BaseAdapter {
             holder.ibMore = (ImageButton) convertView.findViewById(R.id.btnMore);
             holder.ibCamera = (ImageButton) convertView.findViewById(R.id.btnCamera);
             holder.ibPass = (ImageButton) convertView.findViewById(R.id.btnPass);
+            holder.ibGroupFriend = (ImageButton) convertView.findViewById(R.id.btnGroupFriend);
+
 
 
             convertView.setTag(holder);
@@ -115,6 +117,7 @@ public class HabitListAdapter extends BaseAdapter {
         }
 
         final Habiture habiture = item.getHabiture();
+        //more function
         holder.tvPunishment.setSingleLine(true);
         holder.ibMore.setVisibility(View.VISIBLE);
         holder.ibMore.setOnClickListener(new View.OnClickListener() {
@@ -145,6 +148,14 @@ public class HabitListAdapter extends BaseAdapter {
             }
         });
 
+        holder.ibGroupFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                trace("onClick, pid = " + habiture.getId());
+                listener.onClickHabitAddGourpFriend(habiture.getId());
+            }
+        });
+
         return convertView;
     }
 
@@ -155,10 +166,11 @@ public class HabitListAdapter extends BaseAdapter {
         ImageButton ibMore;
         ImageButton ibCamera;
         ImageButton ibPass;
+        ImageButton ibGroupFriend;
     }
 
     public interface Listener {
-        public void onClickHabitSingleItem(int pid);
+        public void onClickHabitAddGourpFriend(int pid);
         public void onClickHabitCamera(int pid);
         public void onClickHabitPass(Habiture habiture, int position, int passRemain);
     }

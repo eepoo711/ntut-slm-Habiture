@@ -148,6 +148,8 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
     public void onTabMore() {
         trace("onTabMore");
         // TODO
+        DialogFragment newFragment = new NoImplementDialog();
+        newFragment.show(getFragmentManager(), "dialog");
     }
 
     @Override
@@ -176,6 +178,14 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
         trace("onClickHabitSingleItem pid = " + pid);
         new QueryPokePageTask().execute(pid, QueryPokePageTask.POKE_IS_FOUNDER);
         //PokeActivity.startActivity(this, url, "123", "456", pid, 1, 1, 1);
+    }
+
+    @Override
+    public void onClickHabitAddGourpFriend(int pid) {
+        trace("onClickHabitAddGourpFriend");
+        // TODO
+        DialogFragment newFragment = new NoImplementDialog();
+        newFragment.show(getFragmentManager(), "dialog");
     }
 
     @Override
