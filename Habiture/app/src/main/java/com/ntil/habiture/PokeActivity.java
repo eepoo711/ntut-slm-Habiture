@@ -47,6 +47,7 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
     private Bitmap mBitmapPoke;
     private static final boolean DEBUG = false;
     private PokeFragment mPoketFragment;
+    private static Random random_tool=null;
 
     private void trace(String message) {
         if(DEBUG)
@@ -67,6 +68,8 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         intent.putExtra("to_id", to_id);
         intent.putExtra("remain", remain);
         context.startActivity(intent);
+
+        random_tool = new Random();
     }
 
     @Override
@@ -153,18 +156,18 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
 
     @Override
     public void onPoke() {
-        Random random_tool = new Random();
         int random_tool_id =random_tool.nextInt(6)+1;
+        System.out.println("onPoke="+random_tool_id);
         // TODO: to guest now
-        int to_id =1;
         Intent broadcastIntent = new Intent(this.getString(R.string.tool_clicck_intent_name));
         broadcastIntent.putExtra("to_id",getIntent().getIntExtra("to_id", 1));
         broadcastIntent.putExtra("pid",getIntent().getIntExtra("pid", 154));
         broadcastIntent.putExtra("tool_id", random_tool_id);
         this.sendBroadcast(broadcastIntent);
 
+        // Client's business
         Intent broadcastIntent_client_playsound = new Intent(getApplicationContext().getString(R.string.play_tool_sound));
-        broadcastIntent.putExtra("tool_id",random_tool_id);
+        broadcastIntent_client_playsound.putExtra("tool_id",random_tool_id);
         sendBroadcast(broadcastIntent_client_playsound);
     }
 
@@ -281,14 +284,6 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
             trace("onPostExecute");
 
             try {
-
-                String toolSentSuccessful = getString(R.string.tool_sent_successful);
-                String toolSentFailed = getString(R.string.tool_sent_failed);
-                Toast.makeText(
-                        PokeActivity.this,
-                        success ? toolSentSuccessful : toolSentFailed,
-                        Toast.LENGTH_SHORT).show();
-
             } catch(Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
             }

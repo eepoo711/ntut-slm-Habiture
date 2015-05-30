@@ -108,7 +108,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        mHabitureModule.stopRegisterGCM();
         this.unregisterReceiver(toolBroadReceiver);
     }
 
@@ -475,7 +475,6 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
             try {
                 is_registered_sent =mHabitureModule.sendRegisterIdToServer(register_id);
             } catch (Throwable e) {
-                //ExceptionAlertDialog.showException(getFragmentManager(), e);
                 Toast.makeText(
                         HomeActivity.this,
                         "GCM register failed",
@@ -494,6 +493,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
                             HomeActivity.this,
                             "GCM register done ",
                             Toast.LENGTH_SHORT).show();
+                    System.out.println("gcm register done");
                 } else {
                     // wait 2 seconds then try again
                     new AsyncTask<String, Void, Boolean>() {
@@ -564,4 +564,6 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
                     Toast.LENGTH_SHORT).show();
         }
     }
+
+
 }

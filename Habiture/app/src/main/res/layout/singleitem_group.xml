@@ -15,7 +15,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginRight="8dp">
 
-        <ImageView
+        <com.widget.CircleImageView
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:id="@+id/ivGroupIcon"
@@ -91,7 +91,8 @@
             android:src="@drawable/button_friends_list"
             android:layout_gravity="center_vertical|right"
             android:cropToPadding="false"
-            android:layout_marginRight="7dp" />c
+            android:layout_marginRight="7dp" />
+
 
     </LinearLayout>
 </LinearLayout>

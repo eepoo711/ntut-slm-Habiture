@@ -15,7 +15,7 @@ public class MockNetworkChannel implements NetworkInterface {
     }
 
     @Override
-    public NetworkConnection openGetPhotoConnection(String photoUrl) {
+    public NetworkConnection openGetFileConnection(String url) {
         throw new RuntimeException("wrong call");
     }
 
@@ -31,6 +31,11 @@ public class MockNetworkChannel implements NetworkInterface {
 
     @Override
     public NetworkConnection openPostPassConnection() {
+        throw new RuntimeException("wrong call");
+    }
+
+    @Override
+    public NetworkConnection openGetAppInfoConnection() {
         throw new RuntimeException("wrong call");
     }
 

@@ -116,7 +116,15 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:textSize="16dp"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"/>
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/ivAlert"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/notice_enable" />
 
             <LinearLayout
                 android:orientation="horizontal"

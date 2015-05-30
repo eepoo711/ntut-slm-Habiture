@@ -3,13 +3,18 @@ package com.habiture.tests;
 import android.app.Activity;
 import android.test.AndroidTestCase;
 
+import com.habiture.AppInfo;
+import com.habiture.FileStream;
 import com.habiture.Friend;
 import com.habiture.Group;
 import com.habiture.Habiture;
 import com.habiture.HabitureModule;
 import com.habiture.MockGcmModel;
+import com.habiture.NetworkConnection;
 import com.habiture.NetworkInterface;
+import com.habiture.StubDownloadFile;
 import com.habiture.StubGcmModelLogin;
+import com.habiture.StubGetAppInfo;
 import com.habiture.StubLoginFailed;
 import com.habiture.StubLoginSuccessfully;
 import com.habiture.StubPassSuccessfully;
@@ -120,6 +125,33 @@ public class HabitureModuleTest extends AndroidTestCase {
         hm = new HabitureModule(networkInterface, gcmModel);
         boolean result = hm.login("testAccount", "testPassword");
         return result;
+    }
+
+    public void testDownloadFile() throws Exception {
+
+
+        FileStream fileStream = null;
+        try {
+            stubLogin(new StubDownloadFile());
+            fileStream = hm.downloadFile("fake url");
+            byte[] buffer = new byte[fileStream.getContentLength()];
+            fileStream.getInputStream().read(buffer);
+            assertEquals("fake file content", new String(buffer));
+        } finally {
+            if(fileStream != null)
+                fileStream.close();
+        }
+
+    }
+
+    public void testGetAppInfo() {
+        stubLogin(new StubGetAppInfo());
+
+        AppInfo appInfo = hm.getOnlineAppInfo();
+
+        assertEquals("http://140.124.144.121/Habiture/version/moo_v_0.apk", appInfo.getUrl());
+        assertEquals("0.45.20150529", appInfo.getVersionName());
+        assertEquals(1, appInfo.getVersionCode());
     }
 
 }

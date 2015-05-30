@@ -144,7 +144,6 @@
                 android:src="@drawable/addfriends"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp" />
-
         </LinearLayout>
 
         <ImageView

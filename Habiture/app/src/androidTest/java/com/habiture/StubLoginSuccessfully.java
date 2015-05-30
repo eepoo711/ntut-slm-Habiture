@@ -17,7 +17,7 @@ public class StubLoginSuccessfully extends MockNetworkChannel {
 
         @Override
         public InputStream getInputStream() {
-            String packet = "{\"url\": \"http://140.124.144.121/Habiture/profile/10176068_726992954019352_539454252837054186_n.jpg\", \"id\": 1}";
+            String packet = "{\"url\": \"http://140.124.144.121/Habiture/profile/10176068_726992954019352_539454252837054186_n.jpg\", \"id\": 1, \"name\": \"Guest\"}";
             in = new ByteArrayInputStream(packet.getBytes());
             return in;
         }
@@ -58,7 +58,7 @@ public class StubLoginSuccessfully extends MockNetworkChannel {
     }
 
     @Override
-    public NetworkConnection openGetPhotoConnection(String photoUrl) {
+    public NetworkConnection openGetFileConnection(String url) {
         return new StubGetPhotoConnection();
     }
 }

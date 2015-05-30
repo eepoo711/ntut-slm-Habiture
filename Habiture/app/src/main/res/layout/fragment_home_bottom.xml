@@ -55,5 +55,4 @@
         android:background="#00ffffff"
         android:layout_weight="1" />
 
-
 </LinearLayout>

@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.gcm.client.receiver.GcmModel;
 import com.habiture.Group;
 import com.habiture.HabitureModule;
+import com.ntil.habiture.task.UpgradeAppTask;
 
 import java.util.List;
 
@@ -50,6 +51,8 @@ public class MainActivity extends Activity implements LoginFragment.Listener {
                         .add(R.id.container, new LoginFragment())
                         .commit();
             }
+
+            new UpgradeAppTask(this, mHabitureModule).execute();
         } catch(Throwable e) {
             ExceptionAlertDialog.showException(getFragmentManager(), e);
         }
