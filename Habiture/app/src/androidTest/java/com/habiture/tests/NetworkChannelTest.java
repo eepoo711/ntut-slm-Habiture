@@ -47,7 +47,7 @@ public class NetworkChannelTest extends AndroidTestCase {
         try {
             Profile profile = getProfile();
 
-            connection = networkChannel.openGetPhotoConnection(profile.getPhotoUrl());
+            connection = networkChannel.openGetFileConnection(profile.getPhotoUrl());
 
             boolean hasImage = connection.getContentLength() > 0;
             assertTrue(hasImage);

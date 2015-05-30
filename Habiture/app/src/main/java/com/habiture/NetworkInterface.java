@@ -9,7 +9,7 @@ public interface NetworkInterface {
 
 
     NetworkConnection openGetProfileConnection(String account, String password, String gcmRegisterId);
-    NetworkConnection openGetPhotoConnection(String photoUrl);
+    NetworkConnection openGetFileConnection(String url);
     NetworkConnection openGetFriendsConnection(int uid);
     NetworkConnection openGetGroupsConnection(int uid);
     NetworkConnection openPostPassConnection();

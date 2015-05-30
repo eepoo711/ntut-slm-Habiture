@@ -3,12 +3,14 @@ package com.habiture.tests;
 import android.app.Activity;
 import android.test.AndroidTestCase;
 
+import com.habiture.FileStream;
 import com.habiture.Friend;
 import com.habiture.Group;
 import com.habiture.Habiture;
 import com.habiture.HabitureModule;
 import com.habiture.MockGcmModel;
 import com.habiture.NetworkInterface;
+import com.habiture.StubDownloadFile;
 import com.habiture.StubGcmModelLogin;
 import com.habiture.StubLoginFailed;
 import com.habiture.StubLoginSuccessfully;
@@ -120,6 +122,23 @@ public class HabitureModuleTest extends AndroidTestCase {
         hm = new HabitureModule(networkInterface, gcmModel);
         boolean result = hm.login("testAccount", "testPassword");
         return result;
+    }
+
+    public void testDownloadFile() throws Exception {
+
+
+        FileStream fileStream = null;
+        try {
+            stubLogin(new StubDownloadFile());
+            fileStream = hm.downloadFile("fake url");
+            byte[] buffer = new byte[fileStream.getContentLength()];
+            fileStream.getInputStream().read(buffer);
+            assertEquals("fake file content", new String(buffer));
+        } finally {
+            if(fileStream != null)
+                fileStream.close();
+        }
+
     }
 
 }

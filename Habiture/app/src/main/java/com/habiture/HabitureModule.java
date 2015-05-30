@@ -1,6 +1,5 @@
 package com.habiture;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
@@ -10,6 +9,7 @@ import com.gcm.client.receiver.GcmModel;
 import com.habiture.exceptions.HabitureException;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -19,15 +19,13 @@ import utils.exception.UnhandledException;
 
 public class HabitureModule {
 
-    private final boolean DEBUG = false;
+    private final boolean DEBUG = true;
     private NetworkInterface networkInterface = null;
     private GcmModel gcmModel =null;
-    private Activity mActivity =null;
 
     private String account = null;
     private String password = null;
     private String name = null;
-    private String self_url =null;
     private Profile profile =null;
     private Photo profilePhoto = null;
     private Bitmap profileBitmap = null;
@@ -67,7 +65,7 @@ public class HabitureModule {
     private Photo getPhotoFromNetwork(String photoUrl) throws HabitureException {
         NetworkConnection connection = null;
         try {
-            connection = networkInterface.openGetPhotoConnection(photoUrl);
+            connection = networkInterface.openGetFileConnection(photoUrl);
             Photo photo = new Photo(
                     connection.getInputStream(),
                     connection.getContentLength());
@@ -264,5 +262,30 @@ public class HabitureModule {
     public void stopRegisterGCM() {
         trace("release");
         gcmModel.stopRegisterGCM();
+    }
+
+    public byte[] downloadPhoto(String url) {
+        trace("downloadPhoto");
+        try {
+            Photo photo = getPhotoFromNetwork(url);
+            return photo.getImageData();
+        } catch (HabitureException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public FileStream downloadFile(String url) {
+        trace("downloadFile");
+        NetworkConnection connection = null;
+        try {
+            connection = networkInterface.openGetFileConnection(url);
+            FileStream fileStream = new FileStream(connection);
+            return fileStream;
+        } catch (HabitureException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

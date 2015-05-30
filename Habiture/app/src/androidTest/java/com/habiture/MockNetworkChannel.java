@@ -15,7 +15,7 @@ public class MockNetworkChannel implements NetworkInterface {
     }
 
     @Override
-    public NetworkConnection openGetPhotoConnection(String photoUrl) {
+    public NetworkConnection openGetFileConnection(String url) {
         throw new RuntimeException("wrong call");
     }
 
