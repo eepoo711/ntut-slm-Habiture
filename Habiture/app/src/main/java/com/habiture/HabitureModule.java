@@ -288,4 +288,36 @@ public class HabitureModule {
         }
         return null;
     }
+
+    public AppInfo getOnlineAppInfo() {
+        trace("getOnlineAppInfo");
+
+        NetworkConnection connection = null;
+        try {
+            connection = networkInterface.openGetAppInfoConnection();
+            String json = readString(connection.getInputStream());
+            return new AppInfo(json);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(connection != null)
+                connection.close();
+        }
+        return null;
+    }
+
+    private String readString(InputStream inputStream) throws IOException {
+        byte[] buffer = new byte[500];
+
+        int readLen = 0;
+        StringBuffer stringBuffer = new StringBuffer();
+        for(readLen = inputStream.read(buffer);
+            readLen > 0;
+            readLen = inputStream.read(buffer)) {
+
+            stringBuffer.append(new String(buffer, 0, readLen));
+        }
+
+        return stringBuffer.toString();
+    }
 }

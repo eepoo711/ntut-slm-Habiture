@@ -138,6 +138,21 @@ public class NetworkChannel implements NetworkInterface {
         return newConnection(httpURLConnection);
     }
 
+    @Override
+    public NetworkConnection openGetAppInfoConnection() {
+
+        trace("openGetAppInfoConnection");
+
+        try {
+            HttpURLConnection httpURLConnection = createHttpURLConnection("http://140.124.144.121/Habiture/upgrade.cgi");
+            return newConnection(httpURLConnection);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     private HttpURLConnection createPostJsonConnection(String urlString) {
 
         try {

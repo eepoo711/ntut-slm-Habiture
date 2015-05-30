@@ -13,6 +13,7 @@ public interface NetworkInterface {
     NetworkConnection openGetFriendsConnection(int uid);
     NetworkConnection openGetGroupsConnection(int uid);
     NetworkConnection openPostPassConnection();
+    NetworkConnection openGetAppInfoConnection();
 
     public List<Habiture> httpGetHabitures(int uid);
     public boolean httpPostDeclaration(int uid, String frequency, String declaration, String punishment, String goal,  String do_it_time);
