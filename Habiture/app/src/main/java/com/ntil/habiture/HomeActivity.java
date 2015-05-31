@@ -75,7 +75,9 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
             case CAMERA_REQUEST:
                 if (resultCode == RESULT_OK) {
                     mBitmapCaputred = (Bitmap) data.getExtras().get("data");
-                    new UploadProofTask().execute(getIntent().getIntExtra("pid", 0));
+                    //TODO: Ed
+                    new UploadProofTask(getIntent().getIntExtra("position", 0))
+                            .execute(getIntent().getIntExtra("pid", 0));
                 }
                 break;
             case DECLARE_ACTIVITY_RESULT:
@@ -189,8 +191,9 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
     }
 
     @Override
-    public void onClickHabitCamera(int pid) {
+    public void onClickHabitCamera(int pid, int position) {
         trace("onClickHabitCamera");
+        //TODO: Ed
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
@@ -537,6 +540,11 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
     }
     private class UploadProofTask extends AsyncTask<Integer, Void, Boolean> {
         private ProgressDialog progress;
+        private final int position;
+        //TODO: Ed
+        public UploadProofTask(int position) {
+            this.position = position;
+        }
         @Override
         protected void onPreExecute() {
             trace("UploadProofTask onPreExecute");
@@ -568,6 +576,8 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
         protected void onPostExecute(Boolean success) {
             trace("UploadProofTask onPostExecute");
             progress.dismiss();
+            //TODO: Ed
+            habitListFragment.setPassDisable(position);
             Toast.makeText(
                     HomeActivity.this,
                     success ? "上傳成功" : "上傳失敗",

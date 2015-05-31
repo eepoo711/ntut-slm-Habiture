@@ -106,13 +106,19 @@ public class HabitListAdapter extends BaseAdapter {
         if (item.isPassDisable) {
             holder.ibPass.setEnabled(false);
             holder.ibPass.getDrawable().setAlpha(128);
+            holder.ibCamera.setEnabled(false);
+            holder.ibCamera.getDrawable().setAlpha(128);
         } else {
             if (!item.getHabiture().getNoticeEnable()) {
                 holder.ibPass.setEnabled(false);
                 holder.ibPass.getDrawable().setAlpha(128);
+                holder.ibCamera.setEnabled(false);
+                holder.ibCamera.getDrawable().setAlpha(128);
             } else {
                 holder.ibPass.setEnabled(true);
                 holder.ibPass.getDrawable().setAlpha(255);
+                holder.ibCamera.setEnabled(true);
+                holder.ibCamera.getDrawable().setAlpha(255);
             }
         }
 
@@ -132,7 +138,7 @@ public class HabitListAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 trace("onClick, pid = " + habiture.getId());
-                listener.onClickHabitCamera(habiture.getId());
+                listener.onClickHabitCamera(habiture.getId(), position);
             }
         });
 
@@ -171,7 +177,7 @@ public class HabitListAdapter extends BaseAdapter {
 
     public interface Listener {
         public void onClickHabitAddGourpFriend(int pid);
-        public void onClickHabitCamera(int pid);
+        public void onClickHabitCamera(int pid, int position);
         public void onClickHabitPass(Habiture habiture, int position, int passRemain);
     }
 }
