@@ -550,6 +550,7 @@ public class NetworkChannel implements NetworkInterface {
         trace("readGroupHistories");
 
         Bitmap image =null;
+        String icon_url  = null;
         String url  = null;
         String date =null;
         String name =null;
@@ -557,7 +558,9 @@ public class NetworkChannel implements NetworkInterface {
         reader.beginObject();
         while(reader.hasNext()) {
             String key = reader.nextName();
-            if("url".equals(key)) {
+            if("icon_url".equals(key)){
+                icon_url = reader.nextString();
+            } else if("url".equals(key)) {
                 url = reader.nextString();
             } else if("date".equals(key)) {
                 date = reader.nextString();
@@ -575,6 +578,7 @@ public class NetworkChannel implements NetworkInterface {
 
         GroupHistory groupHistory = new GroupHistory();
         groupHistory.setUrl(url);
+        groupHistory.setIcon(httpGetBitmapUrl(icon_url));
         groupHistory.setImage(httpGetBitmapUrl(url));
         groupHistory.setName(name);
         groupHistory.setDate(date);

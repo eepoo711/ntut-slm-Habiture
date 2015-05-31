@@ -50,14 +50,20 @@ public class HistoryAdapter extends BaseAdapter{
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.singleitem_history, parent, false);
             holder = new ViewHolder();
-            holder.ivPicture = (ImageView) convertView.findViewById(R.id.ivPicture);
+            holder.ivIcon = (ImageView) convertView.findViewById(R.id.ivIcon);
+            holder.tvName = (TextView) convertView.findViewById(R.id.tvName);
             holder.tvDate = (TextView) convertView.findViewById(R.id.tvDate);
+            holder.ivPicture = (ImageView) convertView.findViewById(R.id.ivPicture);
             convertView.setTag(holder);
         }
         else {
             holder = (ViewHolder)convertView.getTag();
         }
         GroupHistory groupHistory = (GroupHistory) getItem(position);
+        // 設定Icon
+        holder.ivIcon.setImageBitmap(groupHistory.getIcon());
+        // 設定Name
+        holder.tvName.setText(groupHistory.getName());
         // 設定照片圖案
         holder.ivPicture.setImageBitmap(groupHistory.getImage());
         // 設定日期
@@ -67,7 +73,9 @@ public class HistoryAdapter extends BaseAdapter{
     }
 
     private class ViewHolder {
-        ImageView ivPicture;
+        ImageView ivIcon;
+        TextView tvName;
         TextView tvDate;
+        ImageView ivPicture;
     }
 }

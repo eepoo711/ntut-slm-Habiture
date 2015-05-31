@@ -11,12 +11,14 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_marginRight="8dp">
 
             <com.widget.CircleImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:id="@+id/profile_icon"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:id="@+id/ivIcon"
                 android:src="@mipmap/default_icon"/>
 
             <TextView
@@ -24,7 +26,7 @@
                 android:layout_height="fill_parent"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="GUEST"
-                android:id="@+id/textView8"
+                android:id="@+id/tvName"
                 android:paddingLeft="15dp"
                 android:gravity="center_vertical" />
 
@@ -35,10 +37,8 @@
                 android:id="@+id/tvDate"
                 android:layout_weight="1"
                 android:textSize="15dp"
-                android:paddingLeft="15dp"
                 android:layout_gravity="right"
-                android:gravity="center_vertical|right"
-                android:paddingRight="20dp" />
+                android:gravity="center_vertical|right" />
 
         </LinearLayout>
 
@@ -48,7 +48,7 @@
             android:id="@+id/ivPicture"
             android:baselineAlignBottom="false"
             android:src="@drawable/moo"
-            />
+            android:scaleType="fitCenter" />
 
     </LinearLayout>
 </LinearLayout>

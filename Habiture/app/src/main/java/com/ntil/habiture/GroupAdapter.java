@@ -73,8 +73,10 @@ public class GroupAdapter extends BaseAdapter{
             holder = (ViewHolder)convertView.getTag();
         }
         Item item = (Item) getItem(position);
+        holder.ivIcon.setImageResource( getGroupIconId(item.group.getIcon()) );
         holder.tvSwear.setText(item.group.getSwear());
         holder.tvFrequency.setText("每週 " + item.getGroup().getFrequency() + " 次");
+
         // fix 24 clock to 12
         String ampm = item.getGroup().getDoItTime() >= 12 ? "PM " : "AM ";
         int ampmDoItTime = item.getGroup().getDoItTime() > 12 ? item.getGroup().getDoItTime() - 12
@@ -82,6 +84,7 @@ public class GroupAdapter extends BaseAdapter{
         if (ampmDoItTime == 0)
             ampmDoItTime = 12;
         holder.tvTime.setText(ampm + ampmDoItTime + ":00");
+
         return convertView;
     }
 
@@ -92,5 +95,24 @@ public class GroupAdapter extends BaseAdapter{
         TextView tvFrequency;
     }
 
-
+    private int getGroupIconId(int icon) {
+        int resId;
+        switch(icon) {
+            case 1:
+                resId=R.drawable.mark_running;
+                break;
+            case 2:
+                resId=R.drawable.mark_running;
+                break;
+            case 3:
+                resId=R.drawable.mark_swimming;
+                break;
+            case 4:
+                resId=R.drawable.mark_riding;
+                break;
+            default:
+                resId=R.drawable.mark_reading;
+        }
+        return resId;
+    }
 }
