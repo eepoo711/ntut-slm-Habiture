@@ -18,6 +18,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.widget.CircleImageView;
+
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -127,7 +129,7 @@ public class PokeFragment extends Fragment {
             }
         });
 
-        ivPoke = (ImageView) getActivity().findViewById(R.id.ivPoke);
+        ivPoke = (CircleImageView) getActivity().findViewById(R.id.ivPoke);
         ivAlert = (ImageView) getActivity().findViewById(R.id.ivAlert);
         tvSwear = (TextView) getActivity().findViewById(R.id.tvSwear);
         tvPunishment = (TextView) getActivity().findViewById(R.id.tvPunishment);
@@ -187,7 +189,9 @@ public class PokeFragment extends Fragment {
     public void setImage(Bitmap image) {
         trace("setImage");
         bmpOwnerPhoto = image;
+        //bmpDrawing = image;
         bmpDrawing = Bitmap.createScaledBitmap(bmpOwnerPhoto, ivPoke.getWidth(), ivPoke.getHeight(), false);
+//        bmpDrawing = Bitmap.createScaledBitmap(bmpOwnerPhoto, 300, 300, false);
         bmpTool = BitmapFactory.decodeResource(getResources(), R.drawable.sample_tool).copy(Bitmap.Config.ARGB_8888, true);
         setPokeEnabled();
     }

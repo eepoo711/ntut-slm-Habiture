@@ -8,44 +8,46 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="@drawable/shape"
+        android:layout_height="100dp"
+        android:background="@drawable/backgroung_frame"
         android:descendantFocusability="blocksDescendants"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:alpha="0.8">
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="8dp">
 
-        <com.widget.CircleImageView
+        <ImageView
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:id="@+id/ivGroupIcon"
-            android:src="@mipmap/default_group_icon" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/mark_riding"
+            android:padding="5dp"
+            android:layout_gravity="center_vertical" />
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingLeft="10dp">
+            android:paddingLeft="10dp"
+            android:layout_gravity="center_vertical">
 
             <TextView
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="騎腳踏車"
                 android:id="@+id/tvGroupName"
                 android:gravity="center_vertical"
-                android:layout_weight="1"
-                android:textSize="30dp"
+                android:textSize="25sp"
                 android:layout_gravity="left|center_horizontal"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:singleLine="true" />
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -55,7 +57,7 @@
                     android:id="@+id/tvGroupFrequency"
                     android:gravity="center_vertical"
                     android:textSize="16dp"
-                    android:textColor="#F2766B" />
+                    android:textColor="#B62F41" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -65,7 +67,7 @@
                     android:id="@+id/textView16"
                     android:gravity="center_vertical"
                     android:textSize="16dp"
-                    android:textColor="#F2766B"
+                    android:textColor="#B62F41"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp" />
 
@@ -77,7 +79,7 @@
                     android:id="@+id/tvGroupTime"
                     android:gravity="center_vertical"
                     android:textSize="16dp"
-                    android:textColor="#F2766B" />
+                    android:textColor="#B62F41" />
             </LinearLayout>
 
         </LinearLayout>
@@ -86,8 +88,11 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:id="@+id/imageView"
-            android:src="@mipmap/default_icon"
-            android:layout_gravity="center_vertical|right" />
+            android:src="@drawable/button_friends_list"
+            android:layout_gravity="center_vertical|right"
+            android:cropToPadding="false"
+            android:layout_marginRight="7dp" />
+
 
     </LinearLayout>
 </LinearLayout>

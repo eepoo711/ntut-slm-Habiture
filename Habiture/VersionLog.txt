@@ -1,3 +1,8 @@
+2015/05/31 Gawin (0.46.20150531)
+1. change all ui
+2. lock all button which is not implemented
+3. add click more function
+
 2015/05/29 Dewei (0.45.20150529)
 1. change default role icon.
 2. add some group icons.

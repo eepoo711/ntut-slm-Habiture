@@ -9,10 +9,11 @@ public interface NetworkInterface {
 
 
     NetworkConnection openGetProfileConnection(String account, String password, String gcmRegisterId);
-    NetworkConnection openGetPhotoConnection(String photoUrl);
+    NetworkConnection openGetFileConnection(String url);
     NetworkConnection openGetFriendsConnection(int uid);
     NetworkConnection openGetGroupsConnection(int uid);
     NetworkConnection openPostPassConnection();
+    NetworkConnection openGetAppInfoConnection();
 
     public List<Habiture> httpGetHabitures(int uid);
     public boolean httpPostDeclaration(int uid, String frequency, String declaration, String punishment, String goal,  String do_it_time);

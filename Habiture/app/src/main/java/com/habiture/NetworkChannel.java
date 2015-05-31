@@ -89,10 +89,10 @@ public class NetworkChannel implements NetworkInterface {
     }
 
     @Override
-    public NetworkConnection openGetPhotoConnection(String photoUrl) {
-        trace("openGetPhotoConnection url=" + photoUrl);
+    public NetworkConnection openGetFileConnection(String url) {
+        trace("openGetFileConnection url=" + url);
         try {
-            URL imgUrl = new URL(photoUrl);
+            URL imgUrl = new URL(url);
             final HttpURLConnection httpURLConnection = (HttpURLConnection) imgUrl.openConnection();
             httpURLConnection.connect();
             return newConnection(httpURLConnection);
@@ -136,6 +136,21 @@ public class NetworkChannel implements NetworkInterface {
         HttpURLConnection httpURLConnection = null;
         httpURLConnection = createPostJsonConnection(URL_PASS);
         return newConnection(httpURLConnection);
+    }
+
+    @Override
+    public NetworkConnection openGetAppInfoConnection() {
+
+        trace("openGetAppInfoConnection");
+
+        try {
+            HttpURLConnection httpURLConnection = createHttpURLConnection("http://140.124.144.121/Habiture/upgrade.cgi");
+            return newConnection(httpURLConnection);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     private HttpURLConnection createPostJsonConnection(String urlString) {

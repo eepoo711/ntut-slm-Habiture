@@ -16,7 +16,7 @@ import utils.Utils;
 public class ProfileTest extends AndroidTestCase {
 
     public void testJsonToProfile() throws Exception {
-        String packet = "{\"url\": \"http://140.124.144.121/Habiture/profile/10176068_726992954019352_539454252837054186_n.jpg\", \"id\": 1}";
+        String packet = "{\"url\": \"http://140.124.144.121/Habiture/profile/10176068_726992954019352_539454252837054186_n.jpg\", \"id\": 1, \"name\": \"Guest\"}";
 
         Profile profile = newProfile(packet);
 

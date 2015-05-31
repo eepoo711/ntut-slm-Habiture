@@ -9,6 +9,9 @@ import com.habiture.PhotoInputStream;
 import com.habiture.Profile;
 import com.habiture.exceptions.HabitureException;
 
+import org.json.JSONObject;
+
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 public class NetworkChannelTest extends AndroidTestCase {
@@ -47,7 +50,7 @@ public class NetworkChannelTest extends AndroidTestCase {
         try {
             Profile profile = getProfile();
 
-            connection = networkChannel.openGetPhotoConnection(profile.getPhotoUrl());
+            connection = networkChannel.openGetFileConnection(profile.getPhotoUrl());
 
             boolean hasImage = connection.getContentLength() > 0;
             assertTrue(hasImage);
@@ -122,6 +125,48 @@ public class NetworkChannelTest extends AndroidTestCase {
             String codes = new String(buffer);
             int code = Integer.valueOf(codes.split("\n")[0]);
             return code == 1 ? true : false;
+        } finally {
+            if(connection != null)
+                connection.close();
+        }
+    }
+
+    public void testGetAppInfo() throws Exception {
+        assertTrue(login());
+
+        String exceptedValue = "{\n" +
+                "  \"version\": {\n" +
+                "    \"url\": \"http://140.124.144.121/Habiture/version/moo_v_0.apk\", \n" +
+                "    \"version_name\": \"0.45.20150529\", \n" +
+                "    \"version_code\": 1\n" +
+                "  }\n" +
+                "}";
+
+        NetworkConnection connection = null;
+        try {
+            connection = networkChannel.openGetAppInfoConnection();
+
+            StringBuffer stringBuffer = new StringBuffer();
+            byte[] buffer = new byte[1024];
+
+            // read string from inputStream
+            int readLen = 0;
+            for(readLen = connection.getInputStream().read(buffer);
+                readLen > 0;
+                readLen = connection.getInputStream().read(buffer)) {
+
+                stringBuffer.append(new String(buffer, 0, readLen));
+            }
+
+            // to json object
+            JSONObject version = new JSONObject(stringBuffer.toString()).getJSONObject("version");
+            String url = version.getString("url");
+            int versionCode = version.getInt("version_code");
+            String versionName = version.getString("version_name");
+
+            assertEquals("http://140.124.144.121/Habiture/version/moo_v_0.apk", url);
+            assertEquals("0.45.20150529", versionName);
+            assertEquals(1, versionCode);
         } finally {
             if(connection != null)
                 connection.close();

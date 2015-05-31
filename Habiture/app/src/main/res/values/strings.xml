@@ -8,11 +8,11 @@
 
     <string name="enter_account">請輸入帳號</string>
     <string name="enter_password">請輸入密碼</string>
-    <string name="progress_title">習慣成真</string>
+    <string name="progress_title">Moo</string>
     <string name="login">登入</string>
     <string name="logining">登入中...</string>
     <string name="login_successfully">登入成功</string>
-    <string name="login_failed">登入失敗</string>
+    <string name="login_failed">登入失敗！請檢查網路 和 帳號密碼</string>
     <string name="declare">發佈</string>
     <string name="declaring">發佈中...</string>
     <string name="declare_successfully">發佈成功</string>
@@ -75,6 +75,7 @@
     <string name="declaration_do_it_time_hint">別人可於何時提醒我</string>
     <string name="play_tool_sound">play_tool_sound</string>
     <string name="return_register_id">return_register_id</string>
+    <string name="progress_upgrade_app">取得版本資訊</string>
 
 
 </resources>
