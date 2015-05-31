@@ -73,9 +73,9 @@ public class ExceptionAlertDialog extends DialogFragment {
 
     public static void showException(FragmentManager fragmentManager, Throwable e) {
         trace("showException");
+        e.printStackTrace();
 
         String message = stackTraceArrayToString(e);
-
         showDialog(fragmentManager, "Catch An Exception", message);
     }
 
