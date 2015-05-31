@@ -13,6 +13,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import utils.exception.UnhandledException;
 
@@ -31,6 +33,10 @@ public class HabitureModule {
     private Profile profile =null;
     private Photo profilePhoto = null;
     private Bitmap profileBitmap = null;
+
+    private boolean isSendSound = false;
+    private Timer sendSoundTimer = null;
+    final long seconds = 5;
 
     public HabitureModule(NetworkInterface networkInterface, GcmModel gcmModel) {
         trace("HabitureModule");
@@ -185,8 +191,30 @@ public class HabitureModule {
     public boolean sendSoundToPartner(int to_id, int pid, int sound_id ) {
         trace("sendSoundToPartner, uid=" + profile.getId() + ", to_id=" + to_id + ", pid=" + pid + ", sound_id=" + sound_id);
         //TODO: ed chen must modify
-        boolean isSoundSent = networkInterface.httpSendSound(profile.getId(),to_id, pid , sound_id);
-        return isSoundSent;
+        if(!isSendSound) {
+            boolean isSoundSent = networkInterface.httpSendSound(profile.getId(),to_id, pid , sound_id);
+            isSendSound = true;
+            if(sendSoundTimer != null) {
+                sendSoundTimer.cancel();
+                sendSoundTimer = null;
+            }
+            sendSoundTimer = new Timer();
+            setSendSoundTask();
+
+            return isSoundSent;
+        }
+        else {
+            return false;
+        }
+    }
+
+    private void setSendSoundTask() {
+        sendSoundTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                isSendSound = false;
+            }
+        }, seconds);
     }
 
     public boolean uploadProofImage(int pid, Bitmap image) {
@@ -265,4 +293,13 @@ public class HabitureModule {
         trace("release");
         gcmModel.stopRegisterGCM();
     }
+
+    public void stopSendSoundTimer() {
+        trace("stopSendSoundTimer");
+        if(sendSoundTimer != null) {
+            sendSoundTimer.cancel();
+            sendSoundTimer = null;
+        }
+    }
+
 }

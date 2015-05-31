@@ -100,7 +100,7 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        mHabitureModule.stopSendSoundTimer();
         unregisterReceiver(toolBroadReceiver);
     }
 
