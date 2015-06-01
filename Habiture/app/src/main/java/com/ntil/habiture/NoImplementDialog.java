@@ -26,7 +26,7 @@ public class NoImplementDialog extends DialogFragment {
 
 
         String declare = "尚未實作";
-        String pleaseInput = "請按確定";
+        String pleaseInput = "Coming soon";
         String confirm = "確定";
 
         return new AlertDialog.Builder(getActivity())

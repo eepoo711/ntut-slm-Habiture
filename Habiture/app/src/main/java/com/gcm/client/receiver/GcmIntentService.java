@@ -125,7 +125,7 @@ public class GcmIntentService extends IntentService {
                         .setContentTitle(swear)
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 /*.bigText(extras.getString("user"))*/)
-                        .setContentText(name);
+                        .setContentText(name+" 戳你一下");
 
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(notificationID(extras), mBuilder.build());
