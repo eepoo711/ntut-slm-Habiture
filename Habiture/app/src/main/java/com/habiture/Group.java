@@ -29,6 +29,7 @@ public class Group {
     private int do_it_time =-1;
     private int id =-1;
     private int icon =-1;
+    private int notice_enable = 0;
 
     private Group(){}
 
@@ -52,12 +53,16 @@ public class Group {
     public int getIcon(){return icon;}
     void setIcon(int icon){this.icon =icon;}
 
-    void setId(int id) {
-        this.id = id;
+    void setId(int id) {this.id = id;}
+    public int getId() {return id;}
+
+    void setNoticeStatus(int enable) {
+        this.notice_enable = enable;
     }
-    public int getId() {
-        return id;
+    public int getNoticeStatus() {
+        return notice_enable;
     }
+
 
     public static List<Group> readGroups(InputStream is) throws HabitureException {
         trace("readGroups");
@@ -100,6 +105,7 @@ public class Group {
         int do_it_time =-1;
         int id =-1;
         int icon =-1;
+        int notice_enable = -1;
 
         reader.beginObject();
         while(reader.hasNext()) {
@@ -118,6 +124,8 @@ public class Group {
                 id = reader.nextInt();
             } else if("icon".equals(key)) {
                 icon = reader.nextInt();
+            } else if("notice_enable".equals(key)) {
+                notice_enable = reader.nextInt();
             } else {
                 reader.skipValue();
             }
@@ -136,6 +144,7 @@ public class Group {
         group.setFrequency(frequency);
         group.setDoItTime(do_it_time);
         group.setIcon(icon);
+        group.setNoticeStatus(notice_enable);
 
         return group;
     }

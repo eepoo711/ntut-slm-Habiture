@@ -263,6 +263,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
         private int to_id = -1;
         private int remain = -1;
         private boolean isFounder = false;
+        private int notice_enable = -1;
 
         @Override
         protected void onPreExecute() {
@@ -305,14 +306,15 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
                     goal = pokeData.getGoal();
                     remain = pokeData.getFounderList().get(0).getRemain();
                     to_id = pokeData.getFounderList().get(0).getUid();
+                    notice_enable = pokeData.getFounderList().get(0).getNoticeStatus();
 
                     if (url == null || swear == null || punishment == null || remain == -1 ||
-                            doItTime == -1 || frequency == -1 || goal == -1 || to_id == -1) {
+                            doItTime == -1 || frequency == -1 || goal == -1 || to_id == -1 || notice_enable ==-1) {
                         Toast.makeText(HomeActivity.this, "載入失敗", Toast.LENGTH_SHORT).show();
                         return ;
                     }
                     PokeActivity.startActivity(HomeActivity.this, isFounder, url, swear, punishment, pid,
-                            to_id, frequency, doItTime, goal, remain);
+                            to_id, frequency, doItTime, goal, remain,notice_enable);
                 } else {
                     Toast.makeText(HomeActivity.this, "載入失敗", Toast.LENGTH_SHORT).show();
                 }

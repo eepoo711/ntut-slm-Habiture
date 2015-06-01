@@ -315,6 +315,8 @@ public class NetworkChannel implements NetworkInterface {
         int do_it_time = -1;
         String punishment = null;
         int icon = -1;
+        int notice_enable = -1;
+
         try {
             reader = new JsonReader(new InputStreamReader(is));
             reader.beginObject();
@@ -392,6 +394,7 @@ public class NetworkChannel implements NetworkInterface {
         String url = null;
         int uid = -1;
         String name = null;
+        int notice_enable = -1;
 
         reader.beginObject();
         while(reader.hasNext()) {
@@ -404,6 +407,8 @@ public class NetworkChannel implements NetworkInterface {
                 uid = reader.nextInt();
             } else if("name".equals(key)) {
                 name = reader.nextString();
+            } else if("notice_enable".equals(key)) {
+                notice_enable = reader.nextInt();
             }else {
                 reader.skipValue();
             }
@@ -419,6 +424,7 @@ public class NetworkChannel implements NetworkInterface {
         founder.setRemain(remain);
         founder.setUid(uid);
         founder.setName(name);
+        founder.setNoticeStatus(notice_enable);
 
         return founder;
     }

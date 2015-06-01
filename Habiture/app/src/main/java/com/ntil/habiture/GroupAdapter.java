@@ -2,6 +2,7 @@ package com.ntil.habiture;
 
 
 import android.content.Context;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,6 +68,7 @@ public class GroupAdapter extends BaseAdapter{
             holder.tvSwear = (TextView) convertView.findViewById(R.id.tvGroupName);
             holder.tvTime = (TextView) convertView.findViewById(R.id.tvGroupTime);
             holder.tvFrequency = (TextView) convertView.findViewById(R.id.tvGroupFrequency);
+            holder.ivAlert = (ImageView) convertView.findViewById(R.id.ivAlert);
             convertView.setTag(holder);
         }
         else {
@@ -85,6 +87,14 @@ public class GroupAdapter extends BaseAdapter{
             ampmDoItTime = 12;
         holder.tvTime.setText(ampm + ampmDoItTime + ":00");
 
+        //  set Alert icon
+        Time t=new Time(); // or Time t=new Time("GMT+8"); 加上Time Zone資料。
+        t.setToNow(); // 取得系統時間。
+        if(t.hour >= item.getGroup().getDoItTime() && item.getGroup().getNoticeStatus()==1)
+            holder.ivAlert.setVisibility(View.VISIBLE);
+        else
+            holder.ivAlert.setVisibility(View.INVISIBLE);
+
         return convertView;
     }
 
@@ -93,6 +103,7 @@ public class GroupAdapter extends BaseAdapter{
         TextView tvSwear;
         TextView tvTime;
         TextView tvFrequency;
+        ImageView ivAlert;
     }
 
     private int getGroupIconId(int icon) {
