@@ -2,6 +2,7 @@ package com.ntil.habiture;
 
 
 import android.content.Context;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,14 +68,17 @@ public class GroupAdapter extends BaseAdapter{
             holder.tvSwear = (TextView) convertView.findViewById(R.id.tvGroupName);
             holder.tvTime = (TextView) convertView.findViewById(R.id.tvGroupTime);
             holder.tvFrequency = (TextView) convertView.findViewById(R.id.tvGroupFrequency);
+            holder.ivAlert = (ImageView) convertView.findViewById(R.id.ivAlert);
             convertView.setTag(holder);
         }
         else {
             holder = (ViewHolder)convertView.getTag();
         }
         Item item = (Item) getItem(position);
+        holder.ivIcon.setImageResource( getGroupIconId(item.group.getIcon()) );
         holder.tvSwear.setText(item.group.getSwear());
         holder.tvFrequency.setText("每週 " + item.getGroup().getFrequency() + " 次");
+
         // fix 24 clock to 12
         String ampm = item.getGroup().getDoItTime() >= 12 ? "PM " : "AM ";
         int ampmDoItTime = item.getGroup().getDoItTime() > 12 ? item.getGroup().getDoItTime() - 12
@@ -82,6 +86,15 @@ public class GroupAdapter extends BaseAdapter{
         if (ampmDoItTime == 0)
             ampmDoItTime = 12;
         holder.tvTime.setText(ampm + ampmDoItTime + ":00");
+
+        //  set Alert icon
+        Time t=new Time(); // or Time t=new Time("GMT+8"); 加上Time Zone資料。
+        t.setToNow(); // 取得系統時間。
+        if(t.hour >= item.getGroup().getDoItTime() && item.getGroup().getNoticeStatus()==1)
+            holder.ivAlert.setVisibility(View.VISIBLE);
+        else
+            holder.ivAlert.setVisibility(View.INVISIBLE);
+
         return convertView;
     }
 
@@ -90,7 +103,27 @@ public class GroupAdapter extends BaseAdapter{
         TextView tvSwear;
         TextView tvTime;
         TextView tvFrequency;
+        ImageView ivAlert;
     }
 
-
+    private int getGroupIconId(int icon) {
+        int resId;
+        switch(icon) {
+            case 1:
+                resId=R.drawable.mark_running;
+                break;
+            case 2:
+                resId=R.drawable.mark_running;
+                break;
+            case 3:
+                resId=R.drawable.mark_swimming;
+                break;
+            case 4:
+                resId=R.drawable.mark_riding;
+                break;
+            default:
+                resId=R.drawable.mark_reading;
+        }
+        return resId;
+    }
 }

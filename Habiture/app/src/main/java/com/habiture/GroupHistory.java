@@ -6,18 +6,19 @@ import android.graphics.Bitmap;
 public class GroupHistory {
 
     private String url  = null;
+    private Bitmap iconImage =null;
     private Bitmap image =null;
     private String date =null;
     private String name =null;
 
 
-    public String getUrl() {
-        return url;
-    }
+    public String getUrl() {return url;}
 
-    void setUrl(String url) {
-        this.url = url;
-    }
+    void setUrl(String url) {this.url = url;}
+
+    void setIcon(Bitmap image) {this.iconImage = image;}
+
+    public Bitmap getIcon() {return iconImage;}
 
     void setImage(Bitmap image) {this.image = image;}
 

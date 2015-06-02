@@ -57,7 +57,10 @@ public class HabitureModule {
             return true;
         } catch(HabitureException e) {
             e.printStackTrace();
+        } catch(NetworkException e) {
+            e.printStackTrace();
         }
+
         return false;
     }
 
@@ -76,6 +79,8 @@ public class HabitureModule {
                     connection.getInputStream(),
                     connection.getContentLength());
             return photo;
+        } catch(NetworkException e) {
+            throw new HabitureException(e);
         } finally {
             if(connection != null)
                 connection.close();
@@ -89,6 +94,8 @@ public class HabitureModule {
             connection = networkInterface.openGetProfileConnection(account, password, gcmModel.getRegistrationId());
             InputStream in = connection.getInputStream();
             profile = new Profile(in);
+        } catch(NetworkException e) {
+            throw new HabitureException(e);
         } finally {
             if(connection != null)
                 connection.close();
@@ -153,7 +160,9 @@ public class HabitureModule {
             return friends;
         } catch (HabitureException e) {
             e.printStackTrace();
-        }finally {
+        } catch (NetworkException e) {
+            e.printStackTrace();
+        } finally {
             if(connection != null)
                 connection.close();
         }
@@ -168,6 +177,8 @@ public class HabitureModule {
             groups = Group.readGroups(connection.getInputStream());
             return groups;
         } catch (HabitureException e) {
+            e.printStackTrace();
+        } catch(NetworkException e) {
             e.printStackTrace();
         } finally {
             if(connection != null)
@@ -267,6 +278,8 @@ public class HabitureModule {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch(NetworkException e) {
+            e.printStackTrace();
         } finally {
             if(connection != null)
                 connection.close();
@@ -299,6 +312,8 @@ public class HabitureModule {
             return photo.getImageData();
         } catch (HabitureException e) {
             e.printStackTrace();
+        } catch(NetworkException e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -312,6 +327,8 @@ public class HabitureModule {
             FileStream fileStream = new FileStream(connection);
             return fileStream;
         } catch (HabitureException e) {
+            e.printStackTrace();
+        }  catch(NetworkException e) {
             e.printStackTrace();
         }
         return null;
@@ -327,7 +344,9 @@ public class HabitureModule {
             return new AppInfo(json);
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
+        } catch(NetworkException e) {
+            e.printStackTrace();
+        }  finally {
             if(connection != null)
                 connection.close();
         }

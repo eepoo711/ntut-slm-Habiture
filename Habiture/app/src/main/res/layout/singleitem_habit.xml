@@ -186,13 +186,13 @@
             android:layout_width="fill_parent"
             android:layout_height="1dp"
             android:id="@+id/imageView2"
-            android:background="#D6D1BF" />
+            android:background="#7fd6d1bf" />
 
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="1dp"
             android:id="@+id/imageView3"
-            android:background="#D6C89C" />
+            android:background="#7bd6c89c" />
 
     </LinearLayout>
 

@@ -52,7 +52,7 @@ public class PokeFragment extends Fragment {
     }
 
     public static PokeFragment newInstance(boolean isFounder, String swear, String punishment
-            , int frequency, int doItTime, int goal, int remain) {
+            , int frequency, int doItTime, int goal, int remain,int notice_enable) {
         PokeFragment fragment = new PokeFragment();
         //bmpOwnerPhoto = bitmapOwner;
         Bundle args = new Bundle();
@@ -63,6 +63,7 @@ public class PokeFragment extends Fragment {
         args.putInt("doItTime", doItTime);
         args.putInt("goal", goal);
         args.putInt("remain", remain);
+        args.putInt("notice_enable", notice_enable);
         fragment.setArguments(args);
         return fragment;
     }
@@ -148,7 +149,7 @@ public class PokeFragment extends Fragment {
 
         Time t=new Time(); // or Time t=new Time("GMT+8"); 加上Time Zone資料。
         t.setToNow(); // 取得系統時間。
-        int alertId = t.hour >= doItTime ? R.mipmap.notice_enable : R.mipmap.notice_disable ;
+        int alertId = t.hour >= doItTime && getArguments().getInt("notice_enable")==1 ? R.mipmap.notice_enable : R.mipmap.notice_disable ;
         ivAlert.setImageResource(alertId);
 
         tvSwear.setText(getArguments().getString("swear"));

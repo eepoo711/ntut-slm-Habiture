@@ -13,6 +13,7 @@ public class PokeData {
     int goal;
     int do_it_time;
     int icon;
+
     List<Founder> founderList;
 
     public void setSwear(String swear) {
@@ -83,11 +84,15 @@ public class PokeData {
         return this.frequency;
     }
 
+
+
     public static class Founder {
         String url;
         String name;
         int remain;
         int uid;
+        int notice_enable;
+
 
 //        public static Founder newInstance() {
 //            Founder founder = new Founder();
@@ -124,6 +129,12 @@ public class PokeData {
 
         public int getUid() {
             return this.uid;
+        }
+
+        void setNoticeStatus(int enable) {this.notice_enable = enable;}
+
+        public int getNoticeStatus() {
+            return notice_enable;
         }
 
     }

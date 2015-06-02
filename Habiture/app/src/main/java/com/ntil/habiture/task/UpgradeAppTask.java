@@ -66,7 +66,9 @@ public class UpgradeAppTask extends AsyncTask<Void, Void, File> {
 
         AppInfo appInfo = habitureModule.getOnlineAppInfo();
 
-        if(nowVersionCode > appInfo.getVersionCode())
+
+        if(appInfo == null
+                || isLatestVersionNow(appInfo))
             return null;
 
         // download file
@@ -101,6 +103,10 @@ public class UpgradeAppTask extends AsyncTask<Void, Void, File> {
             Utils.closeIO(out);
             if(fileStream != null) fileStream.close();
         }
+    }
+
+    private boolean isLatestVersionNow(AppInfo appInfo) {
+        return nowVersionCode > appInfo.getVersionCode();
     }
 
     @Override

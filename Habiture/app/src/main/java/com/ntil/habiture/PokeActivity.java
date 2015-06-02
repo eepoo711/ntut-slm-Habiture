@@ -56,7 +56,7 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
     }
 
     public static void startActivity(Context context, boolean isFounder, String url, String swear,
-            String punishment,int pid, int to_id, int frequency, int doItTime, int goal, int remain) {
+            String punishment,int pid, int to_id, int frequency, int doItTime, int goal, int remain,int notice_enable) {
         Intent intent = new Intent(context, PokeActivity.class);
         intent.putExtra("isFounder", isFounder);
         intent.putExtra("url", url);
@@ -68,6 +68,7 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         intent.putExtra("goal", goal);
         intent.putExtra("to_id", to_id);
         intent.putExtra("remain", remain);
+        intent.putExtra("notice_enable",notice_enable);
         context.startActivity(intent);
 
         random_tool = new Random();
@@ -84,7 +85,8 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
             mPoketFragment = PokeFragment.newInstance(getIntent().getBooleanExtra("isFounder", false),
                     getIntent().getStringExtra("swear"), getIntent().getStringExtra("punishment"),
                     getIntent().getIntExtra("frequency", 0), getIntent().getIntExtra("doItTime", 0),
-                    getIntent().getIntExtra("goal", 0), getIntent().getIntExtra("remain", 0));
+                    getIntent().getIntExtra("goal", 0), getIntent().getIntExtra("remain", 0),
+                    getIntent().getIntExtra("notice_enable", 0));
             getFragmentManager().beginTransaction()
                     .add(R.id.profileContainer, HomeTopFragment.newInstance(
                             mHabitureModule.getName()
