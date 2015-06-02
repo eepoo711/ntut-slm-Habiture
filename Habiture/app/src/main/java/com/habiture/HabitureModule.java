@@ -34,7 +34,7 @@ public class HabitureModule {
 
     private boolean isSendSound = false;
     private Timer sendSoundTimer = null;
-    final long seconds = 5;
+    final long seconds = 5000;
 
     public HabitureModule(NetworkInterface networkInterface, GcmModel gcmModel) {
         trace("HabitureModule");
@@ -201,6 +201,7 @@ public class HabitureModule {
         trace("sendSoundToPartner, uid=" + profile.getId() + ", to_id=" + to_id + ", pid=" + pid + ", sound_id=" + sound_id);
         //TODO: ed chen must modify
         if(!isSendSound) {
+            trace("isSendSound!!!!!!!!!!!!!!!!");
             boolean isSoundSent = networkInterface.httpSendSound(profile.getId(),to_id, pid , sound_id);
             isSendSound = true;
             if(sendSoundTimer != null) {
