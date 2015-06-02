@@ -24,6 +24,8 @@ import com.widget.CircleImageView;
 
 import java.util.concurrent.TimeoutException;
 
+import utils.exception.ExceptionAlertDialog;
+
 /**
  * Created by GawinHsu on 5/7/15.
  */
@@ -177,7 +179,8 @@ public class PokeFragment extends Fragment {
                     finalHeight = ivPoke.getMeasuredHeight();
                     finalWidth = ivPoke.getMeasuredWidth();
                     trace("Height: " + finalHeight + " Width: " + finalWidth);
-                    setImage(((BitmapDrawable)ivPoke.getDrawable()).getBitmap());
+                    if(bmpDrawing==null)
+                        setImage(((BitmapDrawable)ivPoke.getDrawable()).getBitmap());
                     return true;
                 }
             });
@@ -205,9 +208,14 @@ public class PokeFragment extends Fragment {
         trace("setImage");
         bmpOwnerPhoto = image;
         trace(" ivPoke.getWidth:"+ ivPoke.getWidth()+"   ivPoke.getHeight:"+ ivPoke.getHeight());
-        bmpDrawing = Bitmap.createScaledBitmap(bmpOwnerPhoto, ivPoke.getWidth(), ivPoke.getHeight(), false);
-//        bmpDrawing = Bitmap.createScaledBitmap(bmpOwnerPhoto, 300, 300, false);
-        bmpTool = BitmapFactory.decodeResource(getResources(), R.drawable.sample_tool).copy(Bitmap.Config.ARGB_8888, true);
+
+        try {
+            bmpDrawing = Bitmap.createScaledBitmap(bmpOwnerPhoto, ivPoke.getWidth(), ivPoke.getHeight(), false);
+            bmpTool = BitmapFactory.decodeResource(getResources(), R.drawable.sample_tool).copy(Bitmap.Config.ARGB_8888, true);
+        }
+        catch (Throwable e) {
+            ExceptionAlertDialog.showException(getFragmentManager(), e);
+        }
         setPokeEnabled();
     }
 
