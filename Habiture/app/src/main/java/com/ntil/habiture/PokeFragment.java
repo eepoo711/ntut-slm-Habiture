@@ -179,8 +179,12 @@ public class PokeFragment extends Fragment {
                     finalHeight = ivPoke.getMeasuredHeight();
                     finalWidth = ivPoke.getMeasuredWidth();
                     trace("Height: " + finalHeight + " Width: " + finalWidth);
-                    if(bmpDrawing==null)
-                        setImage(((BitmapDrawable)ivPoke.getDrawable()).getBitmap());
+                    if(bmpDrawing==null) {
+                        Bitmap bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.default_role);
+                        //then create a copy of bitmap bmp1 into bmp2
+                        Bitmap bmp2 = bmp1.copy(bmp1.getConfig(), true);
+                        setImage(bmp2);
+                    }
                     return true;
                 }
             });
@@ -210,6 +214,7 @@ public class PokeFragment extends Fragment {
         trace(" ivPoke.getWidth:"+ ivPoke.getWidth()+"   ivPoke.getHeight:"+ ivPoke.getHeight());
 
         try {
+            //bmpDrawing = bmpOwnerPhoto.copy(bmpOwnerPhoto.getConfig(), true);
             bmpDrawing = Bitmap.createScaledBitmap(bmpOwnerPhoto, ivPoke.getWidth(), ivPoke.getHeight(), false);
             bmpTool = BitmapFactory.decodeResource(getResources(), R.drawable.sample_tool).copy(Bitmap.Config.ARGB_8888, true);
         }
