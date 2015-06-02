@@ -23,8 +23,6 @@ public class Profile {
     public Profile(InputStream in) throws HabitureException {
         JsonReader reader = new JsonReader(new InputStreamReader(in));
 
-
-
         try {
 
             String photoUri = null;
@@ -48,7 +46,7 @@ public class Profile {
 
             trace("id = " + id + " url = " + photoUri);
 
-            if(id <= 0 || photoUri == null || photoUri.length() <= 0 || name == null)
+            if(id <= 0 || photoUri == null || name == null)
                 throw new HabitureException("wrong account or password. id = " + id + " photoUri = " + photoUri + " name = " + name);
 
             this.id = id;
