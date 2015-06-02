@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -27,7 +28,7 @@ public class HabitListAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private Listener listener;
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     private void trace(String message) {
         if(DEBUG)
             Log.d("HabitListAdapter", message);
@@ -55,7 +56,6 @@ public class HabitListAdapter extends BaseAdapter {
     public class Item {
         Habiture habiture;
         boolean isPassDisable = false;
-
         public Habiture getHabiture() {
             return habiture;
         }
@@ -87,9 +87,6 @@ public class HabitListAdapter extends BaseAdapter {
             holder.ibCamera = (ImageButton) convertView.findViewById(R.id.btnCamera);
             holder.ibPass = (ImageButton) convertView.findViewById(R.id.btnPass);
             holder.ibGroupFriend = (ImageButton) convertView.findViewById(R.id.btnGroupFriend);
-
-
-
             convertView.setTag(holder);
         }
         else {
@@ -101,24 +98,15 @@ public class HabitListAdapter extends BaseAdapter {
         holder.tvSwear.setText(item.habiture.getSwear());
         holder.tvPunishment.setText(item.habiture.getPunishment());
         holder.tvRemain.setText("本週剩 " + item.habiture.getRemainFrequency() + " 次");
-        trace("notice = " + item.getHabiture().getNoticeEnable());
-        trace("isPassDisable = " + item.isPassDisable);
+        trace("position = " + position);
+        trace("item.isPassDisable = " + item.isPassDisable + ", NoticeEnable = " + item.getHabiture().getNoticeEnable());
         if (item.isPassDisable) {
-            holder.ibPass.setEnabled(false);
-            holder.ibPass.getDrawable().setAlpha(128);
-            holder.ibCamera.setEnabled(false);
-            holder.ibCamera.getDrawable().setAlpha(128);
+            setProofIconDisable(holder);
         } else {
             if (!item.getHabiture().getNoticeEnable()) {
-                holder.ibPass.setEnabled(false);
-                holder.ibPass.getDrawable().setAlpha(128);
-                holder.ibCamera.setEnabled(false);
-                holder.ibCamera.getDrawable().setAlpha(128);
+                setProofIconDisable(holder);
             } else {
-                holder.ibPass.setEnabled(true);
-                holder.ibPass.getDrawable().setAlpha(255);
-                holder.ibCamera.setEnabled(true);
-                holder.ibCamera.getDrawable().setAlpha(255);
+                setProofIconEnable(holder);
             }
         }
 
@@ -163,6 +151,22 @@ public class HabitListAdapter extends BaseAdapter {
         });
 
         return convertView;
+    }
+
+    private void setProofIconDisable(ViewHolder holder)
+    {
+        holder.ibPass.setEnabled(false);
+        holder.ibPass.setAlpha(128);
+        holder.ibCamera.setEnabled(false);
+        holder.ibCamera.setAlpha(128);
+    }
+
+    private void setProofIconEnable(ViewHolder holder)
+    {
+        holder.ibPass.setEnabled(true);
+        holder.ibPass.setAlpha(255);
+        holder.ibCamera.setEnabled(true);
+        holder.ibCamera.setAlpha(255);
     }
 
     private class ViewHolder {
