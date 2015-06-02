@@ -49,7 +49,8 @@ public class HabitureModule {
 
         try {
             this.profile = getProfileFromNetwork(account, password);
-            this.profilePhoto = getPhotoFromNetwork(profile.getPhotoUrl());
+            if(profile.getPhotoUrl().length()>0)
+                this.profilePhoto = getPhotoFromNetwork(profile.getPhotoUrl());
 
             this.name = this.profile.getName();
             this.account = account;
@@ -139,14 +140,12 @@ public class HabitureModule {
     }
 
     public Bitmap getHeader() {
-
         if(profile != null) {
-            if(profileBitmap == null) {
+            if(profileBitmap == null && profilePhoto!=null) {
                 byte[] image = profilePhoto.getImageData();
                 profileBitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
             }
         }
-
         return profileBitmap;
     }
 

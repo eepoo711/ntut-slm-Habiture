@@ -244,21 +244,14 @@
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:gravity="center">
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
         android:gravity="center"
         android:padding="20dp">
-
 
         <com.widget.CircleImageView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/ivPoke"
             android:src="@drawable/default_role" />
-    </LinearLayout>
 
     </LinearLayout>
 
