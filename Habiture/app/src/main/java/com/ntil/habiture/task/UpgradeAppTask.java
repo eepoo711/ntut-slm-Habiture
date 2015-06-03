@@ -106,7 +106,7 @@ public class UpgradeAppTask extends AsyncTask<Void, Void, File> {
     }
 
     private boolean isLatestVersionNow(AppInfo appInfo) {
-        return nowVersionCode > appInfo.getVersionCode();
+        return nowVersionCode >= appInfo.getVersionCode();
     }
 
     @Override
