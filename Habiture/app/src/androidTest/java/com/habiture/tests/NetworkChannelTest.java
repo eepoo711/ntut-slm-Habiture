@@ -5,13 +5,12 @@ import android.test.AndroidTestCase;
 
 import com.habiture.NetworkChannel;
 import com.habiture.NetworkConnection;
-import com.habiture.PhotoInputStream;
+import com.habiture.Photo;
 import com.habiture.Profile;
 import com.habiture.exceptions.HabitureException;
 
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 public class NetworkChannelTest extends AndroidTestCase {
@@ -55,10 +54,11 @@ public class NetworkChannelTest extends AndroidTestCase {
             boolean hasImage = connection.getContentLength() > 0;
             assertTrue(hasImage);
 
-            PhotoInputStream photoInputStream = new PhotoInputStream(
+            Photo photo = new Photo(
                     connection.getInputStream(),
                     connection.getContentLength());
-            assertNotNull(photoInputStream);
+
+            assertNotNull(photo);
 
         } finally {
             if(connection != null)
