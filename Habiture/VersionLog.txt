@@ -1,3 +1,7 @@
+2015/06/03 Gawin (0.47.20150603)
+1. finish download picture of group and friend
+2. fix image button disable bugs
+
 2015/05/31 Gawin (0.46.20150531)
 1. change all ui
 2. lock all button which is not implemented

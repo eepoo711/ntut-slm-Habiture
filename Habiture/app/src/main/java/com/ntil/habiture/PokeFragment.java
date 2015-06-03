@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.format.Time;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,12 +24,14 @@ import com.widget.CircleImageView;
 
 import java.util.concurrent.TimeoutException;
 
+import utils.exception.ExceptionAlertDialog;
+
 /**
  * Created by GawinHsu on 5/7/15.
  */
 public class PokeFragment extends Fragment {
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     public Listener listener;
     
@@ -130,7 +134,7 @@ public class PokeFragment extends Fragment {
             }
         });
 
-        ivPoke = (CircleImageView) getActivity().findViewById(R.id.ivPoke);
+        ivPoke = (ImageView) getActivity().findViewById(R.id.ivPoke);
         ivAlert = (ImageView) getActivity().findViewById(R.id.ivAlert);
         tvSwear = (TextView) getActivity().findViewById(R.id.tvSwear);
         tvPunishment = (TextView) getActivity().findViewById(R.id.tvPunishment);
@@ -140,16 +144,16 @@ public class PokeFragment extends Fragment {
         tvFrequency = (TextView) getActivity().findViewById(R.id.tvFrequency);
 
         // fix 24 clock to 12
-        int doItTime =  getArguments().getInt("doItTime");
+        int doItTime = getArguments().getInt("doItTime");
         String ampm = doItTime >= 12 ? "PM " : "AM ";
         int ampmDoItTime = doItTime > 12 ? getArguments().getInt("doItTime") - 12
-                :getArguments().getInt("doItTime");
+                : getArguments().getInt("doItTime");
         if (ampmDoItTime == 0)
             ampmDoItTime = 12;
 
-        Time t=new Time(); // or Time t=new Time("GMT+8"); 加上Time Zone資料。
+        Time t = new Time(); // or Time t=new Time("GMT+8"); 加上Time Zone資料。
         t.setToNow(); // 取得系統時間。
-        int alertId = t.hour >= doItTime && getArguments().getInt("notice_enable")==1 ? R.mipmap.notice_enable : R.mipmap.notice_disable ;
+        int alertId = t.hour >= doItTime && getArguments().getInt("notice_enable") == 1 ? R.mipmap.notice_enable : R.mipmap.notice_disable;
         ivAlert.setImageResource(alertId);
 
         tvSwear.setText(getArguments().getString("swear"));
@@ -164,10 +168,27 @@ public class PokeFragment extends Fragment {
         }
 
 
-        if(bmpDrawing != null)
+        if (bmpDrawing != null)
             setPokeEnabled();
-
-
+        else {
+            ViewTreeObserver vto = ivPoke.getViewTreeObserver();
+            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                public boolean onPreDraw() {
+                    int finalHeight, finalWidth;
+                    ivPoke.getViewTreeObserver().removeOnPreDrawListener(this);
+                    finalHeight = ivPoke.getMeasuredHeight();
+                    finalWidth = ivPoke.getMeasuredWidth();
+                    trace("Height: " + finalHeight + " Width: " + finalWidth);
+                    if(bmpDrawing==null) {
+                        Bitmap bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.default_role);
+                        //then create a copy of bitmap bmp1 into bmp2
+                        Bitmap bmp2 = bmp1.copy(bmp1.getConfig(), true);
+                        setImage(bmp2);
+                    }
+                    return true;
+                }
+            });
+        }
     }
 
     @Override
@@ -190,10 +211,16 @@ public class PokeFragment extends Fragment {
     public void setImage(Bitmap image) {
         trace("setImage");
         bmpOwnerPhoto = image;
-        //bmpDrawing = image;
-        bmpDrawing = Bitmap.createScaledBitmap(bmpOwnerPhoto, ivPoke.getWidth(), ivPoke.getHeight(), false);
-//        bmpDrawing = Bitmap.createScaledBitmap(bmpOwnerPhoto, 300, 300, false);
-        bmpTool = BitmapFactory.decodeResource(getResources(), R.drawable.sample_tool).copy(Bitmap.Config.ARGB_8888, true);
+        trace(" ivPoke.getWidth:"+ ivPoke.getWidth()+"   ivPoke.getHeight:"+ ivPoke.getHeight());
+
+        try {
+            //bmpDrawing = bmpOwnerPhoto.copy(bmpOwnerPhoto.getConfig(), true);
+            bmpDrawing = Bitmap.createScaledBitmap(bmpOwnerPhoto, ivPoke.getWidth(), ivPoke.getHeight(), false);
+            bmpTool = BitmapFactory.decodeResource(getResources(), R.drawable.sample_tool).copy(Bitmap.Config.ARGB_8888, true);
+        }
+        catch (Throwable e) {
+            ExceptionAlertDialog.showException(getFragmentManager(), e);
+        }
         setPokeEnabled();
     }
 

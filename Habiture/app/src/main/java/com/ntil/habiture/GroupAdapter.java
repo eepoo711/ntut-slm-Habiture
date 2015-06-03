@@ -2,6 +2,8 @@ package com.ntil.habiture;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +21,7 @@ import java.util.List;
 public class GroupAdapter extends BaseAdapter{
     private List<Item> items;
     private LayoutInflater inflater;
+    Listener listener;
 
     private static final boolean DEBUG = false;
 
@@ -35,11 +38,16 @@ public class GroupAdapter extends BaseAdapter{
             item.group = group;
             items.add(item);
         }
+        listener = (Listener) context;
     }
 
     public class Item {
+        public static final int GROUP_ITEM_READY = 0;
+        public static final int GROUP_ITEM_DOWNING = 1;
+        public static final int GROUP_ITEM_SETTING = 2;
         Group group;
-
+        Bitmap photo = null;
+        int state = GROUP_ITEM_READY;
         public Group getGroup() {
             return group;
         }
@@ -69,12 +77,14 @@ public class GroupAdapter extends BaseAdapter{
             holder.tvTime = (TextView) convertView.findViewById(R.id.tvGroupTime);
             holder.tvFrequency = (TextView) convertView.findViewById(R.id.tvGroupFrequency);
             holder.ivAlert = (ImageView) convertView.findViewById(R.id.ivAlert);
+            holder.ivPhoto = (ImageView) convertView.findViewById(R.id.ivPhoto);
             convertView.setTag(holder);
         }
         else {
             holder = (ViewHolder)convertView.getTag();
         }
         Item item = (Item) getItem(position);
+        trace("position = " + position);
         holder.ivIcon.setImageResource( getGroupIconId(item.group.getIcon()) );
         holder.tvSwear.setText(item.group.getSwear());
         holder.tvFrequency.setText("每週 " + item.getGroup().getFrequency() + " 次");
@@ -95,7 +105,33 @@ public class GroupAdapter extends BaseAdapter{
         else
             holder.ivAlert.setVisibility(View.INVISIBLE);
 
+        //download photo
+        switch (item.state) {
+            case Item.GROUP_ITEM_READY:
+                trace("GROUP_ITEM_READY, position = " + position);
+                listener.onDownloadGroupPhoto(this, item.getGroup().getUrl(), position);
+                item.state = Item.GROUP_ITEM_DOWNING;
+                break;
+            case Item.GROUP_ITEM_DOWNING:
+                // do Nothing
+                break;
+            case Item.GROUP_ITEM_SETTING:
+                trace("GROUP_ITEM_WAIT_SET, position = " + position);
+                holder.ivPhoto.setImageBitmap(item.photo);
+                break;
+        }
+
         return convertView;
+    }
+
+    public void setGroupPhoto(byte[] photo, int position) {
+        Item item = (Item) getItem(position);
+        if (item.state == Item.GROUP_ITEM_DOWNING) {
+            trace("GROUP_ITEM_DOWNING, position = " + position);
+            item.photo = BitmapFactory.decodeByteArray(photo, 0, photo.length);
+            item.state = Item.GROUP_ITEM_SETTING;
+            notifyDataSetChanged();
+        }
     }
 
     private class ViewHolder {
@@ -104,6 +140,8 @@ public class GroupAdapter extends BaseAdapter{
         TextView tvTime;
         TextView tvFrequency;
         ImageView ivAlert;
+        ImageView ivPhoto;
+
     }
 
     private int getGroupIconId(int icon) {
@@ -125,5 +163,9 @@ public class GroupAdapter extends BaseAdapter{
                 resId=R.drawable.mark_reading;
         }
         return resId;
+    }
+
+    public interface Listener {
+        void onDownloadGroupPhoto(GroupAdapter groupAdapter, String url, int position);
     }
 }

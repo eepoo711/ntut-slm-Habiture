@@ -8,8 +8,8 @@ android {
         applicationId "com.ntil.habiture"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 1
-        versionName "0.46.20150531"
+        versionCode 2
+        versionName "0.47.20150603"
     }
     buildTypes {
         release {

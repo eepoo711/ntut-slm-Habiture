@@ -93,7 +93,9 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
                             , mHabitureModule.getHeader()))
                     .add(R.id.pokeContainer, mPoketFragment)
                     .commit();
-            new QueryOwnerPhoto().execute(getIntent().getStringExtra("url"));
+
+            if(getIntent().getStringExtra("url").length()>0)
+                new QueryOwnerPhoto().execute(getIntent().getStringExtra("url"));
         }
         registerToolBroadReceiver();
     }

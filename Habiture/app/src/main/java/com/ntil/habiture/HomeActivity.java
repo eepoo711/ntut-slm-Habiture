@@ -27,7 +27,8 @@ import utils.exception.UnhandledException;
 
 public class HomeActivity extends Activity implements HomeBottomFragment.Listener,
         ExitAlertDialog.Listener, GroupFragment.Listener, HabitListFragment.Listener,
-        HabitListAdapter.Listener, PassAlertDialog.Listener {
+        HabitListAdapter.Listener, PassAlertDialog.Listener, GroupAdapter.Listener,
+        FriendAdapter.Listener {
     private HabitureModule mHabitureModule;
     private Bitmap mBitmapCaputred;
     private HabitListFragment habitListFragment = null;
@@ -203,6 +204,8 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
 
+
+
     @Override
     public void onClickHabitPass(Habiture habiture, int position, int passRemain) {
         trace("onClickHabitPass");
@@ -210,9 +213,128 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
         newFragment.show(getFragmentManager(), "dialog");
     }
 
+    @Override
+    public void onDownloadGroupPhoto(GroupAdapter groupAdapter, String url, int position) {
+        new DownloadGroupPhotoTask(groupAdapter, position).execute(url);
+    }
+
+    @Override
+    public void onDownloadFriendPhoto(FriendAdapter friendAdapter, String url, int position) {
+        new DownloadFriendPhotoTask(friendAdapter, position).execute(url);
+    }
+
+    private class DownloadFriendPhotoTask extends AsyncTask<String, Void, byte[]> {
+        FriendAdapter friendAdapter;
+        int position;
+
+        public DownloadFriendPhotoTask(FriendAdapter friendAdapter, int position) {
+            this.friendAdapter = friendAdapter;
+            this.position = position;
+        }
+
+        @Override
+        protected byte[] doInBackground(String... params) {
+            trace("DownloadFriendPhotoTask doInBackground");
+            String url = params[0];
+            byte[] image = null;
+            try {
+                image = mHabitureModule.downloadPhoto(url);
+            } catch (Exception e) {
+                new UnhandledException("doInBackground" + e);
+            }
+
+            return image;
+        }
+
+        @Override
+        protected void onPostExecute(byte[] image) {
+            trace("DownloadFriendPhotoTask onPostExecute");
+            if (image != null && !friendAdapter.isEmpty() && !HomeActivity.this.isFinishing()) {
+                friendAdapter.setFriendPhoto(image, position);
+            }
+        }
+    }
+
+    private class DownloadGroupPhotoTask extends AsyncTask<String, Void, byte[]> {
+        GroupAdapter groupAdapter;
+        int position;
+
+        public DownloadGroupPhotoTask(GroupAdapter groupAdapter, int position) {
+            this.groupAdapter = groupAdapter;
+            this.position = position;
+        }
+
+        @Override
+        protected byte[] doInBackground(String... params) {
+            trace("DownloadGroupPhotoTask doInBackground");
+            String url = params[0];
+            byte[] image = null;
+            try {
+                image = mHabitureModule.downloadPhoto(url);
+            } catch (Exception e) {
+                new UnhandledException("doInBackground" + e);
+            }
+
+            return image;
+        }
+
+        @Override
+        protected void onPostExecute(byte[] image) {
+            if (image != null && !groupAdapter.isEmpty() && !HomeActivity.this.isFinishing()) {
+                groupAdapter.setGroupPhoto(image, position);
+            }
+        }
+    }
+
+    private class QueryGroupsTask extends AsyncTask<Void, Void, List<Group>> {
+        private ProgressDialog progress;
+        @Override
+        protected void onPreExecute() {
+            trace("onDeclarePreExecute");
+
+            try {
+                progress = ProgressDialog.show(HomeActivity.this,
+                        HomeActivity.this.getString(R.string.progress_title),
+                        HomeActivity.this.getString(R.string.searching_groups));
+            } catch(Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+        }
+
+        @Override
+        protected void onPostExecute(List<Group> groups) {
+            trace("onDeclarePostExecute");
+            try {
+                progress.dismiss();
+
+                if(groups == null || groups.size() == 0) {
+                    Toast.makeText(
+                            HomeActivity.this,
+                            R.string.no_group,
+                            Toast.LENGTH_SHORT).show();
+                    return ;
+                }
+
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.middleContainer, GroupFragment.newInstance(groups))
+                        .addToBackStack(null)
+                        .commitAllowingStateLoss();
+
+            } catch(Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+        }
+
+        @Override
+        protected List<Group> doInBackground(Void... params) {
+            return mHabitureModule.queryGroups();
+        }
+    }
+
     private class PassTask extends AsyncTask<Integer, Void, Boolean> {
         private final int position;
         private ProgressDialog progress;
+
         private final Habiture habiture;
 
         public PassTask(Habiture habiture, int position) {
@@ -233,14 +355,13 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
             }
         }
 
+
         @Override
         protected Boolean doInBackground(Integer... params) {
             trace("PassTask doInBackground");
 
             return mHabitureModule.passHabitToday(habiture);
         }
-
-
         @Override
         protected void onPostExecute(Boolean isPass) {
             trace("PassTask onPostExecute");
@@ -252,15 +373,13 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
         }
 
 
+
     }
-
-
-
     private class QueryPokePageTask extends AsyncTask<Integer, Void, PokeData> {
         private ProgressDialog progress;
         public static final int POKE_IS_FOUNDER = 1;
-        public static final int POKE_NOT_FOUNDER = 0;
 
+        public static final int POKE_NOT_FOUNDER = 0;
         private String url = null;
         private String swear = null;
         private String punishment = null;
@@ -271,6 +390,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
         private int to_id = -1;
         private int remain = -1;
         private boolean isFounder = false;
+
         private int notice_enable = -1;
 
         @Override
@@ -285,6 +405,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
             }
         }
+
 
         @Override
         protected PokeData doInBackground(Integer... params) {
@@ -333,52 +454,6 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
             }
         }
 
-
-    }
-
-    private class QueryGroupsTask extends AsyncTask<Void, Void, List<Group>> {
-        private ProgressDialog progress;
-        @Override
-        protected void onPreExecute() {
-            trace("onDeclarePreExecute");
-
-            try {
-                progress = ProgressDialog.show(HomeActivity.this,
-                        HomeActivity.this.getString(R.string.progress_title),
-                        HomeActivity.this.getString(R.string.searching_groups));
-            } catch(Throwable e) {
-                ExceptionAlertDialog.showException(getFragmentManager(), e);
-            }
-        }
-
-        @Override
-        protected void onPostExecute(List<Group> groups) {
-            trace("onDeclarePostExecute");
-            try {
-                progress.dismiss();
-
-                if(groups == null || groups.size() == 0) {
-                    Toast.makeText(
-                            HomeActivity.this,
-                            R.string.no_group,
-                            Toast.LENGTH_SHORT).show();
-                    return ;
-                }
-
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.middleContainer, GroupFragment.newInstance(groups))
-                        .addToBackStack(null)
-                        .commitAllowingStateLoss();
-
-            } catch(Throwable e) {
-                ExceptionAlertDialog.showException(getFragmentManager(), e);
-            }
-        }
-
-        @Override
-        protected List<Group> doInBackground(Void... params) {
-            return mHabitureModule.queryGroups();
-        }
     }
 
     private class QueryFriendsTask extends AsyncTask<Void, Void, List<Friend>> {
