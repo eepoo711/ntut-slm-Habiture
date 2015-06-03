@@ -35,6 +35,9 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
     private final static int DECLARE_ACTIVITY_RESULT = 101;
     private final static int POKE_ACTIVITY_RESULT = 102;
 
+    private int g_pid = 0;
+    private int g_position = 0;
+
     private static final boolean DEBUG = false;
     private void trace(String message) {
         if(DEBUG)
@@ -76,8 +79,8 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
                 if (resultCode == RESULT_OK) {
                     mBitmapCaputred = (Bitmap) data.getExtras().get("data");
                     //TODO: Ed
-                    new UploadProofTask(getIntent().getIntExtra("position", 0))
-                            .execute(getIntent().getIntExtra("pid", 0));
+                    new UploadProofTask(g_position)
+                            .execute(g_pid);
                 }
                 break;
             case DECLARE_ACTIVITY_RESULT:
@@ -194,6 +197,8 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
     public void onClickHabitCamera(int pid, int position) {
         trace("onClickHabitCamera");
         //TODO: Ed
+        g_pid = pid;
+        g_position = position;
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
