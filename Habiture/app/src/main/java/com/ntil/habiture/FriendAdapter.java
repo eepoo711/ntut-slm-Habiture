@@ -86,8 +86,18 @@ public class FriendAdapter extends BaseAdapter{
         switch (item.state) {
             case Item.FRIEND_ITEM_READY:
                 trace("FRIEND_ITEM_READY, position = " + position);
-                listener.onDownloadFriendPhoto(this, item.getFriend().getUrl(), position);
-                item.state = Item.FRIEND_ITEM_DOWNING;
+                if(item.getFriend().getUrl().length()>0) {
+                    listener.onDownloadFriendPhoto(this, item.getFriend().getUrl(), position);
+                    item.state = Item.FRIEND_ITEM_DOWNING;
+                }
+                else {
+                    Bitmap srcBmp = BitmapFactory.decodeResource(convertView.getResources(), R.mipmap.default_icon);
+                    Bitmap temBmp = srcBmp.copy(srcBmp.getConfig(), true);
+
+                    item.photo = temBmp;
+                    item.state = Item.FRIEND_ITEM_SETTING;
+                    notifyDataSetChanged();
+                }
                 break;
             case Item.FRIEND_ITEM_DOWNING:
                 // do Nothing

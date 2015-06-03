@@ -180,10 +180,10 @@ public class PokeFragment extends Fragment {
                     finalWidth = ivPoke.getMeasuredWidth();
                     trace("Height: " + finalHeight + " Width: " + finalWidth);
                     if(bmpDrawing==null) {
-                        Bitmap bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.default_role);
+                        Bitmap srcBmp = BitmapFactory.decodeResource(getResources(), R.drawable.default_role);
                         //then create a copy of bitmap bmp1 into bmp2
-                        Bitmap bmp2 = bmp1.copy(bmp1.getConfig(), true);
-                        setImage(bmp2);
+                        Bitmap temBmp = srcBmp.copy(srcBmp.getConfig(), true);
+                        setImage(temBmp);
                     }
                     return true;
                 }

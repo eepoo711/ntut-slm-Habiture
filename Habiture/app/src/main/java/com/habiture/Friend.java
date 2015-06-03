@@ -91,7 +91,7 @@ public class Friend {
         }
         reader.endObject();
 
-        if(id == -1 || url == null || url.length() == 0) {
+        if(id == -1 || url==null || name==null) {
             throw new UnhandledException("wrong json format.");
         }
 

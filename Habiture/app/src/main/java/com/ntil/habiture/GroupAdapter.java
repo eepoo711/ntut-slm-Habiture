@@ -109,8 +109,18 @@ public class GroupAdapter extends BaseAdapter{
         switch (item.state) {
             case Item.GROUP_ITEM_READY:
                 trace("GROUP_ITEM_READY, position = " + position);
-                listener.onDownloadGroupPhoto(this, item.getGroup().getUrl(), position);
-                item.state = Item.GROUP_ITEM_DOWNING;
+                if(item.getGroup().getUrl().length()>0) {
+                    listener.onDownloadGroupPhoto(this, item.getGroup().getUrl(), position);
+                    item.state = Item.GROUP_ITEM_DOWNING;
+                }
+                else {
+                    Bitmap srcBmp = BitmapFactory.decodeResource(convertView.getResources(), R.drawable.button_friends_list);
+                    Bitmap temBmp = srcBmp.copy(srcBmp.getConfig(), true);
+
+                    item.photo = temBmp;
+                    item.state = Item.GROUP_ITEM_SETTING;
+                    notifyDataSetChanged();
+                }
                 break;
             case Item.GROUP_ITEM_DOWNING:
                 // do Nothing
