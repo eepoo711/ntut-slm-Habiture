@@ -427,23 +427,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
                 progress.dismiss();
                 if (pokeData != null) {
                     // TODO: startPokeActivity
-                    url = pokeData.getFounderList().get(0).getUrl();
-                    swear = pokeData.getSwear();
-                    punishment = pokeData.getPunishment();
-                    doItTime = pokeData.getDoItime();
-                    frequency = pokeData.getFrequency();
-                    goal = pokeData.getGoal();
-                    remain = pokeData.getFounderList().get(0).getRemain();
-                    to_id = pokeData.getFounderList().get(0).getUid();
-                    notice_enable = pokeData.getFounderList().get(0).getNoticeStatus();
-
-                    if (url == null || swear == null || punishment == null || remain == -1 ||
-                            doItTime == -1 || frequency == -1 || goal == -1 || to_id == -1 || notice_enable ==-1) {
-                        Toast.makeText(HomeActivity.this, "載入失敗", Toast.LENGTH_SHORT).show();
-                        return ;
-                    }
-                    PokeActivity.startActivity(HomeActivity.this, isFounder, url, swear, punishment, pid,
-                            to_id, frequency, doItTime, goal, remain,notice_enable);
+                    PokeActivity.startActivity(HomeActivity.this, pokeData, isFounder, pid);
                 } else {
                     Toast.makeText(HomeActivity.this, "載入失敗", Toast.LENGTH_SHORT).show();
                 }

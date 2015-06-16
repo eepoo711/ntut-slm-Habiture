@@ -2,40 +2,26 @@ package com.ntil.habiture;
 
 import android.app.Activity;
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.habiture.GroupHistory;
 import com.habiture.HabitureModule;
+import com.habiture.PokeData;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Random;
 
 import utils.exception.ExceptionAlertDialog;
-import utils.exception.UnhandledException;
 
 /**
  * Created by GawinHsu on 5/7/15.
@@ -49,29 +35,22 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
     private static final boolean DEBUG = false;
     private PokeFragment mPoketFragment;
     private static Random random_tool=null;
+    private static PokeData pokeData;
+    private static boolean isFounder = false;
+    private static int pid = -1;
 
     private void trace(String message) {
         if(DEBUG)
             Log.d("PokeActivity", message);
     }
 
-    public static void startActivity(Context context, boolean isFounder, String url, String swear,
-            String punishment,int pid, int to_id, int frequency, int doItTime, int goal, int remain,int notice_enable) {
+    public static void startActivity(Context context, PokeData pokeData, boolean isFounder, int pid) {
         Intent intent = new Intent(context, PokeActivity.class);
-        intent.putExtra("isFounder", isFounder);
-        intent.putExtra("url", url);
-        intent.putExtra("swear", swear);
-        intent.putExtra("punishment", punishment);
-        intent.putExtra("pid", pid);
-        intent.putExtra("frequency", frequency);
-        intent.putExtra("doItTime", doItTime);
-        intent.putExtra("goal", goal);
-        intent.putExtra("to_id", to_id);
-        intent.putExtra("remain", remain);
-        intent.putExtra("notice_enable",notice_enable);
-        context.startActivity(intent);
-
+        PokeActivity.pokeData = pokeData;
+        PokeActivity.isFounder = isFounder;
+        PokeActivity.pid = pid;
         random_tool = new Random();
+        context.startActivity(intent);
     }
 
     @Override
@@ -82,11 +61,7 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         mHabitureModule = MainApplication.getInstance().getHabitureModel();
 
         if (savedInstanceState == null) {
-            mPoketFragment = PokeFragment.newInstance(getIntent().getBooleanExtra("isFounder", false),
-                    getIntent().getStringExtra("swear"), getIntent().getStringExtra("punishment"),
-                    getIntent().getIntExtra("frequency", 0), getIntent().getIntExtra("doItTime", 0),
-                    getIntent().getIntExtra("goal", 0), getIntent().getIntExtra("remain", 0),
-                    getIntent().getIntExtra("notice_enable", 0));
+            mPoketFragment = PokeFragment.newInstance(pokeData, isFounder);
             getFragmentManager().beginTransaction()
                     .add(R.id.profileContainer, HomeTopFragment.newInstance(
                             mHabitureModule.getName()
@@ -94,8 +69,8 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
                     .add(R.id.pokeContainer, mPoketFragment)
                     .commit();
 
-            if(getIntent().getStringExtra("url").length()>0)
-                new QueryOwnerPhoto().execute(getIntent().getStringExtra("url"));
+            if(pokeData.getFounderList().get(0).getUrl().length()>0)
+                new QueryOwnerPhoto().execute(pokeData.getFounderList().get(0).getUrl());
         }
         registerToolBroadReceiver();
     }
@@ -112,8 +87,7 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
     private BroadcastReceiver toolBroadReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            int to_id =intent.getIntExtra("to_id",1);
-            int pid =intent.getIntExtra("pid",154);
+            int to_id =pokeData.getFounderList().get(0).getUid();
             int tool_id =intent.getIntExtra("tool_id",1);
             trace("registerToolBroadReceiver(), to_id="+to_id+" pid="+pid+" tool_id="+tool_id);
             new SendToolTask().execute(to_id,pid,tool_id);
@@ -132,7 +106,7 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
 
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             mBitmapCaputred = (Bitmap) data.getExtras().get("data");
-            new UploadProofTask().execute(getIntent().getIntExtra("pid", 0));
+            new UploadProofTask().execute(pid);
         }
     }
 
@@ -146,7 +120,7 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
     @Override
     public void onClickRecords() {
         trace("onClickRecords");
-        new GroupHistoryTask().execute(getIntent().getIntExtra("pid", 0));
+        new GroupHistoryTask().execute(pid);
     }
 
     @Override
@@ -169,8 +143,8 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         System.out.println("onPoke="+random_tool_id);
         // TODO: to guest now
         Intent broadcastIntent = new Intent(this.getString(R.string.tool_clicck_intent_name));
-        broadcastIntent.putExtra("to_id",getIntent().getIntExtra("to_id", 1));
-        broadcastIntent.putExtra("pid",getIntent().getIntExtra("pid", 154));
+        broadcastIntent.putExtra("to_id",pokeData.getFounderList().get(0).getUid());
+        broadcastIntent.putExtra("pid",pid);
         broadcastIntent.putExtra("tool_id", random_tool_id);
         this.sendBroadcast(broadcastIntent);
 
@@ -199,8 +173,8 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
             trace("GroupHistoryTask doInBackground");
             List<GroupHistory> ret = null;
             try {
-                int pid = params[0];
-                ret = mHabitureModule.gueryGroupHistory(pid);
+                int ownerId = params[0];
+                ret = mHabitureModule.gueryGroupHistory(ownerId);
             } catch (Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
             }
@@ -243,9 +217,9 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
             trace("UploadProofTask doInBackground");
             boolean is_upload = false;
             try {
-                int pid = params[0];
+                int ownerId = params[0];
 
-                is_upload = mHabitureModule.uploadProofImage(pid, mBitmapCaputred);
+                is_upload = mHabitureModule.uploadProofImage(ownerId, mBitmapCaputred);
             } catch (Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
             }
@@ -278,9 +252,9 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
             boolean is_tool_sent = false;
             try {
                 int to_id = params[0];
-                int pid = params[1];
+                int from_id = params[1];
                 int tool_id = params[2];
-                is_tool_sent =mHabitureModule.sendSoundToPartner(to_id,pid,tool_id);
+                is_tool_sent =mHabitureModule.sendSoundToPartner(to_id,from_id,tool_id);
             } catch (Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
             }
@@ -301,7 +275,6 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
     }
 
     private class QueryOwnerPhoto extends AsyncTask<String, Void, Bitmap> {
-        private int pid;
         private String url;
 
         @Override

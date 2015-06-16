@@ -20,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.habiture.PokeData;
 import com.widget.CircleImageView;
 
 import java.util.concurrent.TimeoutException;
@@ -47,6 +48,8 @@ public class PokeFragment extends Fragment {
     private Bitmap bmpDrawing;
     private Bitmap bmpTool;
     private Bitmap bmpOwnerPhoto = null;
+    private static PokeData pokeData;
+    private static boolean isFounder = false;
 
     private Paint mPaint = new Paint();
 
@@ -55,20 +58,10 @@ public class PokeFragment extends Fragment {
             Log.d("PokeFragment", message);
     }
 
-    public static PokeFragment newInstance(boolean isFounder, String swear, String punishment
-            , int frequency, int doItTime, int goal, int remain,int notice_enable) {
+    public static PokeFragment newInstance(PokeData pokeData, boolean isFounder) {
         PokeFragment fragment = new PokeFragment();
-        //bmpOwnerPhoto = bitmapOwner;
-        Bundle args = new Bundle();
-        args.putBoolean("isFounder", isFounder);
-        args.putString("swear", swear);
-        args.putString("punishment", punishment);
-        args.putInt("frequency", frequency);
-        args.putInt("doItTime", doItTime);
-        args.putInt("goal", goal);
-        args.putInt("remain", remain);
-        args.putInt("notice_enable", notice_enable);
-        fragment.setArguments(args);
+        PokeFragment.pokeData = pokeData;
+        PokeFragment.isFounder = isFounder;
         return fragment;
     }
 
@@ -144,50 +137,32 @@ public class PokeFragment extends Fragment {
         tvFrequency = (TextView) getActivity().findViewById(R.id.tvFrequency);
 
         // fix 24 clock to 12
-        int doItTime = getArguments().getInt("doItTime");
+        int doItTime = pokeData.getDoItime();
         String ampm = doItTime >= 12 ? "PM " : "AM ";
-        int ampmDoItTime = doItTime > 12 ? getArguments().getInt("doItTime") - 12
-                : getArguments().getInt("doItTime");
+        int ampmDoItTime = doItTime > 12 ? doItTime - 12 : doItTime;
         if (ampmDoItTime == 0)
             ampmDoItTime = 12;
 
-        Time t = new Time(); // or Time t=new Time("GMT+8"); 加上Time Zone資料。
+        final Time t = new Time(); // or Time t=new Time("GMT+8"); 加上Time Zone資料。
         t.setToNow(); // 取得系統時間。
-        int alertId = t.hour >= doItTime && getArguments().getInt("notice_enable") == 1 ? R.mipmap.notice_enable : R.mipmap.notice_disable;
+        int alertId = t.hour >= doItTime && pokeData.getFounderList().get(0).getNoticeStatus() == 1 ?
+                R.mipmap.notice_enable : R.mipmap.notice_disable;
         ivAlert.setImageResource(alertId);
 
-        tvSwear.setText(getArguments().getString("swear"));
-        tvRemain.setText("剩下 " + getArguments().getInt("remain") + " 週");
-        tvPunishment.setText(getArguments().getString("punishment"));
+        tvSwear.setText(pokeData.getSwear());
+        tvRemain.setText("剩下 " + pokeData.getFounderList().get(0).getRemain() + " 週");
+        tvPunishment.setText(pokeData.getPunishment());
         tvTime.setText(ampm + ampmDoItTime + ":00");
-        tvFrequency.setText("每週 " + getArguments().getInt("frequency") + " 次");
-        tvGoal.setText("持續 " + getArguments().getInt("goal") + " 週");
+        tvFrequency.setText("每週 " + pokeData.getFrequency() + " 次");
+        tvGoal.setText("持續 " + pokeData.getGoal() + " 週");
 
-        if (!getArguments().getBoolean("isFounder")) {
+        if (!isFounder) {
             btnCamera.setVisibility(View.INVISIBLE);
         }
 
-
-        if (bmpDrawing != null)
+        if (bmpDrawing != null) {
+            ivPoke.setImageBitmap(bmpDrawing);
             setPokeEnabled();
-        else {
-            ViewTreeObserver vto = ivPoke.getViewTreeObserver();
-            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                public boolean onPreDraw() {
-                    int finalHeight, finalWidth;
-                    ivPoke.getViewTreeObserver().removeOnPreDrawListener(this);
-                    finalHeight = ivPoke.getMeasuredHeight();
-                    finalWidth = ivPoke.getMeasuredWidth();
-                    trace("Height: " + finalHeight + " Width: " + finalWidth);
-                    if(bmpDrawing==null) {
-                        Bitmap srcBmp = BitmapFactory.decodeResource(getResources(), R.drawable.default_role);
-                        //then create a copy of bitmap bmp1 into bmp2
-                        Bitmap temBmp = srcBmp.copy(srcBmp.getConfig(), true);
-                        setImage(temBmp);
-                    }
-                    return true;
-                }
-            });
         }
     }
 
@@ -195,7 +170,6 @@ public class PokeFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         trace("onDestroy");
-
 
         if(bmpOwnerPhoto != null) bmpOwnerPhoto.recycle();
         if(bmpTool != null) bmpTool.recycle();
@@ -211,21 +185,31 @@ public class PokeFragment extends Fragment {
     public void setImage(Bitmap image) {
         trace("setImage");
         bmpOwnerPhoto = image;
-        trace(" ivPoke.getWidth:"+ ivPoke.getWidth()+"   ivPoke.getHeight:"+ ivPoke.getHeight());
-
-        try {
-            //bmpDrawing = bmpOwnerPhoto.copy(bmpOwnerPhoto.getConfig(), true);
+        if (ivPoke.getHeight() <= 0 || ivPoke.getWidth() <= 0) {
+            ViewTreeObserver vto = ivPoke.getViewTreeObserver();
+            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                public boolean onPreDraw() {
+                    int finalHeight, finalWidth;
+                    ivPoke.getViewTreeObserver().removeOnPreDrawListener(this);
+                    finalHeight = ivPoke.getMeasuredHeight();
+                    finalWidth = ivPoke.getMeasuredWidth();
+                    trace("ViewTreeObserver: Height: " + finalHeight + " Width: " + finalWidth);
+                    bmpDrawing = Bitmap.createScaledBitmap(bmpOwnerPhoto, finalWidth, finalHeight, false);
+                    ivPoke.setImageBitmap(bmpDrawing);
+                    setPokeEnabled();
+                    return true;
+                }
+            });
+        } else {
+            trace("setImage: Height: " + ivPoke.getWidth() + " Width: " + ivPoke.getHeight());
             bmpDrawing = Bitmap.createScaledBitmap(bmpOwnerPhoto, ivPoke.getWidth(), ivPoke.getHeight(), false);
-            bmpTool = BitmapFactory.decodeResource(getResources(), R.drawable.sample_tool).copy(Bitmap.Config.ARGB_8888, true);
+            ivPoke.setImageBitmap(bmpDrawing);
+            setPokeEnabled();
         }
-        catch (Throwable e) {
-            ExceptionAlertDialog.showException(getFragmentManager(), e);
-        }
-        setPokeEnabled();
     }
 
     private void setPokeEnabled() {
-        ivPoke.setImageBitmap(bmpDrawing);
+        bmpTool = BitmapFactory.decodeResource(getResources(), R.drawable.sample_tool).copy(Bitmap.Config.ARGB_8888, true);
         ivPoke.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
