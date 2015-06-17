@@ -14,7 +14,7 @@
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/pokeContainer"
+        android:id="@+id/historyContainer"
         android:layout_weight="1">
 
     </FrameLayout>
