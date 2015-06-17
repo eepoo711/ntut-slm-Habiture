@@ -1,3 +1,9 @@
+2015/06/17 Gawin (0.48.20150617)
+1. fix bitmap bugs
+2. modify poke activity function
+3. modify poke fragment function
+4. finish follow test case
+
 2015/06/03 Gawin (0.47.20150603)
 1. finish download picture of group and friend
 2. fix image button disable bugs

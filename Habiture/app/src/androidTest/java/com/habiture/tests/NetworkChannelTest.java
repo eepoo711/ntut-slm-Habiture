@@ -2,6 +2,7 @@ package com.habiture.tests;
 
 
 import android.test.AndroidTestCase;
+import android.util.Log;
 
 import com.habiture.NetworkChannel;
 import com.habiture.NetworkConnection;
@@ -167,6 +168,34 @@ public class NetworkChannelTest extends AndroidTestCase {
             assertEquals("http://140.124.144.121/Habiture/version/moo_v_0.apk", url);
             assertEquals("0.45.20150529", versionName);
             assertEquals(1, versionCode);
+        } finally {
+            if(connection != null)
+                connection.close();
+        }
+    }
+
+    public void testFollowSuccessfully() throws Exception {
+        assertTrue(follow());
+    }
+
+    public void testFollowFailed() throws  Exception {
+        assertFalse(follow());
+    }
+
+    public boolean follow() throws Exception{
+        assertTrue(login());
+
+        NetworkConnection connection = null;
+        try {
+            connection = networkChannel.openGetFollowConnection(1, 250);
+
+            byte[] buffer = new byte[10];
+            connection.getInputStream().read(buffer);
+
+            String codes = new String(buffer);
+            int code = Integer.valueOf(codes.split("\n")[0]);
+            Log.d("follow", "" + codes);
+            return code == 1 ? true : false;
         } finally {
             if(connection != null)
                 connection.close();

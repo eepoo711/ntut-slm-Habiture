@@ -10,9 +10,10 @@ import com.habiture.Group;
 import com.habiture.Habiture;
 import com.habiture.HabitureModule;
 import com.habiture.MockGcmModel;
-import com.habiture.NetworkConnection;
 import com.habiture.NetworkInterface;
 import com.habiture.StubDownloadFile;
+import com.habiture.StubFollowFailed;
+import com.habiture.StubFollowSuccessfully;
 import com.habiture.StubGcmModelLogin;
 import com.habiture.StubGetAppInfo;
 import com.habiture.StubLoginFailed;
@@ -154,4 +155,13 @@ public class HabitureModuleTest extends AndroidTestCase {
         assertEquals(1, appInfo.getVersionCode());
     }
 
+    public void testFollowSuccessfully() {
+        stubLogin(new StubFollowSuccessfully());
+        assertTrue(hm.followHabit(1));
+    }
+
+    public void testFollowFailed() {
+        stubLogin(new StubFollowFailed());
+        assertFalse(hm.followHabit(1));
+    }
 }

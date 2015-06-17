@@ -40,7 +40,7 @@ public class MockNetworkChannel implements NetworkInterface {
     }
 
     @Override
-    public NetworkConnection openFollowConnection() {
+    public NetworkConnection openGetFollowConnection(int uid, int pid) {
         throw new RuntimeException("wrong call");
     }
 

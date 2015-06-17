@@ -155,8 +155,8 @@ public class NetworkChannel implements NetworkInterface {
     }
 
     @Override
-    public NetworkConnection openFollowConnection(int uid, int pid) {
-        trace("openFollowConnection");
+    public NetworkConnection openGetFollowConnection(int uid, int pid) {
+        trace("openGetFollowConnection");
         HttpURLConnection httpUrlConnection = null;
         try {
             httpUrlConnection = createHttpURLConnection(URL_FOLLOW.concat("uid=" + uid + "&pid=" + pid));

@@ -14,7 +14,7 @@ public interface NetworkInterface {
     NetworkConnection openGetGroupsConnection(int uid);
     NetworkConnection openPostPassConnection();
     NetworkConnection openGetAppInfoConnection();
-    NetworkConnection openFollowConnection(int uid, int pid);
+    NetworkConnection openGetFollowConnection(int uid, int pid);
 
     public List<Habiture> httpGetHabitures(int uid);
     public boolean httpPostDeclaration(int uid, String frequency, String declaration, String punishment, String goal,  String do_it_time);

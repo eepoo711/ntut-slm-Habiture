@@ -9,7 +9,6 @@ import com.gcm.client.receiver.GcmModel;
 import com.habiture.exceptions.HabitureException;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -290,7 +289,7 @@ public class HabitureModule {
     public boolean followHabit(int pid) {
         NetworkConnection connection = null;
         try {
-            connection = networkInterface.openFollowConnection(profile.getId(), pid);
+            connection = networkInterface.openGetFollowConnection(profile.getId(), pid);
             return readBoolean(connection.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
