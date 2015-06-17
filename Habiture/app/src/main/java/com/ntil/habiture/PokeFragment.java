@@ -45,6 +45,8 @@ public class PokeFragment extends Fragment {
     private TextView tvGoal;
     private TextView tvFrequency;
     private ImageButton btnCamera;
+    private ImageButton btnFollow;
+    private ImageButton btnAlarm;
     private Bitmap bmpDrawing;
     private Bitmap bmpTool;
     private Bitmap bmpOwnerPhoto = null;
@@ -94,12 +96,30 @@ public class PokeFragment extends Fragment {
         trace("onActivityCreated");
 
         btnCamera = (ImageButton) getActivity().findViewById(R.id.btnCamera);
+        btnFollow = (ImageButton) getActivity().findViewById(R.id.btnFollow);
+        btnAlarm = (ImageButton) getActivity().findViewById(R.id.btnAlarm);
 
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 trace("onClick ibCamera");
                 listener.onClickCamera();
+            }
+        });
+
+        btnFollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                trace("onClick btnFollow");
+                listener.onClickFollow();
+            }
+        });
+
+        btnAlarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                trace("onClick btnAlarm");
+                listener.onClickAlarm();
             }
         });
 
@@ -126,6 +146,8 @@ public class PokeFragment extends Fragment {
                 listener.onClickTool();
             }
         });
+
+
 
         ivPoke = (ImageView) getActivity().findViewById(R.id.ivPoke);
         ivAlert = (ImageView) getActivity().findViewById(R.id.ivAlert);
@@ -156,8 +178,11 @@ public class PokeFragment extends Fragment {
         tvFrequency.setText("每週 " + pokeData.getFrequency() + " 次");
         tvGoal.setText("持續 " + pokeData.getGoal() + " 週");
 
-        if (!isFounder) {
-            btnCamera.setVisibility(View.INVISIBLE);
+        if (isFounder) {
+            btnFollow.setVisibility(View.GONE);
+        } else {
+            btnCamera.setVisibility(View.GONE);
+            btnAlarm.setVisibility(View.GONE);
         }
 
         if (bmpDrawing != null) {
@@ -229,6 +254,8 @@ public class PokeFragment extends Fragment {
         void onClickRecords();
         void onClickGroupFriend();
         void onClickTool();
+        void onClickFollow();
+        void onClickAlarm();
         void onPoke();
     }
 }

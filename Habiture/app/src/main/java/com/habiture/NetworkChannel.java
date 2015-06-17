@@ -35,6 +35,7 @@ public class NetworkChannel implements NetworkInterface {
     public static final String URL_QUERY_POKE_PAGE = "http://140.124.144.121/Habiture/posts_page.cgi?";
     public static final String URL_UPDATE_GCM_REGISTER_ID  ="http://140.124.144.121/Habiture/update.cgi?";
     private static final String URL_PASS = "http://140.124.144.121/Habiture/tests/habiture/record/record.cgi";
+    private static final String URL_FOLLOW = "http://140.124.144.121/Habiture/follow.cgi?";
 
     private void trace(String message) {
         if(DEBUG)
@@ -151,6 +152,18 @@ public class NetworkChannel implements NetworkInterface {
         }
 
         return null;
+    }
+
+    @Override
+    public NetworkConnection openFollowConnection(int uid, int pid) {
+        trace("openFollowConnection");
+        HttpURLConnection httpUrlConnection = null;
+        try {
+            httpUrlConnection = createHttpURLConnection(URL_FOLLOW.concat("uid=" + uid + "&pid=" + pid));
+            return newConnection(httpUrlConnection);
+        } catch (IOException e) {
+            throw new NetworkException(e);
+        }
     }
 
     private HttpURLConnection createPostJsonConnection(String urlString) {

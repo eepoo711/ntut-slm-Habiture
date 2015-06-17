@@ -40,6 +40,11 @@ public class MockNetworkChannel implements NetworkInterface {
     }
 
     @Override
+    public NetworkConnection openFollowConnection() {
+        throw new RuntimeException("wrong call");
+    }
+
+    @Override
     public List<Habiture> httpGetHabitures(int uid) {
         throw new RuntimeException("wrong call");
     }

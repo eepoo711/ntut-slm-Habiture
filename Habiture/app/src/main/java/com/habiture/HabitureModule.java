@@ -21,7 +21,7 @@ import utils.exception.UnhandledException;
 
 public class HabitureModule {
 
-    private final boolean DEBUG = false;
+    private final boolean DEBUG = true;
     private NetworkInterface networkInterface = null;
     private GcmModel gcmModel =null;
 
@@ -276,6 +276,22 @@ public class HabitureModule {
             return readBoolean(connection.getInputStream());
         } catch (HabitureException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch(NetworkException e) {
+            e.printStackTrace();
+        } finally {
+            if(connection != null)
+                connection.close();
+        }
+        return false;
+    }
+
+    public boolean followHabit(int pid) {
+        NetworkConnection connection = null;
+        try {
+            connection = networkInterface.openFollowConnection(profile.getId(), pid);
+            return readBoolean(connection.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
         } catch(NetworkException e) {

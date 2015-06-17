@@ -15,6 +15,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.habiture.GroupHistory;
+import com.habiture.Habiture;
 import com.habiture.HabitureModule;
 import com.habiture.PokeData;
 
@@ -138,6 +139,19 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
     }
 
     @Override
+    public void onClickFollow() {
+        trace("onClickFollow");
+        new FollowTask().execute();
+    }
+
+    @Override
+    public void onClickAlarm() {
+        trace("onClickAlarm");
+        DialogFragment newFragment = new NoImplementDialog();
+        newFragment.show(getFragmentManager(), "dialog");
+    }
+
+    @Override
     public void onPoke() {
         int random_tool_id =random_tool.nextInt(6)+1;
         System.out.println("onPoke="+random_tool_id);
@@ -152,6 +166,43 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         Intent broadcastIntent_client_playsound = new Intent(getApplicationContext().getString(R.string.play_tool_sound));
         broadcastIntent_client_playsound.putExtra("tool_id",random_tool_id);
         sendBroadcast(broadcastIntent_client_playsound);
+    }
+
+    private class FollowTask extends AsyncTask<Void, Void, Boolean> {
+        private ProgressDialog progress;
+
+        @Override
+        protected void onPreExecute() {
+            trace("PassTask onPreExecute");
+
+            try {
+                progress = ProgressDialog.show(PokeActivity.this,
+                        PokeActivity.this.getString(R.string.progress_title),
+                        "載入中...");
+            } catch(Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+        }
+
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            trace("PassTask doInBackground");
+
+            return mHabitureModule.followHabit(pid);
+        }
+        @Override
+        protected void onPostExecute(Boolean isFollow) {
+            trace("PassTask onPostExecute");
+            progress.dismiss();
+            if (isFollow)
+                Toast.makeText(PokeActivity.this, "follow success", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(PokeActivity.this, "follow failed", Toast.LENGTH_SHORT).show();
+        }
+
+
+
     }
 
     private class GroupHistoryTask extends AsyncTask<Integer, Void, List<GroupHistory>> {
