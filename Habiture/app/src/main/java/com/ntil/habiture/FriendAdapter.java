@@ -78,10 +78,9 @@ public class FriendAdapter extends BaseAdapter{
         else {
             holder = (ViewHolder)convertView.getTag();
         }
-        Item item = (Item) getItem(position);
-        // TODO 設定群組圖案
-        holder.tvName.setText(item.friend.getName());
 
+        Item item = (Item) getItem(position);
+        holder.tvName.setText(item.friend.getName());
         setPhoto(holder, item);
 
         return convertView;

@@ -7,7 +7,6 @@ public class GroupHistory {
 
     private String url  = null;
     private Bitmap iconImage =null;
-    private Bitmap image =null;
     private String date =null;
     private String name =null;
 
@@ -19,10 +18,6 @@ public class GroupHistory {
     void setIcon(Bitmap image) {this.iconImage = image;}
 
     public Bitmap getIcon() {return iconImage;}
-
-    void setImage(Bitmap image) {this.image = image;}
-
-    public Bitmap getImage() {return image;};
 
     public String getDate() {
         return date;

@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.habiture.GroupHistory;
 import com.habiture.HabitureModule;
+import com.ntil.habiture.task.DownloadPhotoTask;
 
 import java.util.List;
 
@@ -23,6 +24,8 @@ public class HistoryActivity extends Activity {
     private static List<GroupHistory> _groupHistories;
 
     private HabitureModule mHabitureModule;
+    private HistoryAdapter historyAdapter;
+    private DownloadPhotoTask historyTask;
 
     public static void startActivity(Context context, List<GroupHistory> groupHistories) {
         trace("startActivity");
@@ -45,10 +48,37 @@ public class HistoryActivity extends Activity {
                 mHabitureModule.getName()
                 , mHabitureModule.getHeader());
 
+        historyAdapter = new HistoryAdapter(this, _groupHistories);
+
         getFragmentManager().beginTransaction()
                 .add(R.id.profileContainer, profileFragment)
-                .add(R.id.historyContainer, HistoryFragment.newInstance(_groupHistories))
+                .add(R.id.historyContainer, HistoryFragment.newInstance(historyAdapter))
                 .commit();
+
+        downloadPhoto();
+
     }
 
+    private void downloadPhoto() {
+        String[] urls = new String[_groupHistories.size()];
+        for(int i = 0; i < _groupHistories.size(); i++) {
+            urls[i] = _groupHistories.get(i).getUrl();
+        }
+        DownloadPhotoTask.Listener listener = new DownloadPhotoTask.Listener() {
+            @Override
+            public void onDownloadFinished(int index, byte[] photo) {
+                historyAdapter.setPhoto(photo, index);
+            }
+        };
+        historyTask = new DownloadPhotoTask(urls, listener);
+        historyTask.execute();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        historyTask.cancel(true);
+        historyAdapter.release();
+    }
 }

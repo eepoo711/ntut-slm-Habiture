@@ -598,7 +598,6 @@ public class NetworkChannel implements NetworkInterface {
         GroupHistory groupHistory = new GroupHistory();
         groupHistory.setUrl(url);
         groupHistory.setIcon(httpGetBitmapUrl(icon_url));
-        groupHistory.setImage(httpGetBitmapUrl(url));
         groupHistory.setName(name);
         groupHistory.setDate(date);
 

@@ -3,7 +3,7 @@ package com.ntil.habiture;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Environment;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,31 +11,31 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.habiture.Group;
 import com.habiture.GroupHistory;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryAdapter extends BaseAdapter{
-    private List<GroupHistory> groupHistories;
+    private List<Item > items;
     protected LayoutInflater inflater;
 
     public HistoryAdapter(Context context, List<GroupHistory> groupHistories){
         inflater = LayoutInflater.from(context);
-        this.groupHistories = new ArrayList<GroupHistory>(groupHistories);
-        // 取得外部儲存裝置路徑
+        items = new ArrayList<>(groupHistories.size());
+        for(GroupHistory history: groupHistories) {
+            Item item = new Item();
+            item.history = history;
+            items.add(item);
+        }
     }
 
     @Override
-    public int getCount() { return groupHistories.size(); }
+    public int getCount() { return items.size(); }
 
     @Override
     public Object getItem(int position)  {
-        return groupHistories.get(position);
+        return items.get(position);
     }
 
     @Override
@@ -59,17 +59,43 @@ public class HistoryAdapter extends BaseAdapter{
         else {
             holder = (ViewHolder)convertView.getTag();
         }
-        GroupHistory groupHistory = (GroupHistory) getItem(position);
-        // 設定Icon
-        holder.ivIcon.setImageBitmap(groupHistory.getIcon());
-        // 設定Name
-        holder.tvName.setText(groupHistory.getName());
-        // 設定照片圖案
-        holder.ivPicture.setImageBitmap(groupHistory.getImage());
-        // 設定日期
-        holder.tvDate.setText(groupHistory.getDate());
+        Item item = (Item) getItem(position);
+        GroupHistory history = item.getHistory();
+
+        holder.ivIcon.setImageBitmap(history.getIcon());
+        holder.tvName.setText(history.getName());
+        holder.tvDate.setText(history.getDate());
+        setPhoto(holder, item, history);
 
         return convertView;
+    }
+
+    private void setPhoto(ViewHolder holder, Item item, GroupHistory history) {
+        if(item.photo != null)
+            holder.ivPicture.setImageBitmap(item.photo);
+        else
+            holder.ivPicture.setImageResource(R.drawable.default_role);
+    }
+
+    public void setPhoto(byte[] photo, int position) {
+        Item item = (Item) getItem(position);
+        item.photo = BitmapFactory.decodeByteArray(photo, 0, photo.length);
+        notifyDataSetChanged();
+    }
+
+    public void release() {
+        for(Item item: items)
+            if(item.photo != null)
+                item.photo.recycle();
+    }
+
+    public class Item {
+        private Bitmap photo = null;
+        private GroupHistory history;
+
+        public GroupHistory getHistory() {
+            return history;
+        }
     }
 
     private class ViewHolder {

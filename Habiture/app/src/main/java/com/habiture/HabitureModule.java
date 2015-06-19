@@ -242,7 +242,6 @@ public class HabitureModule {
 
     public List<GroupHistory> gueryGroupHistory(int pid) {
         List<GroupHistory> groupHistories = networkInterface.httpGetGropuHistory(pid);
-
         return groupHistories;
     }
 

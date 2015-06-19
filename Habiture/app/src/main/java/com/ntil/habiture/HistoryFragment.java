@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 
 import com.habiture.GroupHistory;
@@ -17,20 +18,22 @@ import java.util.List;
  * Created by GawinHsu on 5/12/15.
  */
 public class HistoryFragment extends Fragment {
+
     private static final boolean DEBUG = false;
+
+
     private ListView lvHistory;
-    private static List<GroupHistory> groupHistories;
-    private HistoryAdapter historyAdapter;
+    private static BaseAdapter adapter;
+
 
     private void trace(String message) {
         if(DEBUG)
             Log.d("HistoryFragment", message);
     }
 
-    public static HistoryFragment newInstance(List<GroupHistory> groupHistories){
+    public static HistoryFragment newInstance(BaseAdapter adapter){
         HistoryFragment fragment = new HistoryFragment();
-        fragment.groupHistories = groupHistories;
-
+        HistoryFragment.adapter = adapter;
         return fragment;
     }
 
@@ -48,9 +51,7 @@ public class HistoryFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         lvHistory = (ListView) getActivity().findViewById(R.id.lvHistory);
-
-        historyAdapter = new HistoryAdapter(getActivity(), groupHistories);
-        lvHistory.setAdapter(historyAdapter);
+        lvHistory.setAdapter(adapter);
     }
 }
 
