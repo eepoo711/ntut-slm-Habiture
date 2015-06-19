@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 
 import com.habiture.Friend;
@@ -19,9 +20,10 @@ public class FriendFragment extends Fragment {
 
     private ListView item_list;
 
-    private FriendAdapter friendAdapter;
+
 
     private static List<Friend> friends;
+    private static BaseAdapter adapter;
 
     private void trace(String message) {
         if(DEBUG)
@@ -30,10 +32,11 @@ public class FriendFragment extends Fragment {
 
     public FriendFragment() {}
 
-    public static FriendFragment newInstance(List<Friend> friends){
+    public static FriendFragment newInstance(List<Friend> friends, BaseAdapter adapter){
         FriendFragment fragment = new FriendFragment();
 
         FriendFragment.friends = friends;
+        FriendFragment.adapter = adapter;
 
         return fragment;
     }
@@ -50,9 +53,7 @@ public class FriendFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         item_list = (ListView) getActivity().findViewById(R.id.lvFriendList);
-
-        friendAdapter = new FriendAdapter(getActivity(), friends);
-        item_list.setAdapter(friendAdapter);
+        item_list.setAdapter(adapter);
 
     }
 }

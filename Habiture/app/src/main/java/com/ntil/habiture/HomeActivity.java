@@ -2,6 +2,7 @@ package com.ntil.habiture;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,6 +20,7 @@ import com.habiture.Group;
 import com.habiture.Habiture;
 import com.habiture.HabitureModule;
 import com.habiture.PokeData;
+import com.ntil.habiture.task.DownloadPhotoTask;
 
 import java.util.List;
 
@@ -27,8 +29,7 @@ import utils.exception.UnhandledException;
 
 public class HomeActivity extends Activity implements HomeBottomFragment.Listener,
         ExitAlertDialog.Listener, GroupFragment.Listener, HabitListFragment.Listener,
-        HabitListAdapter.Listener, PassAlertDialog.Listener, GroupAdapter.Listener,
-        FriendAdapter.Listener {
+        HabitListAdapter.Listener, PassAlertDialog.Listener, GroupAdapter.Listener {
     private HabitureModule mHabitureModule;
     private Bitmap mBitmapCaputred;
     private HabitListFragment habitListFragment = null;
@@ -44,6 +45,9 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
         if(DEBUG)
             Log.d("HomeActivity", message);
     }
+
+    private DownloadPhotoTask friendPhotoTask;
+    private FriendAdapter friendAdapter;
 
 
     @Override
@@ -79,7 +83,6 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
             case CAMERA_REQUEST:
                 if (resultCode == RESULT_OK) {
                     mBitmapCaputred = (Bitmap) data.getExtras().get("data");
-                    //TODO: Ed
                     new UploadProofTask(g_position)
                             .execute(g_pid);
                 }
@@ -116,6 +119,9 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
         super.onDestroy();
         mHabitureModule.stopRegisterGCM();
         this.unregisterReceiver(toolBroadReceiver);
+
+        if(friendPhotoTask != null) friendPhotoTask.cancel(true);
+        if(friendAdapter != null) friendAdapter.release();
     }
 
     @Override
@@ -153,7 +159,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
     @Override
     public void onTabMore() {
         trace("onTabMore");
-        // TODO
+        // TODO more function
         DialogFragment newFragment = new NoImplementDialog();
         newFragment.show(getFragmentManager(), "dialog");
     }
@@ -174,7 +180,6 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
     @Override
     public void onClickGroupSingleItem(int pid) {
         trace("onClickGroupSingleItem pid = " + pid);
-        // TODO: QueryPokePageTask
         new QueryPokePageTask().execute(pid, QueryPokePageTask.POKE_NOT_FOUNDER);
         //PokeActivity.startActivity(this, url, "123", "456", pid, 1, 1, 1);
     }
@@ -197,7 +202,6 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
     @Override
     public void onClickHabitCamera(int pid, int position) {
         trace("onClickHabitCamera");
-        //TODO: Ed
         g_pid = pid;
         g_position = position;
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -216,43 +220,6 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
     @Override
     public void onDownloadGroupPhoto(GroupAdapter groupAdapter, String url, int position) {
         new DownloadGroupPhotoTask(groupAdapter, position).execute(url);
-    }
-
-    @Override
-    public void onDownloadFriendPhoto(FriendAdapter friendAdapter, String url, int position) {
-        new DownloadFriendPhotoTask(friendAdapter, position).execute(url);
-    }
-
-    private class DownloadFriendPhotoTask extends AsyncTask<String, Void, byte[]> {
-        FriendAdapter friendAdapter;
-        int position;
-
-        public DownloadFriendPhotoTask(FriendAdapter friendAdapter, int position) {
-            this.friendAdapter = friendAdapter;
-            this.position = position;
-        }
-
-        @Override
-        protected byte[] doInBackground(String... params) {
-            trace("DownloadFriendPhotoTask doInBackground");
-            String url = params[0];
-            byte[] image = null;
-            try {
-                image = mHabitureModule.downloadPhoto(url);
-            } catch (Exception e) {
-                new UnhandledException("doInBackground" + e);
-            }
-
-            return image;
-        }
-
-        @Override
-        protected void onPostExecute(byte[] image) {
-            trace("DownloadFriendPhotoTask onPostExecute");
-            if (image != null && !friendAdapter.isEmpty() && !HomeActivity.this.isFinishing()) {
-                friendAdapter.setFriendPhoto(image, position);
-            }
-        }
     }
 
     private class DownloadGroupPhotoTask extends AsyncTask<String, Void, byte[]> {
@@ -426,7 +393,6 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
             try {
                 progress.dismiss();
                 if (pokeData != null) {
-                    // TODO: startPokeActivity
                     PokeActivity.startActivity(HomeActivity.this, pokeData, isFounder, pid);
                 } else {
                     Toast.makeText(HomeActivity.this, "載入失敗", Toast.LENGTH_SHORT).show();
@@ -470,10 +436,17 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
                     return;
                 }
 
+                if(friendAdapter != null) friendAdapter.release();
+                friendAdapter = new FriendAdapter(HomeActivity.this, friends);
+
+
+                Fragment newFragment = FriendFragment.newInstance(friends, friendAdapter);
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.middleContainer, FriendFragment.newInstance(friends))
+                        .replace(R.id.middleContainer, newFragment)
                         .addToBackStack(null)
                         .commitAllowingStateLoss();
+
+                downloadFriendPhoto(friends);
 
             } catch (Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
@@ -484,6 +457,23 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
         protected List<Friend> doInBackground(Void... params) {
             return mHabitureModule.queryFriends();
         }
+    }
+
+    private void downloadFriendPhoto(List<Friend> friends) {
+        String[] photoUrls = new String[friends.size()];
+        for(int i = 0; i < photoUrls.length; i++) {
+            photoUrls[i] = friends.get(i).getUrl();
+        }
+
+        DownloadPhotoTask.Listener listener = new DownloadPhotoTask.Listener() {
+            @Override
+            public void onDownloadFinished(int index, byte[] photo) {
+                friendAdapter.setFriendPhoto(photo, index);
+            }
+        };
+
+        friendPhotoTask = new DownloadPhotoTask(photoUrls, listener);
+        friendPhotoTask.execute();
     }
 
     private class QueryHabituresTask extends AsyncTask<Void, Void, List<Habiture>> {

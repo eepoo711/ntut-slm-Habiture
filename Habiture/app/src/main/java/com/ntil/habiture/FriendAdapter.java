@@ -20,7 +20,6 @@ import java.util.List;
 public class FriendAdapter extends BaseAdapter{
     private List<Item> items;
     private LayoutInflater inflater;
-    private Listener listener;
     private static final boolean DEBUG = true;
 
     private void trace(String message) {
@@ -37,16 +36,17 @@ public class FriendAdapter extends BaseAdapter{
             item.friend = friend;
             items.add(item);
         }
-        listener = (Listener)context;
+    }
+
+    public void release() {
+        for(Item item: items) {
+            if(item.photo != null) item.photo.recycle();
+        }
     }
 
     public class Item {
-        public static final int FRIEND_ITEM_READY = 0;
-        public static final int FRIEND_ITEM_DOWNING = 1;
-        public static final int FRIEND_ITEM_SETTING = 2;
         Friend friend;
         Bitmap photo = null;
-        int state = FRIEND_ITEM_READY;
         public Friend getFriend() {
             return friend;
         }
@@ -82,51 +82,28 @@ public class FriendAdapter extends BaseAdapter{
         // TODO 設定群組圖案
         holder.tvName.setText(item.friend.getName());
 
-        // download photo
-        switch (item.state) {
-            case Item.FRIEND_ITEM_READY:
-                trace("FRIEND_ITEM_READY, position = " + position);
-                if(item.getFriend().getUrl().length()>0) {
-                    listener.onDownloadFriendPhoto(this, item.getFriend().getUrl(), position);
-                    item.state = Item.FRIEND_ITEM_DOWNING;
-                }
-                else {
-                    Bitmap srcBmp = BitmapFactory.decodeResource(convertView.getResources(), R.mipmap.default_icon);
-                    Bitmap temBmp = srcBmp.copy(srcBmp.getConfig(), true);
-
-                    item.photo = temBmp;
-                    item.state = Item.FRIEND_ITEM_SETTING;
-                    notifyDataSetChanged();
-                }
-                break;
-            case Item.FRIEND_ITEM_DOWNING:
-                // do Nothing
-                break;
-            case Item.FRIEND_ITEM_SETTING:
-                trace("FRIEND_ITEM_SETTING, position = " + position);
-                holder.ivFriendIcon.setImageBitmap(item.photo);
-                break;
-        }
+        setPhoto(holder, item);
 
         return convertView;
     }
 
+    private void setPhoto(ViewHolder holder, Item item) {
+        if(item.photo != null) {
+            holder.ivFriendIcon.setImageBitmap(item.photo);
+        } else {
+            holder.ivFriendIcon.setImageResource(R.mipmap.default_icon);
+        }
+    }
+
     public void setFriendPhoto(byte[] photo, int position) {
         Item item = (Item) getItem(position);
-        if (item.state == Item.FRIEND_ITEM_DOWNING) {
-            trace("setFriendPhoto, position = " + position);
-            item.photo = BitmapFactory.decodeByteArray(photo, 0, photo.length);
-            item.state = Item.FRIEND_ITEM_SETTING;
-            notifyDataSetChanged();
-        }
+        trace("setFriendPhoto, position = " + position);
+        item.photo = BitmapFactory.decodeByteArray(photo, 0, photo.length);
+        notifyDataSetChanged();
     }
 
     private class ViewHolder {
         ImageView ivFriendIcon;
         TextView tvName;
-    }
-
-    public interface Listener {
-        void onDownloadFriendPhoto(FriendAdapter friendAdapter, String url, int position);
     }
 }
