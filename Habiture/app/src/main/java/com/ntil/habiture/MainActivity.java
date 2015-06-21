@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.gcm.client.receiver.GcmModel;
+import com.habiture.AlarmModel;
 import com.habiture.Group;
 import com.habiture.HabitureModule;
 import com.ntil.habiture.task.UpgradeAppTask;
@@ -56,6 +57,7 @@ public class MainActivity extends Activity implements LoginFragment.Listener {
         } catch(Throwable e) {
             ExceptionAlertDialog.showException(getFragmentManager(), e);
         }
+
 
     }
 
