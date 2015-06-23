@@ -101,24 +101,6 @@ public class PokeActivity extends Activity implements PokeFragment.Listener, Fou
 
     private void registerToolBroadReceiver() {
         registerReceiver(toolBroadReceiver, new IntentFilter(this.getString(R.string.tool_clicck_intent_name)));
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // call this function after capture
-        trace("onActivityResult, requestCode = " + requestCode + ", resultCode = " + resultCode);
-
-        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            mBitmapCaputred = (Bitmap) data.getExtras().get("data");
-            new UploadProofTask().execute(pid);
-        }
-=======
->>>>>>> origin/master
->>>>>>> origin/Add-ViewPage
     }
 
     @Override
