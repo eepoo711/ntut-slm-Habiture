@@ -83,6 +83,10 @@
             android:name="com.ntil.habiture.HistoryActivity"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name="com.ntil.habiture.RecordActivity"
+            android:screenOrientation="portrait">
+        </activity>
 
     </application>
 

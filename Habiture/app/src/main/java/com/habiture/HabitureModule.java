@@ -225,8 +225,9 @@ public class HabitureModule {
         }, seconds);
     }
 
-    public boolean uploadProofImage(int pid, Bitmap image) {
-        trace("uploadProofImage");
+    public boolean uploadProofImage(int pid,String text, Bitmap image) {
+        // TODO upload text
+        trace("uploadProofImage text = "+text);
         String imageData =null;
 //        }
         try {

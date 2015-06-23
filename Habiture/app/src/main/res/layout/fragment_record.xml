@@ -66,11 +66,11 @@
             android:id="@+id/ivIcon"
             android:src="@mipmap/default_icon"/>
 
-        <TextView
+        <EditText
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/tvText"
+            android:id="@+id/editText"
             android:paddingLeft="15dp"
             android:gravity="center_vertical"
             android:hint="你想說什麼呢~" />
