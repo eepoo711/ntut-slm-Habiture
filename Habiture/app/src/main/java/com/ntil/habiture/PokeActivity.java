@@ -94,7 +94,7 @@ public class PokeActivity extends Activity implements PokeFragment.Listener, Fou
     private BroadcastReceiver toolBroadReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            int to_id =pokeData.getFounderList().get(0).getUid();
+            int to_id=intent.getIntExtra("to_id",1);
             int tool_id =intent.getIntExtra("tool_id",1);
             trace("registerToolBroadReceiver(), to_id="+to_id+" pid="+pid+" tool_id="+tool_id);
             new SendToolTask().execute(to_id,pid,tool_id);
@@ -158,12 +158,12 @@ public class PokeActivity extends Activity implements PokeFragment.Listener, Fou
     }
 
     @Override
-    public void onPoke() {
+    public void onPoke(int position) {
         int random_tool_id =random_tool.nextInt(6)+1;
         System.out.println("onPoke="+random_tool_id);
         // TODO: to guest now
         Intent broadcastIntent = new Intent(this.getString(R.string.tool_clicck_intent_name));
-        broadcastIntent.putExtra("to_id",pokeData.getFounderList().get(0).getUid());
+        broadcastIntent.putExtra("to_id",pokeData.getFounderList().get(position).getUid());
         broadcastIntent.putExtra("pid",pid);
         broadcastIntent.putExtra("tool_id", random_tool_id);
         this.sendBroadcast(broadcastIntent);

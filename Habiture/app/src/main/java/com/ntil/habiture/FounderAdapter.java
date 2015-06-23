@@ -91,8 +91,6 @@ public class FounderAdapter extends PagerAdapter{
         ImageView ivOwnerPhoto = (ImageView) mInflater
                 .inflate(R.layout.singleitem_owner_image, container, false);
 
-        trace("ivOwnerPhoto W, L = "+ivOwnerPhoto.getWidth()+", "+ivOwnerPhoto.getHeight());
-
         item.ivPoke = ivOwnerPhoto;
 
         if(item.photo != null) {
@@ -133,7 +131,7 @@ public class FounderAdapter extends PagerAdapter{
         ivPoke.setImageBitmap(bmpDrawing);
     }
 
-    public void setPokeEnabled(int position) {
+    public void setPokeEnabled(final int position) {
         trace("setPokeEnabled");
         Item item = (Item) items.get(position);
         if(bmpTool != null) {bmpTool.recycle();}
@@ -146,11 +144,10 @@ public class FounderAdapter extends PagerAdapter{
         ivPoke.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
-                trace("onTouch event = "+ event.getAction());
+                //trace("onTouch event = "+ event.getAction());
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     trace("OnTouch");
-                    //listener.onPoke();
+                    listener.onPoke(position);
                     drawSampleTool(event.getX(), event.getY());
                     return true;
                 }
@@ -179,6 +176,6 @@ public class FounderAdapter extends PagerAdapter{
 
 
     public interface Listener {
-        void onPoke();
+        void onPoke(int position);
     }
 }
