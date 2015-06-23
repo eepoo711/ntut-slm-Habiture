@@ -11,50 +11,38 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ShareActionProvider;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.habiture.GroupHistory;
-import com.habiture.Habiture;
 import com.habiture.HabitureModule;
 import com.habiture.PokeData;
+import com.ntil.habiture.task.DownloadPhotoTask;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import utils.exception.ExceptionAlertDialog;
 
+
 /**
  * Created by GawinHsu on 5/7/15.
  */
-public class PokeActivity extends Activity implements PokeFragment.Listener{
+public class PokeActivity extends Activity implements PokeFragment.Listener, FounderAdapter.Listener{
 
     private final static int CAMERA_REQUEST = 66 ;
     private HabitureModule mHabitureModule;
     private Bitmap mBitmapCaputred;
     private Bitmap mBitmapPoke;
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     private PokeFragment mPoketFragment;
     private static Random random_tool=null;
     private static PokeData pokeData;
     private static boolean isFounder = false;
     private static int pid = -1;
+    private FounderAdapter founderAdapter = null;
 
-    //TODO: ViewPager
-    // The items to be displayed in the ViewPager
-    private final ArrayList<ContentItem> mItems = getSampleContent();
 
-    // Keep reference to the ShareActionProvider from the menu
-    private ShareActionProvider mShareActionProvider;
 
     private void trace(String message) {
         if(DEBUG)
@@ -77,29 +65,19 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         String name = MainApplication.getInstance().getHabitureModel().getAccount();
         mHabitureModule = MainApplication.getInstance().getHabitureModel();
 
-        //TODO: ViewPager
-        // Retrieve the ViewPager from the content view
-        ViewPager vp = (ViewPager) findViewById(R.id.viewpager);
-
-        // Set an OnPageChangeListener so we are notified when a new item is selected
-        vp.setOnPageChangeListener(mOnPageChangeListener);
-
-        // Finally set the adapter so the ViewPager can display items
-        vp.setAdapter(mPagerAdapter);
+        founderAdapter = new FounderAdapter(this, pokeData.getFounderList());
 
         if (savedInstanceState == null) {
-            mPoketFragment = PokeFragment.newInstance(pokeData, isFounder);
+            mPoketFragment = PokeFragment.newInstance(pokeData, isFounder, founderAdapter);
             getFragmentManager().beginTransaction()
                     .add(R.id.profileContainer, HomeTopFragment.newInstance(
                             mHabitureModule.getName()
                             , mHabitureModule.getHeader()))
                     .add(R.id.pokeContainer, mPoketFragment)
                     .commit();
-
-            if(pokeData.getFounderList().get(0).getUrl().length()>0)
-                new QueryOwnerPhoto().execute(pokeData.getFounderList().get(0).getUrl());
         }
         registerToolBroadReceiver();
+        downloadPhoto();
     }
 
 
@@ -109,6 +87,8 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         super.onDestroy();
         mHabitureModule.stopSendSoundTimer();
         unregisterReceiver(toolBroadReceiver);
+        photoTask.cancel(true);
+        founderAdapter.release();
     }
 
     private BroadcastReceiver toolBroadReceiver = new BroadcastReceiver() {
@@ -122,7 +102,7 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
     };
 
     private void registerToolBroadReceiver() {
-        registerReceiver(toolBroadReceiver,new IntentFilter(this.getString(R.string.tool_clicck_intent_name)));
+        registerReceiver(toolBroadReceiver, new IntentFilter(this.getString(R.string.tool_clicck_intent_name)));
     }
 
     @Override
@@ -193,6 +173,7 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         broadcastIntent_client_playsound.putExtra("tool_id",random_tool_id);
         sendBroadcast(broadcastIntent_client_playsound);
     }
+
 
     private class FollowTask extends AsyncTask<Void, Void, Boolean> {
         private ProgressDialog progress;
@@ -348,151 +329,62 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         }
     }
 
-    private class QueryOwnerPhoto extends AsyncTask<String, Void, Bitmap> {
-        private String url;
+//    private class QueryOwnerPhoto extends AsyncTask<String, Void, Bitmap> {
+//        private String url;
+//
+//        @Override
+//        protected void onPreExecute() {
+//            trace("QueryOwnerPhoto onPreExecute");
+//        }
+//
+//        @Override
+//        protected Bitmap doInBackground(String... params) {
+//            trace("QueryOwnerPhoto doInBackground");
+//            url = params[0];
+//            Bitmap bitmap = null;
+//
+//            try {
+//                bitmap = mHabitureModule.queryBitmapUrl(url);
+//            } catch (Throwable e) {
+//                ExceptionAlertDialog.showException(getFragmentManager(), e);
+//            }
+//            return bitmap;
+//
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Bitmap bitmap) {
+//            trace("QueryOwnerPhoto onPostExecute");
+//            try {
+//                if (bitmap != null && !PokeActivity.this.isFinishing()) {
+//                    mBitmapPoke = bitmap;
+//                    //mPoketFragment.setImage(mBitmapPoke);
+//                } else {
+//                    Toast.makeText(PokeActivity.this, "載入資料失敗", Toast.LENGTH_SHORT).show();
+//                }
+//
+//            } catch (Throwable e) {
+//                ExceptionAlertDialog.showException(getFragmentManager(), e);
+//            }
+//        }
+//    }
 
-        @Override
-        protected void onPreExecute() {
-            trace("QueryOwnerPhoto onPreExecute");
+
+    private DownloadPhotoTask photoTask;
+    private void downloadPhoto() {
+        String[] urls = new String[pokeData.getFounderList().size()];
+        for(int i = 0; i < pokeData.getFounderList().size(); i++) {
+            urls[i] = pokeData.getFounderList().get(i).getUrl();
         }
-
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            trace("QueryOwnerPhoto doInBackground");
-            url = params[0];
-            Bitmap bitmap = null;
-
-            try {
-                bitmap = mHabitureModule.queryBitmapUrl(url);
-            } catch (Throwable e) {
-                ExceptionAlertDialog.showException(getFragmentManager(), e);
+        DownloadPhotoTask.Listener listener = new DownloadPhotoTask.Listener() {
+            @Override
+            public void onDownloadFinished(int index, byte[] photo) {
+                founderAdapter.setPhoto(photo, index);
             }
-            return bitmap;
-
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            trace("QueryOwnerPhoto onPostExecute");
-            try {
-                if (bitmap != null && !PokeActivity.this.isFinishing()) {
-                    mBitmapPoke = bitmap;
-                    mPoketFragment.setImage(mBitmapPoke);
-                } else {
-                    Toast.makeText(PokeActivity.this, "載入資料失敗", Toast.LENGTH_SHORT).show();
-                }
-
-            } catch (Throwable e) {
-                ExceptionAlertDialog.showException(getFragmentManager(), e);
-            }
-        }
-
-
-
+        };
+        photoTask = new DownloadPhotoTask(urls, listener);
+        photoTask.execute();
     }
 
-    //TODO: ViewPager
-    /**
-     * A PagerAdapter which instantiates views based on the ContentItem's content type.
-     */
-    private final PagerAdapter mPagerAdapter = new PagerAdapter() {
-        LayoutInflater mInflater;
 
-        @Override
-        public int getCount() {
-            return mItems.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object o) {
-            return view == o;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            // Just remove the view from the ViewPager
-            container.removeView((View) object);
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            // Ensure that the LayoutInflater is instantiated
-            if (mInflater == null) {
-                mInflater = LayoutInflater.from(PokeActivity.this);
-            }
-
-            // Get the item for the requested position
-            final ContentItem item = mItems.get(position);
-
-            // The view we need to inflate changes based on the type of content
-            switch (item.contentType) {
-                case ContentItem.CONTENT_TYPE_IMAGE: {
-                    // Inflate item layout for images
-                    ImageView iv = (ImageView) mInflater
-                            .inflate(R.layout.singleitem_owner_image, container, false);
-
-                    // Load the image from it's content URI
-                    iv.setImageURI(item.getContentUri());
-
-                    // Add the view to the ViewPager
-                    container.addView(iv);
-                    return iv;
-                }
-            }
-
-            return null;
-        }
-    };
-
-    private void setShareIntent(int position) {
-        // BEGIN_INCLUDE(update_sap)
-        if (mShareActionProvider != null) {
-            // Get the currently selected item, and retrieve it's share intent
-            ContentItem item = mItems.get(position);
-            Intent shareIntent = item.getShareIntent(PokeActivity.this);
-
-            // Now update the ShareActionProvider with the new share intent
-            mShareActionProvider.setShareIntent(shareIntent);
-        }
-        // END_INCLUDE(update_sap)
-    }
-
-    /**
-     * A OnPageChangeListener used to update the ShareActionProvider's share intent when a new item
-     * is selected in the ViewPager.
-     */
-    private final ViewPager.OnPageChangeListener mOnPageChangeListener
-            = new ViewPager.OnPageChangeListener() {
-
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            // NO-OP
-        }
-
-        @Override
-        public void onPageSelected(int position) {
-            setShareIntent(position);
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int state) {
-            // NO-OP
-        }
-    };
-
-    /**
-     * @return An ArrayList of ContentItem's to be displayed in this sample
-     */
-    static ArrayList<ContentItem> getSampleContent() {
-        ArrayList<ContentItem> items = new ArrayList<ContentItem>();
-
-        items.add(new ContentItem(ContentItem.CONTENT_TYPE_IMAGE, pokeData.getFounderList().get(0).getUrl()));
-//        items.add(new ContentItem(ContentItem.CONTENT_TYPE_TEXT, R.string.quote_1));
-//        items.add(new ContentItem(ContentItem.CONTENT_TYPE_TEXT, R.string.quote_2));
-//        items.add(new ContentItem(ContentItem.CONTENT_TYPE_IMAGE, "photo_2.jpg"));
-//        items.add(new ContentItem(ContentItem.CONTENT_TYPE_TEXT, R.string.quote_3));
-//        items.add(new ContentItem(ContentItem.CONTENT_TYPE_IMAGE, "photo_3.jpg"));
-
-        return items;
-    }
 }
