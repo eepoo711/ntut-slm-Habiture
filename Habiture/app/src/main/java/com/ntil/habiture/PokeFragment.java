@@ -2,6 +2,8 @@ package com.ntil.habiture;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -9,6 +11,8 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,18 +22,17 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 import com.habiture.PokeData;
 import com.widget.CircleImageView;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
 import utils.exception.ExceptionAlertDialog;
 
-/**
- * Created by GawinHsu on 5/7/15.
- */
 public class PokeFragment extends Fragment {
 
     private static final boolean DEBUG = true;
@@ -38,6 +41,7 @@ public class PokeFragment extends Fragment {
     
     private ImageView ivPoke;
     private ImageView ivAlert;
+    private ImageView ivOwnerPhoto;
     private TextView tvSwear;
     private TextView tvPunishment;
     private TextView tvTime;
@@ -47,11 +51,11 @@ public class PokeFragment extends Fragment {
     private ImageButton btnCamera;
     private ImageButton btnFollow;
     private ImageButton btnAlarm;
-    private Bitmap bmpDrawing;
-    private Bitmap bmpTool;
-    private Bitmap bmpOwnerPhoto = null;
+    private ViewPager vp;
+
     private static PokeData pokeData;
     private static boolean isFounder = false;
+    private static FounderAdapter mPagerAdapter = null;
 
     private Paint mPaint = new Paint();
 
@@ -60,10 +64,11 @@ public class PokeFragment extends Fragment {
             Log.d("PokeFragment", message);
     }
 
-    public static PokeFragment newInstance(PokeData pokeData, boolean isFounder) {
+    public static PokeFragment newInstance(PokeData pokeData, boolean isFounder, FounderAdapter adapter) {
         PokeFragment fragment = new PokeFragment();
         PokeFragment.pokeData = pokeData;
         PokeFragment.isFounder = isFounder;
+        PokeFragment.mPagerAdapter = adapter;
         return fragment;
     }
 
@@ -78,8 +83,64 @@ public class PokeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         trace("onCreateView");
-        return inflater.inflate(R.layout.fragment_poke, container, false);
+
+        View rootView = inflater.inflate(R.layout.fragment_poke, container, false);
+        //TODO: ViewPager
+        // Retrieve the ViewPager from the content view
+        vp = (ViewPager) rootView.findViewById(R.id.viewpager);
+
+        // Set an OnPageChangeListener so we are notified when a new item is selected
+        vp.setOnPageChangeListener(mOnPageChangeListener);
+
+        // Finally set the adapter so the ViewPager can display items
+        vp.setAdapter(mPagerAdapter);
+
+        ViewTreeObserver vto = vp.getViewTreeObserver();
+        vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            public boolean onPreDraw() {
+                int finalHeight, finalWidth;
+                vp.getViewTreeObserver().removeOnPreDrawListener(this);
+                finalHeight = vp.getMeasuredHeight();
+                finalWidth = vp.getMeasuredWidth();
+                trace("ViewTreeObserver: Height: " + finalHeight + " Width: " + finalWidth);
+                mPagerAdapter.setViewPagerShape(finalWidth, finalHeight);
+                return true;
+            }
+        });
+
+        return rootView;
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    /**
+     * A OnPageChangeListener used to update the ShareActionProvider's share intent when a new item
+     * is selected in the ViewPager.
+     */
+    private final ViewPager.OnPageChangeListener mOnPageChangeListener
+            = new ViewPager.OnPageChangeListener() {
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            // NO-OP
+            trace("onPageScrolled = "+position);
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            trace("onPageSelected = "+position);
+            mPagerAdapter.setPokeEnabled(position);
+            tvRemain.setText("剩下 " + pokeData.getFounderList().get(position).getRemain() + " 週");
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            // NO-OP
+        }
+    };
 
     @Override
     public void onAttach(Activity activity) {
@@ -185,10 +246,10 @@ public class PokeFragment extends Fragment {
             btnAlarm.setVisibility(View.GONE);
         }
 
-        if (bmpDrawing != null) {
-            ivPoke.setImageBitmap(bmpDrawing);
-            setPokeEnabled();
-        }
+//        if (bmpDrawing != null) {
+//            ivOwnerPhoto.setImageBitmap(bmpDrawing);
+//            //setPokeEnabled();
+//        }
     }
 
     @Override
@@ -196,58 +257,39 @@ public class PokeFragment extends Fragment {
         super.onDestroy();
         trace("onDestroy");
 
-        if(bmpOwnerPhoto != null) bmpOwnerPhoto.recycle();
-        if(bmpTool != null) bmpTool.recycle();
-        if(bmpDrawing != null) bmpDrawing.recycle();
+//        if(bmpOwnerPhoto != null) bmpOwnerPhoto.recycle();
+//        if(bmpTool != null) bmpTool.recycle();
+//        if(bmpDrawing != null) bmpDrawing.recycle();
     }
 
-    private void drawSampleTool(float x, float y) {
-        Canvas drawCanvas = new Canvas(bmpDrawing);
-        drawCanvas.drawBitmap(bmpTool, x, y, mPaint);
-        ivPoke.setImageBitmap(bmpDrawing);
-    }
 
-    public void setImage(Bitmap image) {
-        trace("setImage");
-        bmpOwnerPhoto = image;
-        if (ivPoke.getHeight() <= 0 || ivPoke.getWidth() <= 0) {
-            ViewTreeObserver vto = ivPoke.getViewTreeObserver();
-            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                public boolean onPreDraw() {
-                    int finalHeight, finalWidth;
-                    ivPoke.getViewTreeObserver().removeOnPreDrawListener(this);
-                    finalHeight = ivPoke.getMeasuredHeight();
-                    finalWidth = ivPoke.getMeasuredWidth();
-                    trace("ViewTreeObserver: Height: " + finalHeight + " Width: " + finalWidth);
-                    bmpDrawing = Bitmap.createScaledBitmap(bmpOwnerPhoto, finalWidth, finalHeight, false);
-                    ivPoke.setImageBitmap(bmpDrawing);
-                    setPokeEnabled();
-                    return true;
-                }
-            });
-        } else {
-            trace("setImage: Height: " + ivPoke.getWidth() + " Width: " + ivPoke.getHeight());
-            bmpDrawing = Bitmap.createScaledBitmap(bmpOwnerPhoto, ivPoke.getWidth(), ivPoke.getHeight(), false);
-            ivPoke.setImageBitmap(bmpDrawing);
-            setPokeEnabled();
-        }
-    }
-
-    private void setPokeEnabled() {
-        bmpTool = BitmapFactory.decodeResource(getResources(), R.drawable.sample_tool).copy(Bitmap.Config.ARGB_8888, true);
-        ivPoke.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    trace("OnTouch");
-                    listener.onPoke();
-                    drawSampleTool(event.getX(), event.getY());
-                    return true;
-                }
-                return false;
-            }
-        });
-    }
+//    public void setImage(Bitmap image) {
+//        trace("setImage");
+//        bmpOwnerPhoto = image;
+//        trace("setImage = " + ivOwnerPhoto.hashCode());
+//
+//        if (ivOwnerPhoto.getHeight() <= 0 || ivOwnerPhoto.getWidth() <= 0) {
+//            ViewTreeObserver vto = ivOwnerPhoto.getViewTreeObserver();
+//            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+//                public boolean onPreDraw() {
+//                    int finalHeight, finalWidth;
+//                    ivOwnerPhoto.getViewTreeObserver().removeOnPreDrawListener(this);
+//                    finalHeight = ivOwnerPhoto.getMeasuredHeight();
+//                    finalWidth = ivOwnerPhoto.getMeasuredWidth();
+//                    trace("ViewTreeObserver: Height: " + finalHeight + " Width: " + finalWidth);
+//                    bmpDrawing = Bitmap.createScaledBitmap(bmpOwnerPhoto, finalWidth, finalHeight, false);
+//                    ivOwnerPhoto.setImageBitmap(bmpDrawing);
+//                    //setPokeEnabled();
+//                    return true;
+//                }
+//            });
+//        } else {
+//            trace("setImage: Height: " + ivOwnerPhoto.getWidth() + " Width: " + ivOwnerPhoto.getHeight());
+//            bmpDrawing = Bitmap.createScaledBitmap(bmpOwnerPhoto, ivOwnerPhoto.getWidth(), ivOwnerPhoto.getHeight(), false);
+//            ivOwnerPhoto.setImageBitmap(bmpDrawing);
+//            //setPokeEnabled();
+//        }
+//    }
 
     public interface Listener {
         void onClickCamera();
@@ -256,6 +298,5 @@ public class PokeFragment extends Fragment {
         void onClickTool();
         void onClickFollow();
         void onClickAlarm();
-        void onPoke();
     }
 }

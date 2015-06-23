@@ -15,28 +15,32 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.habiture.GroupHistory;
-import com.habiture.Habiture;
 import com.habiture.HabitureModule;
 import com.habiture.PokeData;
+import com.ntil.habiture.task.DownloadPhotoTask;
 
 import java.util.List;
 import java.util.Random;
 
 import utils.exception.ExceptionAlertDialog;
 
+
 /**
  * Created by GawinHsu on 5/7/15.
  */
-public class PokeActivity extends Activity implements PokeFragment.Listener{
+public class PokeActivity extends Activity implements PokeFragment.Listener, FounderAdapter.Listener{
 
     private HabitureModule mHabitureModule;
     private Bitmap mBitmapPoke;
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     private PokeFragment mPoketFragment;
     private static Random random_tool=null;
     private static PokeData pokeData;
     private static boolean isFounder = false;
     private static int pid = -1;
+    private FounderAdapter founderAdapter = null;
+
+
 
     private void trace(String message) {
         if(DEBUG)
@@ -59,19 +63,19 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         String name = MainApplication.getInstance().getHabitureModel().getAccount();
         mHabitureModule = MainApplication.getInstance().getHabitureModel();
 
+        founderAdapter = new FounderAdapter(this, pokeData.getFounderList());
+
         if (savedInstanceState == null) {
-            mPoketFragment = PokeFragment.newInstance(pokeData, isFounder);
+            mPoketFragment = PokeFragment.newInstance(pokeData, isFounder, founderAdapter);
             getFragmentManager().beginTransaction()
                     .add(R.id.profileContainer, HomeTopFragment.newInstance(
                             mHabitureModule.getName()
                             , mHabitureModule.getHeader()))
                     .add(R.id.pokeContainer, mPoketFragment)
                     .commit();
-
-            if(pokeData.getFounderList().get(0).getUrl().length()>0)
-                new QueryOwnerPhoto().execute(pokeData.getFounderList().get(0).getUrl());
         }
         registerToolBroadReceiver();
+        downloadPhoto();
     }
 
 
@@ -81,12 +85,14 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         super.onDestroy();
         mHabitureModule.stopSendSoundTimer();
         unregisterReceiver(toolBroadReceiver);
+        photoTask.cancel(true);
+        founderAdapter.release();
     }
 
     private BroadcastReceiver toolBroadReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            int to_id =pokeData.getFounderList().get(0).getUid();
+            int to_id=intent.getIntExtra("to_id",1);
             int tool_id =intent.getIntExtra("tool_id",1);
             trace("registerToolBroadReceiver(), to_id="+to_id+" pid="+pid+" tool_id="+tool_id);
             new SendToolTask().execute(to_id,pid,tool_id);
@@ -95,6 +101,24 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
 
     private void registerToolBroadReceiver() {
         registerReceiver(toolBroadReceiver, new IntentFilter(this.getString(R.string.tool_clicck_intent_name)));
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // call this function after capture
+        trace("onActivityResult, requestCode = " + requestCode + ", resultCode = " + resultCode);
+
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            mBitmapCaputred = (Bitmap) data.getExtras().get("data");
+            new UploadProofTask().execute(pid);
+        }
+=======
+>>>>>>> origin/master
+>>>>>>> origin/Add-ViewPage
     }
 
     @Override
@@ -138,12 +162,12 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
     }
 
     @Override
-    public void onPoke() {
+    public void onPoke(int position) {
         int random_tool_id =random_tool.nextInt(6)+1;
         System.out.println("onPoke="+random_tool_id);
         // TODO: to guest now
         Intent broadcastIntent = new Intent(this.getString(R.string.tool_clicck_intent_name));
-        broadcastIntent.putExtra("to_id",pokeData.getFounderList().get(0).getUid());
+        broadcastIntent.putExtra("to_id",pokeData.getFounderList().get(position).getUid());
         broadcastIntent.putExtra("pid",pid);
         broadcastIntent.putExtra("tool_id", random_tool_id);
         this.sendBroadcast(broadcastIntent);
@@ -153,6 +177,7 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         broadcastIntent_client_playsound.putExtra("tool_id",random_tool_id);
         sendBroadcast(broadcastIntent_client_playsound);
     }
+
 
     private class FollowTask extends AsyncTask<Void, Void, Boolean> {
         private ProgressDialog progress;
@@ -228,46 +253,62 @@ public class PokeActivity extends Activity implements PokeFragment.Listener{
         }
     }
 
-    private class QueryOwnerPhoto extends AsyncTask<String, Void, Bitmap> {
-        private String url;
+//    private class QueryOwnerPhoto extends AsyncTask<String, Void, Bitmap> {
+//        private String url;
+//
+//        @Override
+//        protected void onPreExecute() {
+//            trace("QueryOwnerPhoto onPreExecute");
+//        }
+//
+//        @Override
+//        protected Bitmap doInBackground(String... params) {
+//            trace("QueryOwnerPhoto doInBackground");
+//            url = params[0];
+//            Bitmap bitmap = null;
+//
+//            try {
+//                bitmap = mHabitureModule.queryBitmapUrl(url);
+//            } catch (Throwable e) {
+//                ExceptionAlertDialog.showException(getFragmentManager(), e);
+//            }
+//            return bitmap;
+//
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Bitmap bitmap) {
+//            trace("QueryOwnerPhoto onPostExecute");
+//            try {
+//                if (bitmap != null && !PokeActivity.this.isFinishing()) {
+//                    mBitmapPoke = bitmap;
+//                    //mPoketFragment.setImage(mBitmapPoke);
+//                } else {
+//                    Toast.makeText(PokeActivity.this, "載入資料失敗", Toast.LENGTH_SHORT).show();
+//                }
+//
+//            } catch (Throwable e) {
+//                ExceptionAlertDialog.showException(getFragmentManager(), e);
+//            }
+//        }
+//    }
 
-        @Override
-        protected void onPreExecute() {
-            trace("QueryOwnerPhoto onPreExecute");
+
+    private DownloadPhotoTask photoTask;
+    private void downloadPhoto() {
+        String[] urls = new String[pokeData.getFounderList().size()];
+        for(int i = 0; i < pokeData.getFounderList().size(); i++) {
+            urls[i] = pokeData.getFounderList().get(i).getUrl();
         }
-
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            trace("QueryOwnerPhoto doInBackground");
-            url = params[0];
-            Bitmap bitmap = null;
-
-            try {
-                bitmap = mHabitureModule.queryBitmapUrl(url);
-            } catch (Throwable e) {
-                ExceptionAlertDialog.showException(getFragmentManager(), e);
+        DownloadPhotoTask.Listener listener = new DownloadPhotoTask.Listener() {
+            @Override
+            public void onDownloadFinished(int index, byte[] photo) {
+                founderAdapter.setPhoto(photo, index);
             }
-            return bitmap;
-
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            trace("QueryOwnerPhoto onPostExecute");
-            try {
-                if (bitmap != null && !PokeActivity.this.isFinishing()) {
-                    mBitmapPoke = bitmap;
-                    mPoketFragment.setImage(mBitmapPoke);
-                } else {
-                    Toast.makeText(PokeActivity.this, "載入資料失敗", Toast.LENGTH_SHORT).show();
-                }
-
-            } catch (Throwable e) {
-                ExceptionAlertDialog.showException(getFragmentManager(), e);
-            }
-        }
-
-
-
+        };
+        photoTask = new DownloadPhotoTask(urls, listener);
+        photoTask.execute();
     }
+
+
 }

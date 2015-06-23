@@ -400,5 +400,6 @@ public class HabitureModule {
             sendSoundTimer.cancel();
             sendSoundTimer = null;
         }
+        isSendSound = false;
     }
 }
