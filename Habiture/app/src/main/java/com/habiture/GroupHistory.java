@@ -9,7 +9,6 @@ public class GroupHistory {
     private Bitmap iconImage =null;
     private String date =null;
     private String name =null;
-    private String text = null;
 
 
     public String getUrl() {return url;}
@@ -34,14 +33,6 @@ public class GroupHistory {
 
     void setName(String name) {
         this.name = name;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    void setText(String text) {
-        this.text = text;
     }
 
 

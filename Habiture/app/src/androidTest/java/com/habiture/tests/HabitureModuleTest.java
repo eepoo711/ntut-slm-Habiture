@@ -1,8 +1,6 @@
 package com.habiture.tests;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.test.AndroidTestCase;
 
 import com.habiture.AppInfo;
@@ -23,8 +21,6 @@ import com.habiture.StubLoginSuccessfully;
 import com.habiture.StubPassSuccessfully;
 import com.habiture.StubQueryFriends;
 import com.habiture.StubQueryGroups;
-import com.habiture.StubUploadProofFailed;
-import com.ntil.habiture.R;
 
 import java.util.List;
 
@@ -167,11 +163,5 @@ public class HabitureModuleTest extends AndroidTestCase {
     public void testFollowFailed() {
         stubLogin(new StubFollowFailed());
         assertFalse(hm.followHabit(1));
-    }
-
-    public void testUploadProofFailed() {
-        stubLogin(new StubUploadProofFailed());
-        Bitmap bmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.sample_tool).copy(Bitmap.Config.ARGB_8888, true);
-        assertFalse(hm.uploadProofImage(154, "123", bmp));
     }
 }

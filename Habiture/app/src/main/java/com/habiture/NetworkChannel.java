@@ -30,8 +30,8 @@ public class NetworkChannel implements NetworkInterface {
     public static final String URL_QUERY_HABITURES = "http://140.124.144.121/Habiture/home.cgi?";
     public static final String URL_POST_SWEAR = "http://140.124.144.121/Habiture/posts.cgi";
     public static final String URL_PUSH_TOOL = "http://140.124.144.121/Habiture/push.cgi?";
-    public static final String URL_UPLOAD_PROOF_IMAGE = "http://140.124.144.121/Habiture/tests/habiture/record/record.cgi";
-    public static final String URL_QUERY_GROUP_HISTORIES = "http://140.124.144.121/Habiture/tests/habiture/history/history.cgi?";
+    public static final String URL_UPLOAD_PROOF_IMAGE = "http://140.124.144.121/Habiture/record.cgi";
+    public static final String URL_QUERY_GROUP_HISTORIES = "http://140.124.144.121/Habiture/history.cgi?";
     public static final String URL_QUERY_POKE_PAGE = "http://140.124.144.121/Habiture/posts_page.cgi?";
     public static final String URL_UPDATE_GCM_REGISTER_ID  ="http://140.124.144.121/Habiture/update.cgi?";
     private static final String URL_PASS = "http://140.124.144.121/Habiture/tests/habiture/record/record.cgi";
@@ -136,14 +136,6 @@ public class NetworkChannel implements NetworkInterface {
         trace("openPostPassConnection");
         HttpURLConnection httpURLConnection = null;
         httpURLConnection = createPostJsonConnection(URL_PASS);
-        return newConnection(httpURLConnection);
-    }
-
-    @Override
-    public NetworkConnection openUploadProofConnection() {
-        trace("openPostPassConnection");
-        HttpURLConnection httpURLConnection = null;
-        httpURLConnection = createPostJsonConnection(URL_UPLOAD_PROOF_IMAGE);
         return newConnection(httpURLConnection);
     }
 
@@ -581,7 +573,6 @@ public class NetworkChannel implements NetworkInterface {
         String url  = null;
         String date =null;
         String name =null;
-        String text = null;
 
         reader.beginObject();
         while(reader.hasNext()) {
@@ -594,8 +585,6 @@ public class NetworkChannel implements NetworkInterface {
                 date = reader.nextString();
             } else if("name".equals(key)) {
                 name = reader.nextString();
-            } else if("text".equals(key)) {
-                text = reader.nextString();
             } else {
                 reader.skipValue();
             }
@@ -611,7 +600,6 @@ public class NetworkChannel implements NetworkInterface {
         groupHistory.setIcon(httpGetBitmapUrl(icon_url));
         groupHistory.setName(name);
         groupHistory.setDate(date);
-        groupHistory.setText(text);
 
         return groupHistory;
     }

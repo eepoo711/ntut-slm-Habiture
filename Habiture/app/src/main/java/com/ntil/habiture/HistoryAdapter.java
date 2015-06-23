@@ -53,7 +53,6 @@ public class HistoryAdapter extends BaseAdapter{
             holder.ivIcon = (ImageView) convertView.findViewById(R.id.ivIcon);
             holder.tvName = (TextView) convertView.findViewById(R.id.tvName);
             holder.tvDate = (TextView) convertView.findViewById(R.id.tvDate);
-            holder.tvText = (TextView) convertView.findViewById(R.id.tvText);
             holder.ivPicture = (ImageView) convertView.findViewById(R.id.ivPicture);
             convertView.setTag(holder);
         }
@@ -66,7 +65,6 @@ public class HistoryAdapter extends BaseAdapter{
         holder.ivIcon.setImageBitmap(history.getIcon());
         holder.tvName.setText(history.getName());
         holder.tvDate.setText(history.getDate());
-        holder.tvText.setText(history.getText());
         setPhoto(holder, item, history);
 
         return convertView;
@@ -104,7 +102,6 @@ public class HistoryAdapter extends BaseAdapter{
         ImageView ivIcon;
         TextView tvName;
         TextView tvDate;
-        TextView tvText;
         ImageView ivPicture;
     }
 }

@@ -33,6 +33,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
     private HabitureModule mHabitureModule;
     private Bitmap mBitmapCaputred;
     private HabitListFragment habitListFragment = null;
+    private final static int CAMERA_REQUEST = 100 ;
     private final static int DECLARE_ACTIVITY_RESULT = 101;
     private final static int POKE_ACTIVITY_RESULT = 102;
 
@@ -79,6 +80,13 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
         trace("onActivityResult, requestCode = " + requestCode + ", resultCode = " + resultCode);
 
         switch (requestCode) {
+            case CAMERA_REQUEST:
+                if (resultCode == RESULT_OK) {
+                    mBitmapCaputred = (Bitmap) data.getExtras().get("data");
+                    new UploadProofTask(g_position)
+                            .execute(g_pid);
+                }
+                break;
             case DECLARE_ACTIVITY_RESULT:
                 if (resultCode == RESULT_OK) {
                     new QueryHabituresTask().execute();
@@ -194,7 +202,10 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
     @Override
     public void onClickHabitCamera(int pid, int position) {
         trace("onClickHabitCamera");
-        RecordActivity.startActivity(this,pid);
+        g_pid = pid;
+        g_position = position;
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
 
 
@@ -583,4 +594,52 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
         broadcastIntent.putExtra("reg_id",reg_id);
         sendBroadcast(broadcastIntent);
     }
+    private class UploadProofTask extends AsyncTask<Integer, Void, Boolean> {
+        private ProgressDialog progress;
+        private final int position;
+        //TODO: Ed
+        public UploadProofTask(int position) {
+            this.position = position;
+        }
+        @Override
+        protected void onPreExecute() {
+            trace("UploadProofTask onPreExecute");
+            try {
+                progress = ProgressDialog.show(HomeActivity.this,
+                        "習慣成真",
+                        "上傳中...");
+            } catch(Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+
+        }
+
+        @Override
+        protected Boolean doInBackground(Integer... params) {
+            trace("UploadProofTask doInBackground");
+            boolean is_upload = false;
+            try {
+                int pid = params[0];
+
+                is_upload = mHabitureModule.uploadProofImage(pid, mBitmapCaputred);
+            } catch (Throwable e) {
+                ExceptionAlertDialog.showException(getFragmentManager(), e);
+            }
+            return is_upload;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            trace("UploadProofTask onPostExecute");
+            progress.dismiss();
+            //TODO: Ed
+            habitListFragment.setPassDisable(position);
+            Toast.makeText(
+                    HomeActivity.this,
+                    success ? "上傳成功" : "上傳失敗",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 }

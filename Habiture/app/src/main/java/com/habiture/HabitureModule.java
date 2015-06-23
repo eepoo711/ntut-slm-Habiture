@@ -225,31 +225,19 @@ public class HabitureModule {
         }, seconds);
     }
 
-    public boolean uploadProofImage(int pid,String text, Bitmap image) {
-        NetworkConnection connection = null;
+    public boolean uploadProofImage(int pid, Bitmap image) {
+        trace("uploadProofImage");
         String imageData =null;
-
+//        }
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] b = baos.toByteArray();
             imageData = Base64.encodeToString(b, Base64.DEFAULT);
-            Proof proof = new Proof(profile.getId(), pid, text, "jpg", imageData);
-            connection = networkInterface.openUploadProofConnection();
-            trace(proof.getJsonString());
-            connection.getOutputStream().write(proof.getJsonString().getBytes());
-            return readBoolean(connection.getInputStream());
-        } catch (HabitureException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch(NetworkException e) {
-            e.printStackTrace();
-        } finally {
-            if(connection != null)
-                connection.close();
+        } catch (Exception e) {
+            throw new UnhandledException("uploadProofImage failed, " + e );
         }
-        return false;
+        return networkInterface.httpUploadProofImage(profile.getId(), pid, "jpg", imageData);
     }
 
     public List<GroupHistory> gueryGroupHistory(int pid) {
