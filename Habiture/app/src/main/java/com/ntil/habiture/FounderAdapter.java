@@ -91,6 +91,8 @@ public class FounderAdapter extends PagerAdapter{
         ImageView ivOwnerPhoto = (ImageView) mInflater
                 .inflate(R.layout.singleitem_owner_image, container, false);
 
+        trace("ivOwnerPhoto W, L = "+ivOwnerPhoto.getWidth()+", "+ivOwnerPhoto.getHeight());
+
         item.ivPoke = ivOwnerPhoto;
 
         if(item.photo != null) {
@@ -134,6 +136,7 @@ public class FounderAdapter extends PagerAdapter{
     public void setPokeEnabled(int position) {
         trace("setPokeEnabled");
         Item item = (Item) items.get(position);
+        if(bmpTool != null) {bmpTool.recycle();}
         bmpTool = BitmapFactory.decodeResource(context.getResources(), R.drawable.sample_tool).copy(Bitmap.Config.ARGB_8888, true);
         ivPoke = item.ivPoke;
 
@@ -170,6 +173,8 @@ public class FounderAdapter extends PagerAdapter{
 
         if(bmpDrawing != null)
             bmpDrawing.recycle();
+        if(bmpTool != null)
+            bmpTool.recycle();
     }
 
 

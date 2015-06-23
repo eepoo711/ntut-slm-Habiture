@@ -51,6 +51,7 @@ public class PokeFragment extends Fragment {
     private ImageButton btnCamera;
     private ImageButton btnFollow;
     private ImageButton btnAlarm;
+    private ViewPager vp;
 
     private static PokeData pokeData;
     private static boolean isFounder = false;
@@ -86,7 +87,7 @@ public class PokeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_poke, container, false);
         //TODO: ViewPager
         // Retrieve the ViewPager from the content view
-        ViewPager vp = (ViewPager) rootView.findViewById(R.id.viewpager);
+        vp = (ViewPager) rootView.findViewById(R.id.viewpager);
 
         // Set an OnPageChangeListener so we are notified when a new item is selected
         vp.setOnPageChangeListener(mOnPageChangeListener);
@@ -94,9 +95,25 @@ public class PokeFragment extends Fragment {
         // Finally set the adapter so the ViewPager can display items
         vp.setAdapter(mPagerAdapter);
 
-        //mPagerAdapter.setViewPagerShape(vp.getMeasuredWidth(), vp.getMeasuredHeight());
+        ViewTreeObserver vto = vp.getViewTreeObserver();
+        vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            public boolean onPreDraw() {
+                int finalHeight, finalWidth;
+                vp.getViewTreeObserver().removeOnPreDrawListener(this);
+                finalHeight = vp.getMeasuredHeight();
+                finalWidth = vp.getMeasuredWidth();
+                trace("ViewTreeObserver: Height: " + finalHeight + " Width: " + finalWidth);
+                mPagerAdapter.setViewPagerShape(finalWidth, finalHeight);
+                return true;
+            }
+        });
 
         return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     /**
