@@ -23,6 +23,22 @@
         android:theme="@style/AppTheme"
         android:name="com.ntil.habiture.MainApplication"
         >
+        <!-- alarm -->
+        <receiver
+            android:name="com.habiture.AlarmModel">
+            <intent-filter>
+                <action android:name="habiture_alarm_key"/>
+            </intent-filter>
+        </receiver>
+
+
+        <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+        <receiver android:name="com.habiture.BootCompletedModel">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
         <receiver
             android:name="com.gcm.client.receiver.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
@@ -31,6 +47,7 @@
                 <category android:name="com.example.gcm" />
             </intent-filter>
         </receiver>
+
         <service android:name="com.gcm.client.receiver.GcmIntentService" />
         <activity
             android:name="com.ntil.habiture.MainActivity"
@@ -64,6 +81,10 @@
 
         <activity
             android:name="com.ntil.habiture.HistoryActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.ntil.habiture.RecordActivity"
             android:screenOrientation="portrait">
         </activity>
 

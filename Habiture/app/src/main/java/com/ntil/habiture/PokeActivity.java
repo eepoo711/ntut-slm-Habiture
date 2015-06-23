@@ -30,9 +30,7 @@ import utils.exception.ExceptionAlertDialog;
  */
 public class PokeActivity extends Activity implements PokeFragment.Listener, FounderAdapter.Listener{
 
-    private final static int CAMERA_REQUEST = 66 ;
     private HabitureModule mHabitureModule;
-    private Bitmap mBitmapCaputred;
     private Bitmap mBitmapPoke;
     private static final boolean DEBUG = true;
     private PokeFragment mPoketFragment;
@@ -103,6 +101,7 @@ public class PokeActivity extends Activity implements PokeFragment.Listener, Fou
 
     private void registerToolBroadReceiver() {
         registerReceiver(toolBroadReceiver, new IntentFilter(this.getString(R.string.tool_clicck_intent_name)));
+<<<<<<< HEAD
     }
 
     @Override
@@ -115,19 +114,21 @@ public class PokeActivity extends Activity implements PokeFragment.Listener, Fou
             mBitmapCaputred = (Bitmap) data.getExtras().get("data");
             new UploadProofTask().execute(pid);
         }
+=======
+>>>>>>> origin/master
     }
 
     @Override
     public void onClickCamera() {
         trace("onClickCamera");
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+        RecordActivity.startActivity(this, pid);
     }
 
     @Override
     public void onClickRecords() {
         trace("onClickRecords");
-        new GroupHistoryTask().execute(pid);
+
+        HistoryActivity.startActivity(this, pid);
     }
 
     @Override
@@ -186,7 +187,7 @@ public class PokeActivity extends Activity implements PokeFragment.Listener, Fou
                 progress = ProgressDialog.show(PokeActivity.this,
                         PokeActivity.this.getString(R.string.progress_title),
                         "載入中...");
-            } catch(Throwable e) {
+            } catch (Throwable e) {
                 ExceptionAlertDialog.showException(getFragmentManager(), e);
             }
         }
@@ -198,6 +199,7 @@ public class PokeActivity extends Activity implements PokeFragment.Listener, Fou
 
             return mHabitureModule.followHabit(pid);
         }
+
         @Override
         protected void onPostExecute(Boolean isFollow) {
             trace("PassTask onPostExecute");
@@ -209,87 +211,6 @@ public class PokeActivity extends Activity implements PokeFragment.Listener, Fou
         }
 
 
-
-    }
-
-    private class GroupHistoryTask extends AsyncTask<Integer, Void, List<GroupHistory>> {
-        private ProgressDialog progress;
-        @Override
-        protected void onPreExecute() {
-            trace("GroupHistoryTask onPreExecute");
-            try {
-                progress = ProgressDialog.show(PokeActivity.this,
-                        "習慣成真",
-                        "載入中...");
-            } catch(Throwable e) {
-                ExceptionAlertDialog.showException(getFragmentManager(), e);
-            }
-        }
-
-        @Override
-        protected List<GroupHistory> doInBackground(Integer... params) {
-            trace("GroupHistoryTask doInBackground");
-            List<GroupHistory> ret = null;
-            try {
-                int ownerId = params[0];
-                ret = mHabitureModule.gueryGroupHistory(ownerId);
-            } catch (Throwable e) {
-                ExceptionAlertDialog.showException(getFragmentManager(), e);
-            }
-            return ret;
-        }
-
-        @Override
-        protected void onPostExecute(List<GroupHistory> groupHistories) {
-            trace("GroupHistoryTask onPostExecute");
-            progress.dismiss();
-            if (groupHistories != null) {
-                HistoryActivity.startActivity(PokeActivity.this, groupHistories);
-            } else {
-                Toast.makeText(PokeActivity.this, "載入資料失敗", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-
-    private class UploadProofTask extends AsyncTask<Integer, Void, Boolean> {
-        private ProgressDialog progress;
-        @Override
-        protected void onPreExecute() {
-            trace("UploadProofTask onPreExecute");
-            try {
-                progress = ProgressDialog.show(PokeActivity.this,
-                        "習慣成真",
-                        "上傳中...");
-            } catch(Throwable e) {
-                ExceptionAlertDialog.showException(getFragmentManager(), e);
-            }
-
-        }
-
-        @Override
-        protected Boolean doInBackground(Integer... params) {
-            trace("UploadProofTask doInBackground");
-            boolean is_upload = false;
-            try {
-                int ownerId = params[0];
-
-                is_upload = mHabitureModule.uploadProofImage(ownerId, mBitmapCaputred);
-            } catch (Throwable e) {
-                ExceptionAlertDialog.showException(getFragmentManager(), e);
-            }
-            return is_upload;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean success) {
-            trace("UploadProofTask onPostExecute");
-            progress.dismiss();
-            Toast.makeText(
-                    PokeActivity.this,
-                    success ? "上傳成功" : "上傳失敗",
-                    Toast.LENGTH_SHORT).show();
-        }
     }
 
     private class SendToolTask extends AsyncTask<Integer, Void, Boolean> {
