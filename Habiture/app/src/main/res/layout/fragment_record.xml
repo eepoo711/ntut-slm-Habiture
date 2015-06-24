@@ -60,12 +60,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp">
 
-        <com.widget.CircleImageView
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:id="@+id/ivIcon"
-            android:src="@mipmap/default_icon"/>
-
         <EditText
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"

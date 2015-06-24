@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.widget.CircleImageView;
+
 /**
  * Created by Dewei on 2015/6/23.
  */
@@ -59,6 +61,7 @@ public class RecordFragment extends Fragment {
             }
         });
         editText = (EditText) rootView.findViewById(R.id.editText);
+
         return rootView;
     }
 
