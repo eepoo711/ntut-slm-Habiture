@@ -492,6 +492,7 @@ public class NetworkChannel implements NetworkInterface {
         int remain_frequency = -1;
         int remain_pass = -1;
         int notice_enable = -1;
+        int do_it_time = -1;
 
         String swear = null;
         String punishment = null;
@@ -511,6 +512,8 @@ public class NetworkChannel implements NetworkInterface {
                 id = reader.nextInt();
             } else if("punishment".equals(key)) {
                 punishment = reader.nextString();
+            } else if("do_it_time".equals(key)) {
+                do_it_time = reader.nextInt();
             }else {
                 reader.skipValue();
             }
@@ -530,6 +533,7 @@ public class NetworkChannel implements NetworkInterface {
         habiture.setRemainFrequency(remain_frequency);
         habiture.setRemainPass(remain_pass);
         habiture.setId(id);
+        habiture.setDoItTime(do_it_time);
         if (notice_enable == 1)
             habiture.setNoticeEnable(true);
         else

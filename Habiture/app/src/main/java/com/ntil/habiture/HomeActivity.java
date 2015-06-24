@@ -20,6 +20,7 @@ import com.habiture.Group;
 import com.habiture.Habiture;
 import com.habiture.HabitureModule;
 import com.habiture.PokeData;
+import com.habiture.RegisterAlarmByHabituresModel;
 import com.ntil.habiture.task.DownloadPhotoTask;
 
 import java.util.List;
@@ -39,7 +40,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
     private int g_pid = 0;
     private int g_position = 0;
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     private void trace(String message) {
         if(DEBUG)
             Log.d("HomeActivity", message);
@@ -499,6 +500,7 @@ public class HomeActivity extends Activity implements HomeBottomFragment.Listene
                 }
 
                 habitListFragment = HabitListFragment.newInstance(habitures);
+                RegisterAlarmByHabituresModel.RegisterAlarmByHabitures(habitures);
 
                 getFragmentManager().beginTransaction()
                         .replace(R.id.middleContainer, habitListFragment)

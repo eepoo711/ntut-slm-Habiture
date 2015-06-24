@@ -11,6 +11,7 @@ public class Habiture {
     private boolean noticeEnable = false;
     private int id = -1;
     private String url =null;
+    private int do_it_time =-1;
 
     public String getUrl(){return url;}
     void setUrl(String url){this.url =url;}
@@ -58,5 +59,11 @@ public class Habiture {
         return id;
     }
 
+    public void setDoItTime(int do_it_time) {
+        this.do_it_time = do_it_time;
+    }
+    public int getDoItTime() {
+        return do_it_time;
+    }
 
 }
