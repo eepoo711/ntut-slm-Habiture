@@ -32,7 +32,7 @@ public class PokeActivity extends Activity implements PokeFragment.Listener, Fou
 
     private HabitureModule mHabitureModule;
     private Bitmap mBitmapPoke;
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private PokeFragment mPoketFragment;
     private static Random random_tool=null;
     private static PokeData pokeData;

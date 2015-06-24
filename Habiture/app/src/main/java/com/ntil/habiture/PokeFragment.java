@@ -35,7 +35,7 @@ import utils.exception.ExceptionAlertDialog;
 
 public class PokeFragment extends Fragment {
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     public Listener listener;
 

@@ -20,7 +20,7 @@ import utils.exception.UnhandledException;
 
 public class HabitureModule {
 
-    private final boolean DEBUG = true;
+    private final boolean DEBUG = false;
     private NetworkInterface networkInterface = null;
     private GcmModel gcmModel =null;
 

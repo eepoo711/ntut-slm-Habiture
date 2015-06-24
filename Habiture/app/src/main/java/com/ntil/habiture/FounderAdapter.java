@@ -23,7 +23,7 @@ import java.util.List;
  * Created by Reid on 2015/6/22.
  */
 public class FounderAdapter extends PagerAdapter{
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private List<Item> items;
     private Bitmap bmpTool;
     private Context context;
@@ -145,11 +145,15 @@ public class FounderAdapter extends PagerAdapter{
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 //trace("onTouch event = "+ event.getAction());
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    trace("OnTouch");
-                    listener.onPoke(position);
-                    drawSampleTool(event.getX(), event.getY());
-                    return true;
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        return true;
+                    case MotionEvent.ACTION_MOVE:
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        trace("ACTION_UP");
+                        listener.onPoke(position);
+                        drawSampleTool(event.getX(), event.getY());
                 }
                 return false;
             }
