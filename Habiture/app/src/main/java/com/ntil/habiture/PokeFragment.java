@@ -38,10 +38,8 @@ public class PokeFragment extends Fragment {
     private static final boolean DEBUG = true;
 
     public Listener listener;
-    
-    private ImageView ivPoke;
+
     private ImageView ivAlert;
-    private ImageView ivOwnerPhoto;
     private TextView tvSwear;
     private TextView tvPunishment;
     private TextView tvTime;
@@ -50,14 +48,11 @@ public class PokeFragment extends Fragment {
     private TextView tvFrequency;
     private ImageButton btnCamera;
     private ImageButton btnFollow;
-    private ImageButton btnAlarm;
     private ViewPager vp;
 
     private static PokeData pokeData;
     private static boolean isFounder = false;
     private static FounderAdapter mPagerAdapter = null;
-
-    private Paint mPaint = new Paint();
 
     private void trace(String message) {
         if(DEBUG)
@@ -158,7 +153,6 @@ public class PokeFragment extends Fragment {
 
         btnCamera = (ImageButton) getActivity().findViewById(R.id.btnCamera);
         btnFollow = (ImageButton) getActivity().findViewById(R.id.btnFollow);
-        btnAlarm = (ImageButton) getActivity().findViewById(R.id.btnAlarm);
 
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,14 +167,6 @@ public class PokeFragment extends Fragment {
             public void onClick(View v) {
                 trace("onClick btnFollow");
                 listener.onClickFollow();
-            }
-        });
-
-        btnAlarm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                trace("onClick btnAlarm");
-                listener.onClickAlarm();
             }
         });
 
@@ -210,7 +196,7 @@ public class PokeFragment extends Fragment {
 
 
 
-        ivPoke = (ImageView) getActivity().findViewById(R.id.ivPoke);
+        //ivPoke = (ImageView) getActivity().findViewById(R.id.ivPoke);
         ivAlert = (ImageView) getActivity().findViewById(R.id.ivAlert);
         tvSwear = (TextView) getActivity().findViewById(R.id.tvSwear);
         tvPunishment = (TextView) getActivity().findViewById(R.id.tvPunishment);
@@ -243,7 +229,6 @@ public class PokeFragment extends Fragment {
             btnFollow.setVisibility(View.GONE);
         } else {
             btnCamera.setVisibility(View.GONE);
-            btnAlarm.setVisibility(View.GONE);
         }
 
 //        if (bmpDrawing != null) {
@@ -297,6 +282,5 @@ public class PokeFragment extends Fragment {
         void onClickGroupFriend();
         void onClickTool();
         void onClickFollow();
-        void onClickAlarm();
     }
 }

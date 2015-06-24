@@ -209,22 +209,12 @@
             <ImageButton
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:id="@+id/btnAlarm"
-                android:scaleType="fitCenter"
-                android:background="#00ffffff"
-                android:paddingBottom="10dp"
-                android:padding="5dp"
-                android:src="@mipmap/notice_disable" />
-
-            <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
                 android:id="@+id/btnFollow"
                 android:scaleType="fitCenter"
                 android:background="#00ffffff"
                 android:paddingBottom="10dp"
                 android:padding="5dp"
-                android:src="@drawable/abc_ic_clear_mtrl_alpha" />
+                android:src="@drawable/join" />
 
             <ImageButton
                 android:layout_width="50dp"

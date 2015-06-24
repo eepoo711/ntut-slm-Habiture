@@ -137,13 +137,6 @@ public class PokeActivity extends Activity implements PokeFragment.Listener, Fou
     }
 
     @Override
-    public void onClickAlarm() {
-        trace("onClickAlarm");
-        DialogFragment newFragment = new NoImplementDialog();
-        newFragment.show(getFragmentManager(), "dialog");
-    }
-
-    @Override
     public void onPoke(int position) {
         int random_tool_id =random_tool.nextInt(6)+1;
         System.out.println("onPoke="+random_tool_id);

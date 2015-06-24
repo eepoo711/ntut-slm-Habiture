@@ -87,7 +87,7 @@
                     android:id="@+id/ivAlert"
                     android:layout_gravity="center_vertical"
                     android:scaleType="fitCenter"
-                    android:src="@mipmap/notice_enable" />
+                    android:src="@drawable/click" />
             </LinearLayout>
 
         </LinearLayout>
