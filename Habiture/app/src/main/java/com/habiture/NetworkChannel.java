@@ -36,6 +36,7 @@ public class NetworkChannel implements NetworkInterface {
     public static final String URL_UPDATE_GCM_REGISTER_ID  ="http://140.124.144.121/Habiture/update.cgi?";
     private static final String URL_PASS = "http://140.124.144.121/Habiture/tests/habiture/record/record.cgi";
     private static final String URL_FOLLOW = "http://140.124.144.121/Habiture/follow.cgi?";
+    private static final String URL_INQUIRE = "http://140.124.144.121/Habiture/inquire_notify.cgi?";
 
     private void trace(String message) {
         if(DEBUG)
@@ -776,6 +777,28 @@ public class NetworkChannel implements NetworkInterface {
             closeConnection(httpUrlConnection);
         }
         return false;
+    }
+
+    public boolean httpInquireNotify( int uid, int pid){
+        trace("httpInquireNotify, uid="+uid+", pid="+pid);
+        HttpURLConnection httpUrlConnection = null;
+        boolean isInquireOK =true;
+        try {
+            httpUrlConnection = createHttpURLConnection(URL_INQUIRE+"&pid="+pid+"uid="+uid);
+
+            InputStream in = httpUrlConnection.getInputStream();
+            String data = readText(in);
+            trace(data);
+            if(Integer.valueOf(data)==0) {
+                isInquireOK =false;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection(httpUrlConnection);
+        }
+        return isInquireOK;
     }
 }
 

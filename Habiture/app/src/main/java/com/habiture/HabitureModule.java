@@ -402,4 +402,8 @@ public class HabitureModule {
         }
         isSendSound = false;
     }
+
+    public boolean inquireNotify( int pid) {
+        return networkInterface.httpInquireNotify(profile.getId(), pid);
+    }
 }

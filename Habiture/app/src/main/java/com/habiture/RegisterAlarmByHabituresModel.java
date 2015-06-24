@@ -13,10 +13,10 @@ public class RegisterAlarmByHabituresModel  {
 
     public static void RegisterAlarmByHabitures(List<Habiture> habitures ) {
         int do_it_time =0;
-        int id =0;
+        int pid =0;
         for(Habiture habiture : habitures){
             do_it_time =habiture.getDoItTime();
-            id=habiture.getId();
+            pid=habiture.getId();
             String swear = habiture.getSwear();
 
 
@@ -31,7 +31,7 @@ public class RegisterAlarmByHabituresModel  {
                 day +=1;
             }
 
-            AlarmModel.setAlarm(MainApplication.getInstance(), year, month, day, do_it_time, 0, 0,id,swear);
+            AlarmModel.setAlarm(MainApplication.getInstance(), year, month, day, do_it_time, 0, 0,pid,swear);
         }
     }
 }
