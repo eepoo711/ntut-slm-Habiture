@@ -28,14 +28,11 @@ function create(dbInfo){
     });
 }
 
-function query(db, query, values, logFlag = 1){
+function query(db, query, values){
     return new Promise((resolve, reject) => {
         let error;
 
-        if(logFlag){
-            console.log(`query=${query}\nvalues=${values}\n`);
-        }
-
+        console.log(`query=${query}\nvalues=${values}\n`);
         db.getConnection((error, dbClient) => {
             if (error) {
                 return reject(error);

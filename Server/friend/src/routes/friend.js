@@ -15,10 +15,13 @@ async function getFriendList(ctx, next){
     }
 
     try{
-        friends = await friendRepository.getFriendList(ctx.db, uId);
+        friends = await friendRepository.getFriendList(ctx.nosqlDb, parseInt(uId));
         friends.forEach((friend) => {
             friend.url = config.profileUrl + friend.image_name;
+            friend.id = friend.uid;
             delete friend.image_name;
+            delete friend._id;
+            delete friend.uid;
         });
 
         ctx.body = {

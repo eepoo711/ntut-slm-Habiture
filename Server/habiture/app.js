@@ -9,10 +9,10 @@ const app = new koa();
 const rootRoute = require('./src/routes');
 // const node_env = process.env.NODE_ENV ? process.env.NODE_ENV : 'development';
 const config = require('./config/config');
-const nosqlDbConnection = require('./src/utils/nosql-db-connection');
+const dbConnection = require('./src/utils/db-connection');
 
 let serverPort = config.server.port;
-let nosqlDb;
+let db;
 
 initDb();
 
@@ -29,11 +29,11 @@ app.use(rootRoute.allowedMethods());
 app.use(compress());
 
 async function initDb(){
-    nosqlDb = await nosqlDbConnection.create(config.nosqlDb).catch((err) => {
-        console.log('Connect to nosqldb fail =', err);
+    db = await dbConnection.create(config.db).catch((err) => {
+        console.log('Connect to db fail=', err);
         process.exit(-1);
     });
-    app.context.nosqlDb = nosqlDb;
+    app.context.db = db;
 }
 
 module.exports = app;
