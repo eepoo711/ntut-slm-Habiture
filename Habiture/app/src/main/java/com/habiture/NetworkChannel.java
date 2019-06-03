@@ -28,7 +28,7 @@ public class NetworkChannel implements NetworkInterface {
     public static final String URL_QUERY_FRIENDS = "http://192.168.99.1:7101/v1/friends?";
     public static final String URL_QUERY_GROUPS = "http://192.168.99.1/cgi-bin/groups.cgi?";
     public static final String URL_QUERY_HABITURES = "http://192.168.99.1:7100/v1/habitures?";
-    public static final String URL_POST_SWEAR = "http://192.168.99.1/cgi-bin/posts.cgi";
+    public static final String URL_POST_SWEAR = "http://192.168.99.1:7100/v1/habitures";
     public static final String URL_PUSH_TOOL = "http://192.168.99.1/cgi-bin/push.cgi?";
     public static final String URL_UPLOAD_PROOF_IMAGE = "http://192.168.99.1/cgi-bin/tests/habiture/record/record.cgi";
     public static final String URL_QUERY_GROUP_HISTORIES = "http://192.168.99.1/cgi-bin/history.cgi?";

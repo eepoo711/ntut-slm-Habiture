@@ -63,7 +63,34 @@ async function get(ctx, next) {
     }
 }
 
+async function add(ctx, next) {
+    let uId = ctx.request.body.uid;
+    let frequency = ctx.request.body.frequency;
+    let swear = ctx.request.body.swear;
+    let punishment = ctx.request.body.punishment;
+    let goal = ctx.request.body.goal;
+    let doItTime = ctx.request.body.do_it_time;
+    let habiture;
+
+    try {
+        if (frequency === null || swear === null || punishment === null || goal === null || doItTime === null) {
+            return ctx.body = {
+                Code: 400,
+                Message: resMessage.getMessage(400)
+            };
+        }
+
+        habiture = await habitureRepository.addHabiture(ctx.db, uId, frequency, swear, punishment, goal, doItTime);
+
+        ctx.body = {};
+    } catch (error) {
+        console.log('addHabiture error=', error);
+        ctx.status = 500;
+    }
+}
+
 module.exports = {
     getList,
     get,
+    add,
 }

@@ -43,6 +43,31 @@ async function getHabitureFounders(db, pId) {
     }
 }
 
+async function addHabiture(db, uId, frequency, swear, punishment, goal, doItTime) {
+	let result;
+	let pId;
+
+	try {
+		result = await dbClient.query(db, 'INSERT INTO posts (frequency, swear ,punishment, goal,do_it_time, post_date,update_date) VALUES (?, ?, ?, ?, ?, now(),now());',
+			[frequency, swear, punishment, goal, doItTime]);
+
+		if(result.affectedRows === 1){
+			result = await dbClient.query(db, 'SELECT LAST_INSERT_ID();');
+			pId = result[0]['LAST_INSERT_ID()'];
+
+			result = await dbClient.query(db, 'INSERT INTO groups(pid, uid, founder) VALUES(?, ?, 1)',
+				[pId, uId]);
+			result = await dbClient.query(db, 'INSERT INTO posts_owner (pid, uid, update_time, goal, weeks_frequency) VALUES (?, ?, now(), ?, ?)',
+				[pId, uId, goal, frequency]);
+		}
+
+		return (result.affectedRows);
+	} catch (err) {
+		console.log('addHabitureFounder error=', err);
+		throw(err);
+	}
+}
+
 async function updateLastLoginTime(db, userId) {
     let result;
     let query;
@@ -63,6 +88,7 @@ async function updateLastLoginTime(db, userId) {
 module.exports = {
     getHabitures,
     getHabitureInfo,
-    getHabitureFounders,
+	getHabitureFounders,
+	addHabiture,
     updateLastLoginTime,
 }
