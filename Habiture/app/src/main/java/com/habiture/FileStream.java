@@ -2,7 +2,6 @@ package com.habiture;
 
 import com.habiture.exceptions.HabitureException;
 
-
 import java.io.InputStream;
 
 /**

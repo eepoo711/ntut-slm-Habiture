@@ -43,12 +43,17 @@ Temporary Items
 .apdisk
 
 # Others
+Habiture/.metadata/
 
 # Android Studio environment files
 Habiture/app/app.iml
 Habiture/.idea/
 Habiture/Habiture.iml
 
+Habiture/.idea/gradle.xml
+Habiture/.idea/gradle.xml
 
-Habiture/.idea/gradle.xml
-Habiture/.idea/gradle.xml
+# For Node
+**/node_modules
+Server/Habiture-old
+Server/habiture

@@ -1,0 +1,11 @@
+﻿#!/usr/bin/env node
+var debug = require('debug')('backend');
+var app = require('../app');
+// var node_env = process.env.NODE_ENV ? process.env.NODE_ENV : 'production';
+var config = require('../config/config');//[node_env];
+var port = config.server.port;
+
+var server = app.listen(port, function() {
+    console.log('Koa server listening on port ' + server.address().port);
+});
+server.keepAliveTimeout = 180000

@@ -24,19 +24,19 @@ public class NetworkChannel implements NetworkInterface {
 
     public static final boolean DEBUG = false;
 
-    public static final String URL_LOGIN =  "http://140.124.144.121/Habiture/login.cgi?";
-    public static final String URL_QUERY_FRIENDS = "http://140.124.144.121/Habiture/friends.cgi?";
-    public static final String URL_QUERY_GROUPS = "http://140.124.144.121/Habiture/groups.cgi?";
-    public static final String URL_QUERY_HABITURES = "http://140.124.144.121/Habiture/home.cgi?";
-    public static final String URL_POST_SWEAR = "http://140.124.144.121/Habiture/posts.cgi";
-    public static final String URL_PUSH_TOOL = "http://140.124.144.121/Habiture/push.cgi?";
-    public static final String URL_UPLOAD_PROOF_IMAGE = "http://140.124.144.121/Habiture/tests/habiture/record/record.cgi";
-    public static final String URL_QUERY_GROUP_HISTORIES = "http://140.124.144.121/Habiture/tests/habiture/history/history.cgi?";
-    public static final String URL_QUERY_POKE_PAGE = "http://140.124.144.121/Habiture/posts_page.cgi?";
-    public static final String URL_UPDATE_GCM_REGISTER_ID  ="http://140.124.144.121/Habiture/update.cgi?";
-    private static final String URL_PASS = "http://140.124.144.121/Habiture/tests/habiture/record/record.cgi";
-    private static final String URL_FOLLOW = "http://140.124.144.121/Habiture/follow.cgi?";
-    private static final String URL_INQUIRE = "http://140.124.144.121/Habiture/inquire_notify.cgi?";
+    public static final String URL_LOGIN =  "http://192.168.99.1:7001/v1/users/login?";
+    public static final String URL_QUERY_FRIENDS = "http://192.168.99.1:7101/v1/friends?";
+    public static final String URL_QUERY_GROUPS = "http://192.168.99.1/cgi-bin/groups.cgi?";
+    public static final String URL_QUERY_HABITURES = "http://192.168.99.1:7100/v1/habitures?";
+    public static final String URL_POST_SWEAR = "http://192.168.99.1/cgi-bin/posts.cgi";
+    public static final String URL_PUSH_TOOL = "http://192.168.99.1/cgi-bin/push.cgi?";
+    public static final String URL_UPLOAD_PROOF_IMAGE = "http://192.168.99.1/cgi-bin/tests/habiture/record/record.cgi";
+    public static final String URL_QUERY_GROUP_HISTORIES = "http://192.168.99.1/cgi-bin/history.cgi?";
+    public static final String URL_QUERY_POKE_PAGE = "http://192.168.99.1:7100/v1/habitures/";
+    public static final String URL_UPDATE_GCM_REGISTER_ID  ="http://192.168.99.1/cgi-bin/update.cgi?";
+    private static final String URL_PASS = "http://192.168.99.1/cgi-bin/tests/habiture/record/record.cgi";
+    private static final String URL_FOLLOW = "http://192.168.99.1/cgi-bin/follow.cgi?";
+    private static final String URL_INQUIRE = "http://192.168.99.1/cgi-bin/inquire_notify.cgi?";
 
     private void trace(String message) {
         if(DEBUG)
@@ -154,7 +154,7 @@ public class NetworkChannel implements NetworkInterface {
         trace("openGetAppInfoConnection");
 
         try {
-            HttpURLConnection httpURLConnection = createHttpURLConnection("http://140.124.144.121/Habiture/upgrade.cgi");
+            HttpURLConnection httpURLConnection = createHttpURLConnection("http://192.168.99.1/cgi_bin/upgrade.cgi");
             return newConnection(httpURLConnection);
         } catch (IOException e) {
             e.printStackTrace();
@@ -281,7 +281,7 @@ public class NetworkChannel implements NetworkInterface {
 
         String parameters =
                 "uid=".concat(String.valueOf(uid));
-        String url = URL_QUERY_HABITURES.concat(parameters);
+        String url = URL_QUERY_HABITURES.concat(String.valueOf(parameters));
 
         HttpURLConnection connection = null;
 
@@ -730,7 +730,7 @@ public class NetworkChannel implements NetworkInterface {
         trace("httpGetPokePage");
         String parameters =
                 "pid=".concat(String.valueOf(pid));
-        String url = URL_QUERY_POKE_PAGE.concat(parameters);
+        String url = URL_QUERY_POKE_PAGE.concat(String.valueOf(pid));
 
         HttpURLConnection connection = null;
 
@@ -779,6 +779,7 @@ public class NetworkChannel implements NetworkInterface {
         return false;
     }
 
+
     public boolean httpInquireNotify( int uid, int pid){
         trace("httpInquireNotify, uid="+uid+", pid="+pid);
         HttpURLConnection httpUrlConnection = null;
@@ -793,6 +794,7 @@ public class NetworkChannel implements NetworkInterface {
                 isInquireOK =false;
             }
 
+
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -801,4 +803,3 @@ public class NetworkChannel implements NetworkInterface {
         return isInquireOK;
     }
 }
-
